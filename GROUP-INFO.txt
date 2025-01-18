@@ -1,0 +1,8 @@
+Group Name     : Group 9
+
+Candidate Name : venkata sai vishnu vardhan reddy Tallapureddy
+
+Skills         : programming         - Python, java
+                 Database Management - MySQL 
+                 UI Design           - HTML, CSS, JavaScript
+                 Cloud Computing     - AWS
