@@ -50,3 +50,13 @@ Skills:
         Programming              - Python, java, dart
         database management      - MySql
         Front end                - HTML, CSS, Flutter
+
+
+
+Candidate Name : Siddireddygari Nandini
+
+Skills : 
+
+          Programming             - Python, C
+          Database Management     - MYSQL
+          Front-end               - HTML , CSS
