@@ -17,11 +17,11 @@ Skills         :Programming          - Python , Java , C
                 Backe-end            - FLASK 
                 Cloud                - AWS , Azure(Fundamentals)
 
-Yamini Malikireddy
+Candidate Name : Yamini Malikireddy
 
 Skills: 
 
-Programming Languages: Python, C
-Database Management Systems: MYSQL
-Cloud Computing: AWS
-User Interface: HTML, CSS
+      Programming                    -Python, C
+      Database Management            -MYSQL
+      Cloud                          -AWS
+      Front-end                      -HTML, CSS
