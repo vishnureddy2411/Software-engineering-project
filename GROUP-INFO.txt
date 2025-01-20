@@ -16,3 +16,14 @@ Skills         :Programming          - Python , Java , C
                 Front-end            - HTML, CSS, JavaScript
                 Backe-end            - FLASK 
                 Cloud                - AWS , Azure(Fundamentals)
+
+Yamini Malikireddy
+
+Group number: 9
+
+Skills: 
+
+Programming Languages: Python, C
+Database Management Systems: MYSQL
+Cloud Computing: AWS
+User Interface: HTML, CSS
