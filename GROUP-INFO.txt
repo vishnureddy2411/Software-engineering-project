@@ -8,6 +8,13 @@ Skills         : programming         - Python, java
                  Cloud Computing     - AWS
 
 
+Candidate Name : Kalyankumar Sandireddy
+
+Skills         : programming         - Python, java
+                 Database Management - MySQL 
+                 UI Design           - HTML, CSS, JavaScript
+                 Cloud Computing     - ServiceNow
+
 
 Candidate Name : Saranya Madala
 
