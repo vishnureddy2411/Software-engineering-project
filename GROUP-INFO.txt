@@ -40,3 +40,13 @@ Candidate Name : Boyapati Navya Eeshani
 Skills :  Programming - Python , C 
           Database Management - MySql
           Front end - HTML , CSS
+
+
+
+Candidate Name : G Shashank Reddy
+
+Skills: 
+
+        Programming              - Python, java, dart
+        database management      - MySql
+        Front end                - HTML, CSS, Flutter
