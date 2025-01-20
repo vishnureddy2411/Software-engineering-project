@@ -10,10 +10,11 @@ Skills         : programming         - Python, java
 
 Candidate Name : Kalyankumar Sandireddy
 
-Skills         : programming         - Python, java
-                 Database Management - MySQL 
+Skills         : programming         - Python, Java
+                 Database Management - SQL, MongoDB
                  UI Design           - HTML, CSS, JavaScript
                  Cloud Computing     - ServiceNow
+
 
 
 Candidate Name : Saranya Madala
