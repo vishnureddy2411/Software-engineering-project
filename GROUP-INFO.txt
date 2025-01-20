@@ -19,8 +19,6 @@ Skills         :Programming          - Python , Java , C
 
 Yamini Malikireddy
 
-Group number: 9
-
 Skills: 
 
 Programming Languages: Python, C
