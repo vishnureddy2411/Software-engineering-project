@@ -6,3 +6,13 @@ Skills         : programming         - Python, java
                  Database Management - MySQL 
                  UI Design           - HTML, CSS, JavaScript
                  Cloud Computing     - AWS
+
+
+
+Candidate Name : Saranya Madala
+
+Skills         :Programming          - Python , Java , C 
+                Database Management  - MySQL, SQLdeveloper
+                Front-end            - HTML, CSS, JavaScript
+                Backe-end            - FLASK 
+                Cloud                - AWS , Azure(Fundamentals)
