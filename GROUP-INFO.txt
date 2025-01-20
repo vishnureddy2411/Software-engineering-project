@@ -25,3 +25,10 @@ Skills:
       Database Management            -MYSQL
       Cloud                          -AWS
       Front-end                      -HTML, CSS
+
+
+Candidate Name : Boyapati Navya Eeshani
+
+Skills :  Programming - Python , C 
+          Database Management - MySql
+          Front end - HTML , CSS
