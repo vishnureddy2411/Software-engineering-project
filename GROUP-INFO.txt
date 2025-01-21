@@ -72,3 +72,9 @@ Skills :
           Back-end                - Spring boot
 
 
+Candidate Name : Jahnavi Chowdary Batta
+
+Skills : 
+          Programming              - C, Python, Java, R
+          Database Management      - Oracle SQL
+          Front-end                - HTML , CSS, JavaScript, React
