@@ -53,10 +53,22 @@ Skills:
 
 
 
-Candidate Name : Siddireddygari Nandini
+Candidate Name : Siddireddygari Nandiniaw
 
 Skills : 
 
           Programming             - Python, C
           Database Management     - MYSQL
           Front-end               - HTML , CSS
+
+
+Candidate Name : Anupama Bandoju
+
+Skills : 
+
+          Programming             - Java, Python, C
+          Database Management     - MYSQL
+          Front-end               - HTML , CSS ,JavaScript
+          Back-end                - Spring boot
+
+
