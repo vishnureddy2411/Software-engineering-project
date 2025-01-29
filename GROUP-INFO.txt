@@ -32,7 +32,7 @@ Skills:
       Programming                    -Python, C
       Database Management            -MYSQL
       Cloud                          -AWS
-      Front-end                      -HTML, CSS
+      Front-end                      -HTML, CSS.
 
 
 Candidate Name : Boyapati Navya Eeshani
