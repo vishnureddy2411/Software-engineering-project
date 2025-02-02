@@ -1,0 +1,80 @@
+Group Name     : " We Team 9 " 
+
+Candidate Name : venkata sai vishnu vardhan reddy Tallapureddy
+
+Skills         : programming         - Python, java
+                 Database Management - MySQL 
+                 UI Design           - HTML, CSS, JavaScript
+                 Cloud Computing     - AWS
+
+
+Candidate Name : Kalyankumar Sandireddy
+
+Skills         : programming         - Python, Java
+                 Database Management - SQL, MongoDB
+                 UI Design           - HTML, CSS, JavaScript
+                 Cloud Computing     - ServiceNow
+
+
+
+Candidate Name : Saranya Madala
+
+Skills         :Programming          - Python , Java , C 
+                Database Management  - MySQL, SQLdeveloper
+                Front-end            - HTML, CSS, JavaScript
+                Backe-end            - FLASK 
+                Cloud                - AWS , Azure(Fundamentals)
+
+Candidate Name : Yamini Malikireddy
+
+Skills: 
+
+      Programming                    -Python, C
+      Database Management            -MYSQL
+      Cloud                          -AWS
+      Front-end                      -HTML, CSS.
+
+
+Candidate Name : Boyapati Navya Eeshani
+
+Skills :  Programming - Python , C 
+          Database Management - MySql
+          Front end - HTML , CSS
+
+
+
+Candidate Name : G Shashank Reddy
+
+Skills: 
+
+        Programming              - Python, java, dart
+        database management      - MySql
+        Front end                - HTML, CSS, Flutter
+
+
+
+Candidate Name : Siddireddygari Nandini
+
+Skills : 
+
+          Programming             - Python, C
+          Database Management     - MYSQL
+          Front-end               - HTML , CSS
+
+
+Candidate Name : Anupama Bandoju
+
+Skills : 
+
+          Programming             - Java, Python, C
+          Database Management     - MYSQL
+          Front-end               - HTML , CSS ,JavaScript
+          Back-end                - Spring boot
+
+
+Candidate Name : Jahnavi Chowdary Batta
+
+Skills : 
+          Programming              - C, Python, Java, R
+          Database Management      - Oracle SQL
+          Front-end                - HTML , CSS, JavaScript, React
