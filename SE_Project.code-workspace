@@ -6,8 +6,6 @@
 	],
 	"settings": {
 		"githubPullRequests.remotes": [
-			"origin",
-			"upstream",
 			"https://github.com/vishnureddy2411/Software-engineering-project"
 		]
 	}
