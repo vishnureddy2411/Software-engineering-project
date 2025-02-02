@@ -76,9 +76,9 @@ WSGI_APPLICATION = 'indore_sports.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'school_db',
+        'NAME': 'indore_sports_db',
         'USER': 'root',
-        'PASSWORD': '#Phoenix@15320',
+        'PASSWORD': '*******',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
