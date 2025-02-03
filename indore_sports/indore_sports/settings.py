@@ -43,6 +43,12 @@ INSTALLED_APPS = [
     'bookings',  # App for bookings
     'equipment',  # App for equipment management
     'ratings',  # App for ratings and feedback
+    'registration', #app for registerpage
+    'login', # app for loginpage
+    'payments', #app for payments
+    'my_referals', #app for my referals
+    'dashboards', #app for dashboards
+
 ]
 
 MIDDLEWARE = [
@@ -82,9 +88,9 @@ WSGI_APPLICATION = 'indore_sports.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'school_db',
+        'NAME': 'se_project',
         'USER': 'root',
-        'PASSWORD': '#Phoenix@15320',
+        'PASSWORD': 'vishnu',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }

@@ -4,9 +4,15 @@
 </head>
 <body>
     <h1>Welcome to the Indore Sports Portal</h1>
+    
+    <p><a href="{% url 'registerpage' %}">Registration</a></p>
+    <p><a href="{% url 'loginpage' %}">Login</a></p>
+    <p><a href="{% url 'dashboards' %}">Dashboard</a></p>
     <p><a href="{% url 'manage_profile' %}">Manage Profile</a></p>
     <p><a href="{% url 'book_slot' %}">Book Slot</a></p>
     <p><a href="{% url 'equipment_list' %}">Equipment List</a></p>
+    <p><a href="{% url 'payments' %}">Payments</a></p>
+    <p><a href="{% url 'myreferals' %}">Referals</a></p>
     <p><a href="{% url 'give_rating' %}">Give Rating</a></p>
 </body>
 </html>

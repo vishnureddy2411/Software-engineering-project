@@ -24,5 +24,10 @@ urlpatterns = [
     path('bookings/', include('bookings.urls')),
     path('equipment/', include('equipment.urls')),
     path('ratings/', include('ratings.urls')),
+    path('registerpage/', include('registration.urls')),
+    path('loginpage/', include('login.urls')),
+    path('payments/', include('payments.urls')),
+    path('myreferals/', include('my_referals.urls')),
+     path('dashboards/', include('dashboards.urls')),
     path('', home, name='home'),  # Default landing page
 ]
