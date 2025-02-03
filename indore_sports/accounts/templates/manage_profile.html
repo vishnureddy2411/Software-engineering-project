@@ -1,0 +1,7 @@
+<form method="POST">
+    {% csrf_token %}
+    <label for="location">Location:</label>
+    <input type="text" id="location" name="location" value="{{ profile.location }}">
+    <button type="submit">Update</button>
+</form>
+
