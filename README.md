@@ -9,9 +9,7 @@ SE_PROJECT/
 │   │   ├── settings.py           # Configuration settings for the project, including databases, middleware, and apps
 │   │   ├── urls.py               # Responsible for routing URLs to the appropriate views
 │   │   ├── wsgi.py               # Configuration for WSGI (Web Server Gateway Interface) server for web server communication
-│   │   ├── migrations            # Database migration files
 │   ├── accounts/                 # User account management functionalities
-│   │   ├── templates/            # HTML templates for rendering user account pages
 │   │   ├── init.py               # Initialization file for the accounts app
 │   │   ├── admin.py              # Admin interface configuration for user accounts
 │   │   ├── apps.py               # Application configuration settings
@@ -20,10 +18,6 @@ SE_PROJECT/
 │   │   │   └── ...               # Specific test files for various components
 │   │   ├── urls.py               # URL routing for accounts-related views
 │   │   ├── views.py              # View functions for handling requests related to accounts
-│   │   ├── static/               # Static files (CSS, JavaScript, images) related to accounts
-│   │   │   ├── css/              # Stylesheets for user accounts
-│   │   │   ├── js/               # JavaScript files for interactive features
-│   │   │   └── img/              # Images used in account-related templates
 │   ├── bookings/                 # Booking and reservation management functionality
 │   │   ├── ...                   # Same structure as accounts, including models, views, and tests for bookings
 │   ├── dashboards/               # Features for data visualization and reporting
@@ -40,6 +34,12 @@ SE_PROJECT/
 │   │   ├── ...                   # Same structure as accounts for ratings functionality
 │   └── registration/             # User registration functionalities
 │       ├── ...                   # Same structure as accounts, focusing on user registrations
+├── migrations                    # Database migration files
+├── templates/                    # HTML templates for rendering user account pages
+├── static/                       # Static files (CSS, JavaScript, images) related to accounts
+│   ├── css/                      # Stylesheets for user accounts
+│   ├── js/                       # JavaScript files for interactive features
+│   └── img/                      # Images used in account-related templates
 ├── Planning Documents/           # Contains project planning documents and specifications
 ├── Minutes of Meeting/           # Records of meeting minutes, e.g., 2024-10-26_meeting.md
 │   └── ...                       # Additional meeting notes
