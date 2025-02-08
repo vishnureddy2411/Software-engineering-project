@@ -2,7 +2,7 @@
 
 This document provides an overview of the directory structure for the SE_PROJECT Django application, detailing the functionality and contents of each directory.
 SE_PROJECT/
-├── apps/                         # Core application modules (Django apps)
+├── indore_sports/                # Core application modules (Django apps)
 │   ├── indore_sports/            # Main application, coordinating functionalities across other apps
 │   │   ├── init.py               # Initialization file for the indore_sports app
 │   │   ├── asgi.py               # Configuration for ASGI (Asynchronous Server Gateway Interface) server
