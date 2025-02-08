@@ -66,7 +66,7 @@ ROOT_URLCONF = 'indore_sports.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,6 +79,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'indore_sports.wsgi.application'
 
 
@@ -88,9 +89,9 @@ WSGI_APPLICATION = 'indore_sports.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'se_project',
+        'NAME': '******',
         'USER': 'root',
-        'PASSWORD': 'vishnu',
+        'PASSWORD': '*****',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
