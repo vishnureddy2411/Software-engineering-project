@@ -3,12 +3,6 @@
 This document provides an overview of the directory structure for the SE_PROJECT Django application, detailing the functionality and contents of each directory.
 SE_PROJECT/
 ├── apps/                         # Core application modules (Django apps)
-│   │   ├── migrations            # Database migration files
-│   │   ├── templates/            # HTML templates for rendering user account pages
-│   │   ├── static/               # Static files (CSS, JavaScript, images) related to accounts
-│   │   │   ├── css/              # Stylesheets for user accounts
-│   │   │   ├── js/               # JavaScript files for interactive features
-│   │   │   └── img/              # Images used in account-related templates
 │   ├── indore_sports/            # Main application, coordinating functionalities across other apps
 │   │   ├── init.py               # Initialization file for the indore_sports app
 │   │   ├── asgi.py               # Configuration for ASGI (Asynchronous Server Gateway Interface) server
@@ -40,6 +34,12 @@ SE_PROJECT/
 │   │   ├── ...                   # Same structure as accounts for ratings functionality
 │   └── registration/             # User registration functionalities
 │       ├── ...                   # Same structure as accounts, focusing on user registrations
+├── migrations                    # Database migration files
+├── templates/                    # HTML templates for rendering user account pages
+├── static/                       # Static files (CSS, JavaScript, images) related to accounts
+│   ├── css/                      # Stylesheets for user accounts
+│   ├── js/                       # JavaScript files for interactive features
+│   └── img/                      # Images used in account-related templates
 ├── Planning Documents/           # Contains project planning documents and specifications
 ├── Minutes of Meeting/           # Records of meeting minutes, e.g., 2024-10-26_meeting.md
 │   └── ...                       # Additional meeting notes
