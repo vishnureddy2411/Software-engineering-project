@@ -3,15 +3,19 @@
 This document provides an overview of the directory structure for the SE_PROJECT Django application, detailing the functionality and contents of each directory.
 SE_PROJECT/
 ├── apps/                         # Core application modules (Django apps)
+│   │   ├── migrations            # Database migration files
+│   │   ├── templates/            # HTML templates for rendering user account pages
+│   │   ├── static/               # Static files (CSS, JavaScript, images) related to accounts
+│   │   │   ├── css/              # Stylesheets for user accounts
+│   │   │   ├── js/               # JavaScript files for interactive features
+│   │   │   └── img/              # Images used in account-related templates
 │   ├── indore_sports/            # Main application, coordinating functionalities across other apps
 │   │   ├── init.py               # Initialization file for the indore_sports app
 │   │   ├── asgi.py               # Configuration for ASGI (Asynchronous Server Gateway Interface) server
 │   │   ├── settings.py           # Configuration settings for the project, including databases, middleware, and apps
 │   │   ├── urls.py               # Responsible for routing URLs to the appropriate views
 │   │   ├── wsgi.py               # Configuration for WSGI (Web Server Gateway Interface) server for web server communication
-│   │   ├── migrations            # Database migration files
 │   ├── accounts/                 # User account management functionalities
-│   │   ├── templates/            # HTML templates for rendering user account pages
 │   │   ├── init.py               # Initialization file for the accounts app
 │   │   ├── admin.py              # Admin interface configuration for user accounts
 │   │   ├── apps.py               # Application configuration settings
@@ -20,10 +24,6 @@ SE_PROJECT/
 │   │   │   └── ...               # Specific test files for various components
 │   │   ├── urls.py               # URL routing for accounts-related views
 │   │   ├── views.py              # View functions for handling requests related to accounts
-│   │   ├── static/               # Static files (CSS, JavaScript, images) related to accounts
-│   │   │   ├── css/              # Stylesheets for user accounts
-│   │   │   ├── js/               # JavaScript files for interactive features
-│   │   │   └── img/              # Images used in account-related templates
 │   ├── bookings/                 # Booking and reservation management functionality
 │   │   ├── ...                   # Same structure as accounts, including models, views, and tests for bookings
 │   ├── dashboards/               # Features for data visualization and reporting
