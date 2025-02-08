@@ -9,8 +9,8 @@ SE_PROJECT/
 │   │   ├── settings.py           # Configuration settings for the project, including databases, middleware, and apps
 │   │   ├── urls.py               # Responsible for routing URLs to the appropriate views
 │   │   ├── wsgi.py               # Configuration for WSGI (Web Server Gateway Interface) server for web server communication
+│   │   ├── migrations            # Database migration files
 │   ├── accounts/                 # User account management functionalities
-│   │   ├── migrations/           # Database migration files for accounts
 │   │   ├── templates/            # HTML templates for rendering user account pages
 │   │   ├── init.py               # Initialization file for the accounts app
 │   │   ├── admin.py              # Admin interface configuration for user accounts
