@@ -1,8 +1,7 @@
 
 
 All Diagrams (Overall System Structure and Subsystems workflows):
-Location : github.com/vishnureddy2411/Software-engineering-project/blob/main/overall_structure.png
-
+Location : https://github.com/vishnureddy2411/Software-engineering-project/tree/main/Diagrams
 
 Deliverable-2 Report :   Whole deliverable content in pdf file format
 Location : github.com/vishnureddy2411/Software-engineering-project/blob/main/Deliverable%20-2_Team%209.pdf
