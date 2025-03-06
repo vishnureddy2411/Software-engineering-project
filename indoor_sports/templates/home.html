@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Indore Sports</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+<body>
+    <header>
+        <button class="exit-button">Exit</button>
+        <ul class="menu-options">
+            <li><a href="{% url 'registerpage' %}">Registration</a></li>
+            <li><a href="{% url 'loginpage' %}">Login</a></li>
+            <li><a href="{% url 'dashboards' %}">Dashboard</a></li>
+            <li><a href="{% url 'manage_profile' %}">Manage Profile</a></li>
+            <li><a href="{% url 'book_slot' %}">Book Slot</a></li>
+            <li><a href="{% url 'equipment_list' %}">Equipment List</a></li>
+            <li><a href="{% url 'user_details' %}">Payments</a></li>
+            <li><a href="{% url 'myreferals' %}">Referrals</a></li>
+            <li><a href="{% url 'give_rating' %}">Give Rating</a></li>
+        </ul>
+    </header>
+    <div class="welcome-message">
+        <h1>Welcome to the Indore Sports Portal</h1>
+    </div>
+</body>
+</html>
