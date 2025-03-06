@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from accounts.views import home  # Import the home view
+from . import views  # Import the views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,5 +29,5 @@ urlpatterns = [
     path('payments/', include('payments.urls')),
     path('my_referrals/', include('my_referrals.urls')),
     path('dashboards/', include('dashboards.urls')),
-    path('', home, name='home'),  # Default landing page
+    path('', views.home, name='home'),  # Home page URL
 ]

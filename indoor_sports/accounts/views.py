@@ -12,7 +12,3 @@ def manage_profile(request):
     return render(request, 'manage_profile.html', {'profile': profile})
 
 
-from django.shortcuts import render
-
-def home(request):
-    return render(request, 'home.html')

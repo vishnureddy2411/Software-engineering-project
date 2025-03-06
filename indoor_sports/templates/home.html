@@ -3,27 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Indore Sports</title>
+    <title>Home - Indore Sports Academy</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
     <header>
-        <button class="exit-button">Exit</button>
-        <ul class="menu-options">
-            <li><a href="{% url 'registerpage' %}">Registration</a></li>
-            <li><a href="{% url 'loginpage' %}">Login</a></li>
-            <li><a href="{% url 'dashboards' %}">Dashboard</a></li>
-            <li><a href="{% url 'manage_profile' %}">Manage Profile</a></li>
-            <li><a href="{% url 'book_slot' %}">Book Slot</a></li>
-            <li><a href="{% url 'equipment_list' %}">Equipment List</a></li>
-            <li><a href="{% url 'user_details' %}">Payments</a></li>
-            <li><a href="{% url 'myreferals' %}">Referrals</a></li>
-            <li><a href="{% url 'give_rating' %}">Give Rating</a></li>
-        </ul>
+        <h1>Welcome to Indore Sports Academy</h1>
     </header>
-    <div class="welcome-message">
-        <h1>Welcome to the Indore Sports Portal</h1>
-    </div>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Sports</a></li>
+            <li><a href="#">Bookings</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h2>Discover a World of Sports and Fitness</h2>
+        <p>Join us at Indore Sports Academy where we offer a wide range of sports and fitness programs for all ages. Whether you're looking to learn a new sport, improve your skills, or stay fit, we have something for everyone.</p>
+    </main>
+    <footer>
+        <p>&copy; 2025 Indore Sports Academy. All rights reserved.</p>
+    </footer>
 </body>
 </html>
