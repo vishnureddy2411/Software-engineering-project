@@ -1,3 +1,6 @@
 from django.shortcuts import render
+from .models import Sport
 
-# Create your views here.
+def sport_list(request):
+    sports = Sport.objects.all()
+    return render(request, 'sports/sport_list.html', {'sports': sports})

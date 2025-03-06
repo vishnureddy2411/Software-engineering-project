@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Payments</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>My Payments</h1>
+    </header>
+    <main>
+        <ul>
+            {% for payment in payments %}
+                <li>Payment ID: {{ payment.id }} - Amount: {{ payment.amount }} - Method: {{ payment.payment_method }} - Status: {{ payment.payment_status }} - Date: {{ payment.payment_date }}</li>
+            {% endfor %}
+        </ul>
+    </main>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Referrals - Indore Sports Academy</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>My Referrals</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Sports</a></li>
+            <li><a href="#">Bookings</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h2>Referrals Given</h2>
+        <ul>
+            {% for referral in referrals_given %}
+                <li>Referred User: {{ referral.referred_user.username }} - Points Earned: {{ referral.points_earned }} - Date: {{ referral.created_at }}</li>
+            {% endfor %}
+        </ul>
+        <h2>Referrals Received</h2>
+        <ul>
+            {% for referral in referrals_received %}
+                <li>Referrer User: {{ referral.referrer_user.username }} - Points Earned: {{ referral.points_earned }} - Date: {{ referral.created_at }}</li>
+            {% endfor %}
+        </ul>
+    </main>
+    <footer>
+        <p>&copy; 2025 Indore Sports Academy. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Indoor Sports Academy</title>
+    <title>Home - Indore Sports Academy</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
     <header>
-        <h1>Welcome to Indoor Sports Academy</h1>
+        <h1>Welcome to Indore Sports Academy</h1>
     </header>
     <nav>
         <ul>
@@ -17,15 +17,16 @@
             <li><a href="#">About Us</a></li>
             <li><a href="#">Sports</a></li>
             <li><a href="#">Bookings</a></li>
+            <li><a href="{% url 'referral_list' %}">My Referrals</a></li>  <!-- Add link to My Referrals page -->
             <li><a href="#">Contact</a></li>
         </ul>
     </nav>
     <main>
         <h2>Discover a World of Sports and Fitness</h2>
-        <p>Join us at Indoor Sports Academy where we offer a wide range of sports and fitness programs for all ages. Whether you're looking to learn a new sport, improve your skills, or stay fit, we have something for everyone.</p>
+        <p>Join us at Indore Sports Academy where we offer a wide range of sports and fitness programs for all ages. Whether you're looking to learn a new sport, improve your skills, or stay fit, we have something for everyone.</p>
     </main>
     <footer>
-        <p>&copy; 2025 Indoor Sports Academy. All rights reserved.</p>
+        <p>&copy; 2025 Indore Sports Academy. All rights reserved.</p>
     </footer>
 </body>
 </html>

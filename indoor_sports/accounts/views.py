@@ -1,14 +1,23 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Profile
+from django.contrib.auth import authenticate, login
 
-@login_required
-def manage_profile(request):
-    profile = Profile.objects.get(user=request.user)
+def login_view(request):
     if request.method == 'POST':
-        profile.location = request.POST.get('location')
-        profile.save()
-        return redirect('manage_profile')
-    return render(request, 'manage_profile.html', {'profile': profile})
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            return render(request, 'login.html', {'error': 'Invalid username or password'})
+    else:
+        return render(request, 'login.html')
 
+from django.shortcuts import render, get_object_or_404
+from .models import User, Profile
 
+def user_profile(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    profile = get_object_or_404(Profile, user=user)
+    return render(request, 'user_profile.html', {'user': user, 'profile': profile})

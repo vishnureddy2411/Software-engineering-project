@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.username }}'s Profile</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>{{ user.username }}'s Profile</h1>
+    </header>
+    <main>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>First Name:</strong> {{ user.first_name }}</p>
+        <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+        <p><strong>Contact Number:</strong> {{ user.contact_number }}</p>
+        <p><strong>Address:</strong> {{ user.address }}</p>
+        <p><strong>City:</strong> {{ user.city }}</p>
+        <p><strong>State:</strong> {{ user.state }}</p>
+        <p><strong>Country:</strong> {{ user.country }}</p>
+        <p><strong>ZIP Code:</strong> {{ user.zip_code }}</p>
+        <p><strong>Gender:</strong> {{ user.gender }}</p>
+        <p><strong>Referral Points:</strong> {{ user.referral_points }}</p>
+    </main>
+</body>
+</html>

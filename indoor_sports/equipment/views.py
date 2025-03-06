@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from .models import Equipment
 
 def equipment_list(request):
-    equipment_items = Equipment.objects.all()
-    return render(request, 'equipment_list.html', {'equipment_items': equipment_items})
+    equipment = Equipment.objects.all()
+    return render(request, 'equipment/equipment_list.html', {'equipment': equipment})
