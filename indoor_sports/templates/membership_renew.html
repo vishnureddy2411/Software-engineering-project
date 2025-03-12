@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Renew Membership{% endblock %}
+
+{% block content %}
+<div class="container py-5 position-relative">
+    <!-- Go Back Button -->
+    <div class="position-absolute top-0 end-0 mt-3 me-3">
+        <button class="btn btn-light" onclick="history.back()">Go Back</button>
+    </div>
+
+    <h1 class="text-center mb-4">Renew Membership</h1>
+    <div class="card">
+        <div class="card-body text-center">
+            <h4>Your Current Membership</h4>
+            <p>Plan: <strong>{{ membership.plan }}</strong></p>
+            <p>End Date: <strong>{{ membership.end_date }}</strong></p>
+            <p>Status: <strong>{{ membership.status }}</strong></p>
+            <p class="text-muted">Do you want to renew the same membership?</p>
+
+            <!-- Confirmation Form -->
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" name="confirm-renew" class="btn btn-success">Yes, Renew</button>
+                <button type="submit" name="new-plan" class="btn btn-primary">No, Select a New Plan</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

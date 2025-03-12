@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Renew Membership Error{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center">
+    <h1 class="text-danger">Unable to Renew Membership</h1>
+    <p>{{ error }}</p>
+    <a href="{% url 'membership_dashboard' %}" class="btn btn-primary">Go to Dashboard</a>
+</div>
+{% endblock %}

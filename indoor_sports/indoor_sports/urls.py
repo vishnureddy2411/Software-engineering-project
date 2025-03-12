@@ -11,4 +11,6 @@ urlpatterns = [
     path('sports/', include('sports.urls')),
     path('payments/', include('payments.urls')),
     path('my_referrals/', include('my_referrals.urls')),
+    path('memberships/', include('memberships.urls')),
+    path('notifications/', include('notifications.urls')),
 ]

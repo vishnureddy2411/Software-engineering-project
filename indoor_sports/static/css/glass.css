@@ -1,0 +1,36 @@
+/* Glass Effect for Cards */
+.glass-card {
+    background: rgba(255, 255, 255, 0.8); /* Bright frosted look */
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2); /* Softer shadow */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #2a2a2e; /* Neutral for text readability */
+}
+
+/* Glass Effect for Background */
+.glass-bg {
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc8d4); /* Pastel pinks and oranges */
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', Arial, sans-serif;
+    color: #2a2a2e;
+}
+
+/* Glass Effect for Forms */
+.glass-form .form-control {
+    background-color: rgba(255, 255, 255, 0.85); /* Light frosted input fields */
+    border: 1px solid #ff85a1; /* Pinkish border for vibrance */
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 15px;
+}
+
+.glass-form .form-control:focus {
+    border-color: #4ecdc4; /* Teal for an exciting touch */
+    box-shadow: 0 0 8px rgba(78, 205, 196, 0.6);
+    outline: none;
+}

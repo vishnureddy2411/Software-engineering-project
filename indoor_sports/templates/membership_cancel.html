@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Cancel Membership{% endblock %}
+
+{% block content %}
+<div class="container py-5 position-relative">
+    <!-- Go Back Button -->
+    <div class="position-absolute top-0 end-0 mt-3 me-3">
+        <button class="btn btn-light" onclick="history.back()">Go Back</button>
+    </div>
+
+    <h1 class="text-center mb-4 text-danger">Cancel Membership</h1>
+
+    {% if membership %}
+        <div class="card">
+            <div class="card-body text-center">
+                <h4>Are you sure you want to cancel your membership?</h4>
+                <p class="text-muted">
+                    Plan: <strong>{{ membership.plan }}</strong><br>
+                    Status: <strong>{{ membership.status }}</strong><br>
+                    End Date: <strong>{{ membership.end_date }}</strong>
+                </p>
+                <form method="POST" action="{% url 'cancel_membership' membership.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Yes, Cancel Membership</button>
+                </form>
+                <button class="btn btn-secondary mt-2" onclick="history.back()">No, Go Back</button>
+            </div>
+        </div>
+    {% else %}
+        <p class="text-center text-warning">You do not have a valid membership to cancel.</p>
+        <a href="{% url 'membership_dashboard' %}" class="btn btn-primary d-block mx-auto" style="width: fit-content;">Go to Dashboard</a>
+    {% endif %}
+</div>
+{% endblock %}

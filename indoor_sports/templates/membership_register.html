@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Register Membership{% endblock %}
+
+{% block content %}
+<div class="container py-5 position-relative">
+    <!-- Go Back Button -->
+    <div class="position-absolute top-0 end-0 mt-3 me-3">
+        <button class="btn btn-light" onclick="history.back()">Go Back</button>
+    </div>
+
+    <h1 class="text-center mb-4">Register for {{ plan.name }}</h1>
+    <form method="POST" action="{% url 'register_membership' plan.name %}">
+        {% csrf_token %}
+        <div class="card">
+            <div class="card-body">
+                <h4>{{ plan.name }}</h4>
+                <p>Duration: {{ plan.duration }}</p>
+                <p>Price: ${{ plan.price }}</p>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Confirm Registration</button>
+    </form>
+</div>
+{% endblock %}

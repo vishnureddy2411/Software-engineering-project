@@ -1,15 +1,15 @@
-# notifications/signals.py
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from bookings.models import Booking
-from ..notificati.models import Notification  # assuming Notification model lives in notifications/models.py
+from .models import Notification  # Updated to use the Notification model
 
-@receiver(post_save, sender=Booking)
-def create_booking_notification(sender, instance, created, **kwargs):
-    if created:
-        # Create a notification when a booking is created.
-        Notification.objects.create(
-            user=instance.user,  # the user who made the booking
-            notification_type='Booking Confirmation',
-            message=f"Your booking with ID {instance.id} has been confirmed.",
+@receiver(post_save, sender=Notification)
+def create_notification_for_received_email(sender, instance, created, **kwargs):
+    """
+    Automatically creates a notification entry for received emails.
+    """
+    if created and instance.notification_type == 'Received':
+        # Example logic for creating a related notification
+        instance.user.notifications.create(
+            notification_type="New Email Received",
+            message=f"You have a new email: {instance.subject}",
         )

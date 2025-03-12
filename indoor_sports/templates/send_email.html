@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Send Email{% endblock %}
+
+{% block content %}
+<div class="container py-5 position-relative">
+    <!-- Go Back Button at Top-Right -->
+    <div class="position-absolute top-0 end-0 mt-3 me-3">
+        <button class="btn btn-light" id="goBackButton">Go Back</button>
+    </div>
+
+    <h1 class="text-center">Send Email to Customer Service</h1>
+    
+    <!-- Email Form -->
+    <form method="POST" id="emailForm">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="subject" class="form-label">Subject</label>
+            <input type="text" id="subject" name="subject" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="body" class="form-label">Message</label>
+            <textarea id="body" name="body" class="form-control" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+</div>
+
+<!-- JavaScript to Handle Go Back and Clear Fields -->
+<script>
+    document.getElementById('goBackButton').addEventListener('click', function (e) {
+        e.preventDefault(); // Prevent the default button behavior
+        document.getElementById('emailForm').reset(); // Clear the form fields
+        history.back(); // Navigate back to the previous page
+    });
+</script>
+{% endblock %}

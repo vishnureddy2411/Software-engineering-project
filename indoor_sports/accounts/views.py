@@ -1,5 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import authenticate, login
+from .models import User, Profile
+
 
 def login_view(request):
     if request.method == 'POST':
@@ -14,8 +16,6 @@ def login_view(request):
     else:
         return render(request, 'login.html')
 
-from django.shortcuts import render, get_object_or_404
-from .models import User, Profile
 
 def user_profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)

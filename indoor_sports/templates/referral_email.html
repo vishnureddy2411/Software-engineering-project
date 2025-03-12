@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>You’re Invited to Join Indoor Sports Academy!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+        }
+        .button {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            color: white;
+            background-color: #4CAF50;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>You’re Invited!</h2>
+        <p>Hi there,</p>
+        <p>Your friend <strong>{{ username }}</strong> has invited you to join Indoor Sports Academy!</p>
+        <p>Use the referral code <strong>{{ referral_code }}</strong> or click the button below to register:</p>
+        <a href="{{ referral_link }}" class="button">Join Now</a>
+        <p>We look forward to seeing you!</p>
+    </div>
+</body>
+</html>
