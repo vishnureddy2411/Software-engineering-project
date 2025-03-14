@@ -39,7 +39,9 @@ SE_PROJECT/
 ├── static/                       # Static files (CSS, JavaScript, images) related to accounts
 │   ├── css/                      # Stylesheets for user accounts
 │   ├── js/                       # JavaScript files for interactive features
+│   ├── video                     # Video files for video features
 │   └── img/                      # Images used in account-related templates
+├── Utils/                        # Utils for additional functionalities
 ├── Planning Documents/           # Contains project planning documents and specifications
 ├── Minutes of Meeting/           # Records of meeting minutes, e.g., 2024-10-26_meeting.md
 │   └── ...                       # Additional meeting notes
