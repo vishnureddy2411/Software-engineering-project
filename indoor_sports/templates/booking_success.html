@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Booking Successful{% endblock %}
+
+{% block content %}
+<div class="container mt-4 text-center">
+    <h2>Booking Successful!</h2>
+    <p>Your booking has been confirmed. Thank you for choosing Indoor Sports Academy!</p>
+    <p>If you need any equipment or inventory to play the sport, click the button below.</p>
+    <a href="{% url 'equipment_list' %}" class="btn btn-primary mt-3">Browse Equipment</a>
+    <br><br>
+    <a href="{% url 'my_bookings' %}" class="btn btn-secondary">View My Bookings</a>
+</div>
+{% endblock %}

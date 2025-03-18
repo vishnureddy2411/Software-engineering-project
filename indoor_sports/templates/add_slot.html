@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Add Slot{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Add New Slot</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Add Slot</button>
+    </form>
+</div>
+{% endblock %}
