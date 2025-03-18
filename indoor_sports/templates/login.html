@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Login - Indoor Sports{% endblock %}
+
+{% block content %}
+
+<div class="glass-card mx-auto mt-5" style="max-width: 400px;">
+    <h2 class="text-center mb-4">Login</h2>
+    
+    <!-- Display messages for feedback -->
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'loginpage' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="identifier" class="form-label">Username or Email</label>
+            <input type="text" name="identifier" id="identifier" class="form-control" placeholder="Enter your username or email" required>
+        </div>
+        <div class="mb-3 password-container">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
+            <span class="toggle-password" onclick="togglePassword()">
+                <i class="closed-eye">🙈</i>
+                <i class="open-eye" style="display: none;">🐵</i>
+            </span>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+
+    <div class="text-center mt-3">
+        <p><a href="{% url 'register_user' %}">New user? Register here!</a></p>
+        <p><a href="{% url 'password_reset' %}">Forgot Password?</a></p>
+    </div>
+</div>
+
+<script>
+    function togglePassword() {
+        const passwordField = document.getElementById('password');
+        const closedEyeIcon = document.querySelector('.closed-eye');
+        const openEyeIcon = document.querySelector('.open-eye');
+        
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            closedEyeIcon.style.display = 'none';
+            openEyeIcon.style.display = 'inline';
+        } else {
+            passwordField.type = 'password';
+            closedEyeIcon.style.display = 'inline';
+            openEyeIcon.style.display = 'none';
+        }
+    }
+</script>
+{% endblock %}
