@@ -1,6 +1,8 @@
-from django.shortcuts import render, redirect
-from .models import Equipment
+from django.urls import path
+from . import views
 
-'''def equipment_list(request):
-    equipment_items = Equipment.objects.all()
-    return render(request, 'equipment_list.html', {'equipment_items': equipment_items})'''
+urlpatterns = [
+    path('equipment/', views.equipment_list, name='equipment_list'),
+    
+]
+
