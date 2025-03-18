@@ -8,10 +8,4 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'location', 'balance_credits')
-    search_fields = ('user__username',)
-
-@admin.register(Admin)
-class AdminAdmin(admin.ModelAdmin):
-    list_display = ('emailid', 'firstname', 'lastname', 'status')
-    search_fields = ('emailid',)
+    list_display = ('user', 'bio')

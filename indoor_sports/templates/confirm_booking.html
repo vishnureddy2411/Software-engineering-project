@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "base.html" %}
 {% load static %}
 {% block title %}Confirm Booking{% endblock %}
@@ -21,3 +22,28 @@
     </form>
 </div>
 {% endblock %}
+=======
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Confirm Booking{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Confirm Your Booking</h2>
+    <div class="card p-3 mb-3">
+        <p><strong>Date:</strong> {{ slot.date }}</p>
+        <p><strong>Time:</strong> {{ slot.time|time:"H:i" }}</p>
+        <p><strong>Slot Type:</strong> {{ slot.slot_type }}</p>
+        <p><strong>Location:</strong> {{ slot.location.name }}</p>
+        <p><strong>Sport:</strong> {{ slot.sport.name }}</p>
+    </div>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="d-flex justify-content-between">
+            <button type="button" onclick="window.history.back()" class="btn btn-secondary">Back</button>
+            <button type="submit" class="btn btn-primary">Confirm Booking</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+>>>>>>> 587daca803448929c1cfa1e6e31a62917d21a21d

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "base.html" %}
 {% block title %}Choose Location - Indoor Sports{% endblock %}
 
@@ -18,3 +19,25 @@
     </form>
 </div>
 {% endblock %}
+=======
+{% extends "base.html" %}
+{% block title %}Choose Location - Indoor Sports{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Select Location</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <select name="location" class="form-control">
+                <option value="">--Select Location--</option>
+                {% for loc in locations %}
+                    <option value="{{ loc.location_id }}">{{ loc.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Next</button>
+    </form>
+</div>
+{% endblock %}
+>>>>>>> 587daca803448929c1cfa1e6e31a62917d21a21d

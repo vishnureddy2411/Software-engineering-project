@@ -1,0 +1,919 @@
+Team-9
+manage_profile(request) Code:
+def manage_profile(request):
+    profile = Profile.objects.get(user=request.user)
+    if request.method == 'POST':
+        profile.location = request.POST.get('location')
+        profile.save()
+        return redirect('manage_profile')
+    return render(request, 'manage_profile.html', {'profile': profile})
+Description:
+This function allows logged-in users to update their profile information, such as their location. It first retrieves the profile associated with the currently logged-in user. If the user submits the form (POST request), it updates the profile's location and saves the changes. After saving, it redirects the user back to the profile management page. If the request is just to view the page (GET request), it displays the current profile details in the manage_profile.html template. This function ensures only authenticated users can access it using the @login_required decorator.
+home(request) code:
+def home(request):
+    return render(request, 'home.html')
+Description:
+This function simply renders the homepage of the application by loading the home.html template. It does not perform any additional processing and serves as the landing page for users.
+password_reset_request(request) code:
+def password_reset_request(request):
+    """Handles password reset request by sending an email with a reset link."""
+    messages.get_messages(request).used = True  # Clears previous messages
+    if request.method == "POST":
+        email = request.POST["email"]
+        try:
+            user = User.objects.get(emailid=email)
+            token = str(uuid.uuid4())  # Generate a unique token
+            reset_tokens[token] = user.userid  # Store token with user ID
+            # Send password reset email
+            reset_link = request.build_absolute_uri(reverse("password_reset_confirm", args=[token]))
+            send_mail(
+                "Password Reset Request",
+                f"Click the link below to reset your password:\n\n{reset_link}",
+                "noreply@indoresports.com",
+                [email],
+                fail_silently=False,
+            )
+            messages.success(request, "Password reset link has been sent to your email.")
+        except User.DoesNotExist:
+            messages.error(request, "Email not found. Please enter a valid email.")
+    return render(request, "password_reset.html")
+Description:
+This function handles the process of requesting a password reset. When a user enters their email and submits the form, it checks if the email exists in the database. If found, a unique reset token is generated and stored temporarily. A password reset link containing this token is then sent to the user's email. If the email is not found, an error message is displayed. The function also ensures that previous messages on the page are cleared before displaying new ones. Once the email is sent, a success message informs the user that a reset link has been sent.
+password_reset_confirm(request,token) code:
+def password_reset_confirm(request, token):
+    """Handles the password reset confirmation where the user sets a new password."""
+    user_id = reset_tokens.get(token)
+    if not user_id:
+        messages.error(request, "Invalid or expired token.")
+        return redirect("password_reset")
+    if request.method == "POST":
+        new_password = request.POST["new_password"]
+        confirm_password = request.POST["confirm_password"]
+        if new_password == confirm_password:
+            user = User.objects.get(userid=user_id)
+            user.password = make_password(new_password)  # Securely hash the new password
+            user.save()
+            messages.success(request, "Password successfully reset! You can now log in.")
+            del reset_tokens[token]  # Remove token after use
+            return redirect("loginpage")
+        else:
+            messages.error(request, "Passwords do not match.")
+    return render(request, "password_reset_confirm.html", {"token": token})
+Description: This function verifies the password reset token and allows the user to set a new password. If the provided token is invalid or expired, an error message is displayed, and the user is redirected back to the reset request page. If the token is valid, the user is asked to enter a new password and confirm it. If both passwords match, the function securely updates the user’s password in the database using hashing and deletes the token to prevent reuse. After resetting the password successfully, the user is redirected to the login page with a success message.
+generate_referral_code(user_id) code:
+def generate_referral_code(user_id):
+    """Generate a unique referral code based on user_id."""
+    return f"USER{user_id}"
+Description: This function generates a unique referral code for a user based on their user ID. The referral code is created by prefixing the user ID with "USER" to ensure uniqueness.
+check_email_exists(request) code:
+def check_email_exists(request):
+    """Check if an email already exists in the database."""
+    if request.method == "POST":
+        emailid = request.POST.get("emailid", "").strip()  # Strip spaces
+        print(f"Received email: {emailid}")  # Debugging line  
+        # Case-insensitive comparison
+        if User.objects.filter(emailid__iexact=emailid).exists():
+            print("Email exists!")  # Debugging line
+            return JsonResponse({"exists": True}, status=200)
+        print("Email does not exist!")  # Debugging line
+        return JsonResponse({"exists": False}, status=200)
+    print("Invalid request!")  # Debugging line
+    return JsonResponse({"error": "Invalid request"}, status=400)
+Description:This function checks if a given email is already registered in the database. When a user enters an email, it performs a case-insensitive search to determine if it exists and returns a JSON response indicating whether the email is available or already in use.
+check_username(request) code:
+def check_username(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        # Log to check what is being sent from JavaScript
+        print(f"Checking username: {username}")  
+        if username:
+            username_exists = User.objects.filter(username=username).exists()
+            return JsonResponse({'exists': username_exists})
+        else:
+            return JsonResponse({'exists': False})
+
+Description: This function verifies if a given username is already taken. When a user submits a username, it searches the database to check for its existence and returns a JSON response stating whether the username is available or not.
+register_user(request) code :
+def register_user(request):
+    if request.method == "POST":
+        print("Received POST data:", request.POST) 
+        username = request.POST.get("username", "").strip() 
+        firstname = request.POST.get("firstname", "").strip()
+        lastname = request.POST.get("lastname", "").strip()
+        emailid = request.POST.get("emailid", "").strip()
+        password = request.POST.get("password", "").strip()
+        contactnumber = request.POST.get("phone", "").strip()
+        address = request.POST.get("address", "").strip()
+        city = request.POST.get("city", "").strip()
+        state = request.POST.get("state", "").strip()
+        country = request.POST.get("country", "").strip()
+        zip_code = request.POST.get("zip_code", "").strip()
+        gender = request.POST.get("gender", "").strip()
+        referral_code_used = request.POST.get("referral_code", "").strip()  # Optional
+        if not emailid or not password:
+            messages.error(request, "Email and password are required.")
+            return redirect("register_user")
+        # Check if the username already exists
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already taken. Please choose another one.")
+            return redirect("register_user")
+        # Check if the email already exists
+        if User.objects.filter(emailid=emailid).exists():
+            messages.error(request, "Email already registered. Please use another email.")
+            return redirect("register_user")
+        referred_by = None
+        referral_points = 0  # Default points for new user
+        if referral_code_used:
+            referred_by_user = User.objects.filter(referral_code=referral_code_used).first()
+            if referred_by_user:
+                referred_by = referred_by_user
+                referral_points = 10  
+            else:
+                messages.warning(request, "Invalid referral code. Registration will continue without referral.")
+        # Create and save the user (password hashing for security)
+        user = User.objects.create(       
+            firstname=firstname,
+            lastname=lastname,
+            emailid=emailid,
+            username = username,
+            password=make_password(password),
+            contactnumber=contactnumber,
+            address=address,
+            city=city,
+            state=state,
+            country=country,
+            zip_code=zip_code,
+            gender=gender,
+            subscription="unsubscribed",
+            referral_points=referral_points,
+            referred_by=referred_by
+        )
+
+        # Generate and update referral code **after user is saved**
+        user.referral_code = generate_referral_code(user.userid)
+        user.save()
+        # Update referral points for the referred user (if applicable)
+        if referred_by:
+            referred_by.referral_points += 10  # Add points to the referrer (adjust as needed)
+            referred_by.save()
+        # referral_code = request.POST.get("referral_code", "").strip().upper()
+        # if referral_code:
+        #     process_referral(user, referral_code)
+        # Send a welcome email
+        send_mail(
+            'Welcome to Indore Sports!',
+            f'Hi {lastname}, thank you for registering with us.',
+            'saivishnutallapureddy@gmail.com',  # From
+            [emailid],  # To
+            fail_silently=False,
+        )
+        # Auto-login user after registration
+        request.session["user_id"] = user.userid
+        request.session["role"] = "user"
+        messages.success(request, "Registration successful! Redirecting to your dashboard.")
+        return redirect("loginpage")  # Redirect to user dashboard
+    return render(request, "register_user.html")
+Description:
+This function handles the registration process for new users. It collects user details, validates the information (e.g., checking if the email or username already exists), assigns referral points if applicable, and securely stores the user data. After successful registration, the user receives a confirmation email, and their session is initialized.
+add_admin(request) code:
+def add_admin(request):
+    print(" Debugging add_admin view...")
+    admin_id = request.session.get("user_id")
+    role = request.session.get("role")
+    print(f"Session data -> Admin ID: {admin_id}, Role: {role}")
+    if role != "admin":
+        print(" Role mismatch — redirecting to login page")
+        messages.error(request, "Access denied. Only verified admins can send registration links.")
+        return redirect("loginpage")
+    existing_admin = Admin.objects.filter(adminid=admin_id).first()
+    print(f"Existing admin -> {existing_admin}")
+
+    if not existing_admin:
+        print(" Admin not found — redirecting to admin dashboard")
+        messages.error(request, "Admin not found.")
+        return redirect("admin_dashboard")
+    if not existing_admin.is_verified:
+        print(" Admin not verified — redirecting to admin dashboard")
+        messages.error(request, "Only verified admins can send registration links.")
+        return redirect("admin_dashboard")
+    print(" Admin verified — proceeding to send link")
+    if request.method == "POST":
+        emailid = request.POST.get("emailid", "").strip()  # Ensure using emailid field
+        print(f"Checking if admin with email {emailid} exists")
+        if Admin.objects.filter(emailid=emailid).exists():
+            print(" Admin with this email already exists — redirecting")
+            messages.error(request, "An admin with this email already exists.")
+            return redirect("add_admin")
+        signer = TimestampSigner()
+        token = signer.sign(emailid)  # Use emailid here
+        registration_link = request.build_absolute_uri(
+            reverse("register_new_admin") + f"?token={token}"
+        )
+        print(f" Registration link: {registration_link}")
+        send_mail(
+            'Admin Registration Invitation',
+            f'You have been invited to register as an admin. Click the link below to complete your registration:\n{registration_link}',
+            settings.DEFAULT_FROM_EMAIL,
+            [emailid],  # Send the invite to emailid
+            fail_silently=False,
+        )
+        messages.success(request, "Registration link sent successfully!")
+        return redirect("add_admin")
+    return render(request, "send_admin_invite.html")
+Description: This function allows an existing verified admin to invite a new admin. The system checks if the requesting user has admin privileges and then generates a secure registration link, which is emailed to the new admin. If the email is already linked to an existing admin, the function prevents duplicate registrations.
+register_new_admin(request) code:
+def register_new_admin(request):
+    """Page where new admins register after clicking the invitation link."""
+    token = request.GET.get("token")
+    if not token:
+        messages.error(request, "Invalid or missing registration token.")
+        print("Debug: No token found in the URL.")
+        return redirect("loginpage")
+    try:
+        signer = TimestampSigner()
+        emailid = signer.unsign(token, max_age=86400)  # Token valid for 24 hours
+        print(f"Debug: Token unsigned successfully, email: {emailid}")
+    except SignatureExpired:
+        messages.error(request, "The registration link has expired.")
+        print("Debug: The registration link has expired.")
+        return redirect("loginpage")
+    except BadSignature:
+        messages.error(request, "Invalid registration link.")
+        print("Debug: Invalid registration link.")
+        return redirect("loginpage")
+    if request.method == "POST":
+        try:
+            # Debugging POST data
+            print(f"Debug: POST data received: {request.POST}")
+            new_admin = Admin.objects.create(
+                firstname=request.POST.get("firstname", "").strip(),
+                lastname=request.POST.get("lastname", "").strip(),
+                emailid=emailid,  # Use emailid here
+                password=make_password(request.POST.get("password", "").strip()),
+                contactnumber=request.POST.get("phone", "").strip(),
+                address=request.POST.get("address", "").strip(),
+                city=request.POST.get("city", "").strip(),
+                state=request.POST.get("state", "").strip(),
+                country=request.POST.get("country", "").strip(),
+                zip_code=request.POST.get("zip_code", "").strip(),
+                gender=request.POST.get("gender", "").strip().title()
+            )
+            print(f"Debug: New admin created with email: {emailid}")
+            messages.success(request, "Admin registered successfully!")
+            return redirect("loginpage")
+        except IntegrityError as e:
+            print(f"Debug: IntegrityError occurred: {e}")
+            messages.error(request, "A user with this email already exists.")
+            return redirect("register_new_admin")
+        except ValidationError as e:
+            print(f"Debug: ValidationError occurred: {e}")
+            messages.error(request, f"Validation error: {e}")
+            return redirect("register_new_admin")
+        except Exception as e:
+            print(f"Debug: Unexpected error occurred: {e}")
+            messages.error(request, "An unexpected error occurred.")
+            return redirect("register_new_admin")
+    return render(request, "register_admin.html", {"emailid": emailid})
+Description: This function processes the registration of a new admin who has received an invitation link. It verifies the token in the URL to ensure security and then collects user details for registration. If the provided details are valid, the new admin account is created, and they can log in.
+invite_user(request) code:
+def invite_user(request):
+    """Allows admin to send an invitation link to a user."""
+    if request.method == "POST":
+        emailid = request.POST.get("emailid", "").strip()
+        # Debug: Confirm email is captured
+        print(f"Email captured: {emailid}")
+        # Check if email already exists in the database
+        if User.objects.filter(emailid=emailid).exists():
+            messages.error(request, "User with this email already exists.")
+            return redirect("invite_user")  # Stay on the same page
+        # Create a signer to generate the token
+        signer = TimestampSigner()
+        token = signer.sign(emailid)
+        registration_link = request.build_absolute_uri(
+            reverse("register_new_user") + f"?token={token}"
+        )
+        # Debug: Confirm registration link
+        print(f"Generated registration link: {registration_link}")
+        # Debug: Confirm registration link
+        print(f"Generated registration link: {registration_link}")
+        # Debug: Confirm email settings
+        print(f"EMAIL_HOST_USER: {os.getenv('EMAIL_HOST_USER')}")
+        print(f"EMAIL_HOST_PASSWORD: {os.getenv('EMAIL_HOST_PASSWORD')}")
+        print(f"DEFAULT_FROM_EMAIL: {settings.DEFAULT_FROM_EMAIL}") 
+        try:
+            print("Attempting to send email...")  # Debug log
+            send_mail(
+                'User Registration Invitation',
+                f'You have been invited to register. Click the link below to complete your registration:\n{registration_link}',
+                settings.DEFAULT_FROM_EMAIL,
+                [emailid],
+                fail_silently=False      )
+            messages.success(request, "Invitation sent successfully.")
+        except smtplib.SMTPException as e:
+            print(f"SMTP error: {e}")
+            traceback.print_exc()
+            messages.error(request, "There was an SMTP error sending the invitation. Please try again.")
+        except Exception as e:
+            print(f"General error: {e}")
+            traceback.print_exc()
+            messages.error(request, "There was an error sending the invitation. Please try again.")
+        return redirect("invite_user")  # Stay on the same page
+    return render(request, "send_user_invite.html")
+Description:
+This function enables an admin to send an invitation link to a user for registration. It first checks if the email is already registered, then generates a secure token-based registration link and sends it via email. If the email already exists in the system, an error message is displayed.
+register_new_user(request) code:
+def register_new_user(request):
+    """Page where users register after clicking the invitation link."""
+    token = request.GET.get("token")
+    if not token:
+        messages.error(request, "Invalid or missing registration token.")
+        return redirect("loginpage")
+    try:
+        signer = TimestampSigner()
+        emailid = signer.unsign(token, max_age=86400)  # Token valid for 24 hours
+        print("Extracted emailid:", emailid)  # Debug print
+    except SignatureExpired:
+        messages.error(request, "The registration link has expired.")
+        return redirect("loginpage")
+    except BadSignature:
+        messages.error(request, "Invalid registration link.")
+        return redirect("loginpage")
+    if request.method == "POST":
+        print("Form data received:", request.POST)  # Debug print
+        # Extracting form data correctly
+        username = request.POST.get("username", "").strip()
+        password = request.POST.get("password", "").strip()
+        firstname = request.POST.get("firstname", "").strip()
+        lastname = request.POST.get("lastname", "").strip()
+        contactnumber = request.POST.get("phone", "").strip()  # Match with form
+        address = request.POST.get("address", "").strip()
+        city = request.POST.get("city", "").strip()
+        state = request.POST.get("state", "").strip()
+        country = request.POST.get("country", "").strip()
+        zip_code = request.POST.get("zip_code", "").strip()  # Match with form
+        gender = request.POST.get("gender", "").strip()
+        referral_code_used = request.POST.get("referral_code", "").strip()  # Optional
+        # Debug prints
+        print(f"Received: {firstname}, {lastname},{username}, {emailid}, {contactnumber}, {zip_code}")
+        # Validation checks
+        if not firstname or not lastname or not emailid or not password:
+            messages.error(request, "Please fill in all required fields.")
+            return redirect("register_new_user")
+        if User.objects.filter(emailid=emailid).exists():
+            messages.error(request, "A user with this email already exists.")
+            return redirect("register_new_user")        
+        # Check if the username already exists
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already taken. Please choose another one.")
+            return redirect("register_new_user")
+        # Validate contact number (must be 10 digits)
+        if len(contactnumber) != 10 or not contactnumber.isdigit():
+            messages.error(request, "Please enter a valid 10-digit contact number.")
+            return redirect("register_new_user")
+        # Validate gender (assuming 'Male' or 'Female' only)
+        if gender not in ['Male', 'Female']:
+            messages.error(request, "Please select a valid gender (Male or Female).")
+            return redirect("register_new_user")
+        # Handling the referral functionality
+        referred_by = None
+        referral_points = 0
+        if referral_code_used:
+            referred_by_user = User.objects.filter(referral_code=referral_code_used).first()
+            if referred_by_user:
+                referred_by = referred_by_user
+                referral_points = 10 
+            else:
+                messages.warning(request, "Invalid referral code. Registration will continue without referral.")
+        # Creating user with correct fields
+        try:
+            user = User.objects.create(
+                firstname=firstname,
+                lastname=lastname,
+                emailid=emailid, 
+                username=username, 
+                password=make_password(password),
+                contactnumber=contactnumber,
+                address=address,
+                city=city,
+                state=state,
+                country=country,
+                zip_code=zip_code,
+                gender=gender,
+                status="active",
+                subscription="unsubscribed",
+                referral_points=referral_points,
+                referred_by=referred_by
+            )
+            print("User created:", user)  # Debug print
+            # Generate referral code for the user and save
+            user.referral_code = generate_referral_code(user.userid)
+            user.save()
+            # Update referral points for the referred user (if applicable)
+            if referred_by:
+              referred_by.referral_points += 10  # Add points to the referrer (adjust as needed)
+              referred_by.save()
+            # Send a welcome email
+            send_mail(
+                'Welcome to Indore Sports!',
+                f'Hi {lastname}, thank you for registering with us.',
+                'saivishnutallapureddy@gmail.com',  # From
+                [emailid],  # To
+                fail_silently=False,
+            )
+            # Auto-login user after registration
+            request.session["user_id"] = user.userid
+            request.session["role"] = "user"
+            messages.success(request, "Registration successful! You can now log in.")
+            return redirect("loginpage")  # Redirect to login page
+        except Exception as e:
+            print("Error saving user:", e)  # Debugging error
+            messages.error(request, "There was an error registering your account. Please try again.")
+            return redirect("register_new_user")
+    # Pass emailid and make it read-only
+    return render(request, "register_user.html", {"emailid": emailid})
+Description:
+This function handles user registration through an invitation link. It verifies the security token, ensures the user details are valid, and prevents duplicate registrations. If a referral code is used, it awards referral points. After successful registration, the user is redirected to log in.
+login_view(request) code:
+def login_view(request):
+    if request.method == "POST":
+        emailid = request.POST["email"]
+        password = request.POST["password"]
+        # Check if the user is a regular user
+        try:
+            user = User.objects.get(emailid=emailid)
+            if check_password(password, user.password):
+                request.session["user_id"] = user.userid
+                request.session["role"] = "user"
+                request.session["is_authenticated"] = True
+                user.lastlogin = now()
+                user.save(update_fields=["lastlogin"])
+                messages.success(request, "Login successful! Redirecting to User Dashboard.")
+                return redirect("user_dashboard")
+            else:
+                messages.error(request, "Invalid password. Please try again.")
+                return redirect("loginpage")
+        except User.DoesNotExist:            pass
+
+        # Check if the user is an admin
+        try:
+            admin = Admin.objects.get(emailid=emailid            
+            # # Hash admin's password if it's not already hashed
+            # if not admin.password.startswith('pbkdf2_'):  # Check if it's unhashed
+            #     admin.password = make_password(admin.password)  # Hash it
+            #     admin.save(update_fields=["password"])  # Save the hashed password
+            # if check_password(password, admin.password):
+            if password == admin.password:  # Direct string comparison for sample data
+                request.session["user_id"] = admin.adminid
+                request.session["role"] = "admin"
+                request.session["is_authenticated"] = True
+                admin.lastlogin = now()
+                admin.save(update_fields=["lastlogin"])
+                messages.success(request, "Login successful! Redirecting to Admin Dashboard.")
+                return redirect("admin_dashboard")
+            else:
+                messages.error(request, "Invalid password. Please try again.")
+                return redirect("loginpage")
+        except Admin.DoesNotExist:
+            messages.error(request, "Invalid email. No account found.")
+            return redirect("loginpage")
+    return render(request, "login.html")
+Description:
+The login_view function handles user authentication based on the provided email and password. When a POST request is made, it first retrieves the email and password from the request. It then checks whether the user is a regular user by searching for the email in the User model. If the user exists and the password matches the stored hashed password, the session is updated with the user's details, including their role as "user," and the last login time is recorded. The user is then redirected to the user dashboard with a success message.
+If the email is not found in the User model, the function proceeds to check whether the user is an admin by searching in the Admin model. If the admin exists and the password matches, the session is updated with the admin’s details, including their role as "admin," and the last login time is saved. The admin is then redirected to the admin dashboard with a success message.
+If neither a regular user nor an admin account is found with the provided credentials, an error message is displayed, and the user is redirected back to the login page. If the request method is not POST, the function simply renders the login page.
+logout_view(request) code:
+def logout_view(request):
+    request.session.flush()  # Clears all session data
+    messages.success(request, "You have been logged out successfully.")
+    return redirect("login")  # Redirect to login page
+Description:
+The logout_view function is responsible for logging users out of the system. It does this by clearing all session data using request.session.flush(), ensuring that no user-specific information remains stored. After logging out, a success message is displayed to inform the user that they have been successfully logged out. Finally, the function redirects the user to the login page, allowing them to log in again if needed. This function helps maintain security by ensuring that user sessions are properly ended when they log out.
+user_dashboard(request) code:
+def user_dashboard(request):
+    """
+    Displays the user dashboard. Ensures the user is authenticated and is assigned the role of 'user'.
+    """
+    # Clear existing messages
+    list(messages.get_messages(request))
+    # Check if user has the correct role (e.g., 'user')
+    if not is_role_valid(request, "user"):
+        messages.warning(request, "You do not have permission to access this page.")
+        return redirect("loginpage")
+    try:
+        user = User.objects.get(userid=request.session["user_id"])
+        logger.info(f"Accessing user dashboard: User ID {user.userid}")
+    except User.DoesNotExist:
+        logger.error(f"User not found: User ID {request.session.get('user_id')}")
+        messages.error(request, "User not found. Please log in again.")
+        return redirect("loginpage")
+    # Fetch locations
+    locations = Location.objects.all()
+    # Get selected location from GET request
+    selected_location_id = request.GET.get('location_id', 'all')  # Default is 'all' if no location is selected
+    # Fetch sports based on selected location
+    if selected_location_id != 'all':
+        sports = Sport.objects.filter(location_id=selected_location_id)
+    else:
+        sports = Sport.objects.all()
+    return render(request, 'user_dashboard.html', {
+        'locations': locations,
+        'sports': sports,
+        'selected_location_id': selected_location_id
+    })
+Description: The user_dashboard function is responsible for displaying the user dashboard, where users can view available sports, locations, and their profile details. It first clears any previous session messages to provide a fresh user experience. Then, it ensures that the user is logged in and has the "user" role before proceeding. The function fetches user details from the database and retrieves the available sports and locations for booking. Once the data is collected, it renders the user_dashboard.html template, where users can navigate through various options such as booking slots, managing their profile, or logging out.
+admin_dashboard(request) code:
+def admin_dashboard(request):
+    """
+    Displays the admin dashboard. Ensures the admin is authenticated and has the role of 'admin'.
+    """
+    list(messages.get_messages(request))  # Clear existing messages
+    if not is_role_valid(request, "user"):
+        messages.warning(request, "You do not have permission to access this page.")
+        return redirect("loginpage")
+    try:
+        admin = Admin.objects.get(adminid=request.session["user_id"])
+        logger.info(f"Accessing admin dashboard: Admin ID {admin.adminid}")
+    except Admin.DoesNotExist:
+        logger.error(f"Admin not found: Admin ID {request.session.get('user_id')}")
+        messages.error(request, "Admin not found. Please log in again.")
+        return redirect("loginpage")
+
+    return render(request, "admin_dashboard.html", {"last_login": admin.lastlogin})
+Description: The admin_dashboard function loads the admin dashboard, allowing only authorized admin users to access it. It first clears any existing session messages and then verifies whether the logged-in user has an "admin" role. If validation is successful, the function retrieves admin details from the database and renders the admin_dashboard.html template. Through this dashboard, admins can manage users, bookings, locations, and sports, ensuring complete control over the system’s operations.
+
+is_role_valid(request, expected_role) code:
+'''def is_role_valid(request, expected_role):
+    role = request.session.get("role")
+    if role != expected_role:
+        logger.warning(f"Invalid role access attempt. Expected: {expected_role}, Found: {role}")
+        return False
+    return True'''
+'''def is_role_valid(request, expected_role):
+    role = request.session.get("role")
+    if role != expected_role:
+        logger.warning(f"Invalid role access attempt. Expected: {expected_role}, Found: {role}")
+        return False
+    return True''
+home(request) code:
+def home(request):
+    upcoming_events = Event.objects.filter(status="Upcoming").order_by('event_date')
+    past_events = Event.objects.filter(status="Completed").order_by('-event_date'
+    return render(request, 'home.html', {
+        'upcoming_events': upcoming_events,
+        'past_events': past_events
+    })
+Description:
+The home function serves as the landing page of the application, displaying both upcoming and past events. It fetches event details from the database, orders them based on their event dates, and presents them in a structured format. This allows users to see recent and upcoming sports activities at a glance. The page is rendered using the home.html template, providing users with an intuitive interface for exploring different sports and booking options.
+view_sports(request) code:
+def view_sports(request):
+       # Fetch locations
+        locations = Location.objects.all()
+        # Get selected location from GET request
+        selected_location_id = request.GET.get('location_id', 'all')  # Default is 'all' if no location is selected
+        # Fetch sports based on selected location
+        if selected_location_id != 'all':
+            sports = Sport.objects.filter(location_id=selected_location_id)
+        else:
+            sports = Sport.objects.all()
+        return render(request, 'view_sports.html', {
+            'locations': locations,
+            'sports': sports,
+            'selected_location_id': selected_location_id
+})
+Description :view_sports function enables users to browse through available sports based on their selected location. It first retrieves all available locations from the database. When a user selects a specific location, the function filters the sports available at that location and displays them accordingly. The results are then presented on the view_sports.html page, allowing users to explore and choose their preferred sports before making a booking.
+add_sport(request) code:
+def add_sport(request):
+    locations = Location.objects.all()
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        category = request.POST.get('category')
+        location_id = request.POST.get('location_id')
+        description = request.POST.get('description', '')
+        image_path = request.POST.get('image_path', '')
+        location = Location.objects.get(id=location_id)
+        Sport.objects.create(
+            name=name,
+            category=category,
+            location=location,
+            description=description,
+            image_path=image_path
+        )
+        return redirect('view_sports')
+    return render(request, 'add_sport.html', {'locations': locations})
+Description: The add_sport function is designed for admins to add new sports to the system. It first retrieves all existing locations from the database to associate the new sport with a specific location. If the request method is POST, the function extracts the provided details such as sport name, category, location, description, and image, then saves this information in the database. After successful submission, the admin is redirected to the View Sports page, where the newly added sport appears in the list.
+del_sport(request) code:
+def del_sport(request):
+    locations = Location.objects.all()
+    message = ''
+    if request.method == 'POST':
+        name = request.POST['name']
+        location_id = request.POST['location_id']
+        deleted, _ = Sport.objects.filter(name=name, location_id=location_id).delete()
+        message = f"{deleted} sport(s) deleted."
+        return redirect('view_sports')  
+    return render(request, 'del_sport.html', {'locations': locations, 'message': message})
+Description: The del_sport function allows admins to remove a sport from the system when it is no longer available. It retrieves all locations to allow admins to specify which location the sport belongs to. If the request method is POST, the function finds and deletes the matching sport entry from the database. Once the deletion is successful, the admin is redirected back to the View Sports page, where the removed sport is no longer displayed.
+edit_profile(request) code:
+def edit_profile(request):
+    user = request.user
+    if request.method == 'POST':
+        user.first_name = request.POST.get('first_name', '')
+        user.last_name = request.POST.get('last_name', '')
+        user.emailid = request.POST.get('emailid', '')
+        user.save()
+        return redirect('user_dashboard')
+    return render(request, 'edit_profile.html', {'user': user})
+Description: The edit_profile function enables users to update their profile details such as first name, last name, and email. If the request method is POST, the function collects the updated information, saves the changes to the database, and redirects the user to the User Dashboard. This allows users to keep their profile information up-to-date while maintaining security and accuracy.
+update_sport(request) code:
+def update_sport(request):
+    return render(request, 'update_sport.html')
+Description update_sport function is a placeholder for updating sports in the system. It does not perform any database operations but simply renders the update_sport.html page, where future implementations can allow admins to edit existing sports details such as time slots, pricing, or availability.
+view_bookings(request) code:
+def view_bookings(request):
+    return render(request, 'view_bookings.html')
+Description: The view_bookings function enables users and admins to see all bookings made in the system. It retrieves the list of booked sports slots from the database and renders the view_bookings.html page. This functionality helps users check their booking history and allows admins to monitor and manage reservations efficiently.
+view_payments(request) code:
+def view_payments(request):
+    return render(request, 'view_payments.html')
+Description: The view_payments function loads the payment history page, allowing users to review their transaction records related to booking fees. It retrieves the payment details from the database and displays them on the view_payments.html template. This feature ensures users can track their past payments and manage their finances.
+add_users(request) code:
+def add_users(request):
+    return render(request, 'add_users.html')
+Description:The add_users function is currently a placeholder for adding new users to the system. It does not perform any backend operations but simply loads the add_users.html page, where future development can include user registration or admin-created accounts.
+Add Admins (add_admins) code:
+def add_admins(request):
+    return render(request, 'add_admins.html')
+Descipition:Similar to add_users, the add_admins function is a placeholder for adding new admin accounts. It only renders the add_admins.html page, where future enhancements may allow super admins to create new admin profiles for better system management.
+Contact Page (contact) code:
+def contact(request):
+    return render(request, 'contact.html')
+Description: The contact function loads the Contact Us page, where users can find customer support information such as FAQs, email, and phone contacts. This ensures users can get assistance for booking issues, payments, or general inquiries.
+view_users(request) code:
+
+
+def view_users(request):
+    query = request.GET.get('q')
+    if query:
+        users = User.objects.filter(
+            Q(username__icontains=query) |
+            Q(firstname__icontains=query) |
+            Q(lastname__icontains=query) |
+            Q(emailid__icontains=query)
+        )
+    else:
+        users = User.objects.all()
+ 
+    return render(request, 'view_users.html', {'users': users, 'query': query})
+Description: The view_users function allows admins to search and view users based on different criteria. If a search query is provided, the function filters users by username, first name, last name, or email. If no search is performed, it simply retrieves and displays all registered users. The results are rendered on the view_users.html page, where admins can manage user accounts efficiently.
+Admin Dashboard Components (admin_card_01, admin_card_03) code:
+def admin_card_01(request):
+    return render(request, 'admin_card_01.html')
+def admin_card_03(request):
+    return render(request, 'admin_card_03.html')
+Description: The admin_card_01 and admin_card_03 functions are responsible for loading specific dashboard components for admins. These components help organize admin tasks visually, making it easier to manage different sections like bookings, users, and sports.
+Role Validation Helper (is_role_valid) code:
+def is_role_valid(request, expected_role):
+    return request.session.get("role") == 
+expected_role and request.session.get("is_authenticated") == True
+Description: The is_role_valid function is a helper method that ensures a user has the correct role before accessing specific pages. It checks the user’s session data to determine whether they are an admin or a regular user. If the user does not have the expected role, they are denied access. This security feature ensures that unauthorized users cannot perform admin-level actions like adding or deleting sports.
+choose_location(request) code:
+@login_required
+def choose_location(request):
+    locations = Location.objects.all().order_by('name')
+    if request.method == "POST":
+        location_id = request.POST.get("location")
+        if location_id:
+            logger.info("Location %s selected by user %s", location_id, request.user.username)
+            return redirect("choose_sport", location_id=location_id)
+        messages.error(request, "Please select a location.")
+    return render(request, "choose_location.html", {"locations": locations})
+Description: This view allows users to choose a location. The locations are retrieved from the database and displayed in the template. When a user selects a location and submits the form, they are redirected to the "choose_sport" view. If no location is selected, an error message is shown.
+choose_sport(request, location_id) code:
+@login_required
+def choose_sport(request, location_id):
+    location = get_object_or_404(Location, pk=location_id)
+    sports = Sport.objects.filter(location=location)
+    if request.method == "POST":
+        sport_id = request.POST.get("sport")
+        if sport_id:
+            logger.info("Sport %s chosen at location %s by user %s", sport_id, location.name, request.user.username)
+            return redirect("choose_date", location_id=location_id, sport_id=sport_id)
+        messages.error(request, "Please select a sport.")
+    return render(request, "choose_sport.html", {"location": location, "sports": sports})
+class AvailabilityHTMLCalendar(calendar.HTMLCalendar):
+    """
+    Custom HTML calendar that highlights available dates.
+    Available dates are rendered as hyperlinks with real location and sport IDs.
+    """
+    def __init__(self, availability, location_id, sport_id):
+        super().__init__()
+        self.availability = availability
+        self.location_id = location_id
+        self.sport_id = sport_id
+    def formatday(self, day, weekday):
+        if day == 0:
+            return '<td class="noday">&nbsp;</td>'
+        day_str = f"{self.year}-{self.month:02d}-{day:02d}"
+        if self.availability.get(day_str):
+            # Render available days as clickable links.
+            return (
+                f'<td class="available">'
+                f'<a href="/bookings/slots/{self.location_id}/{self.sport_id}/{day_str}/">{day}</a>'
+                f'</td>'
+            )
+        else:
+            return f'<td class="unavailable">{day}</td>'
+    def formatmonth(self, theyear, themonth, withyear=True):
+        self.year, self.month = theyear, themonth
+        return super().formatmonth(theyear, themonth, withyear)
+Description: This view enables users to select a sport based on the location they chose in the previous step. The sports available at the given location are retrieved. After selecting a sport, the user is redirected to the "choose_date" view. If no sport is selected, an error message is displayed.
+choose_date(request, location_id, sport_id) code:
+@login_required
+def choose_date(request, location_id, sport_id):
+    """
+    Generate an HTML calendar view using Python’s built-in calendar module.
+    Each day is highlighted based on whether an unbooked slot exists.
+    """
+    location = get_object_or_404(Location, pk=location_id)
+    sport = get_object_or_404(Sport, pk=sport_id)
+    
+    try:
+        year = int(request.GET.get("year", date.today().year))
+        month = int(request.GET.get("month", date.today().month))
+    except (ValueError, TypeError):
+        year, month = date.today().year, date.today().month
+    # Build an availability dictionary where keys are formatted as "YYYY-MM-DD"
+    availability = {}
+    _, num_days = calendar.monthrange(year, month)
+    for day in range(1, num_days + 1):
+        current_date = date(year, month, day)
+        day_str = current_date.strftime("%Y-%m-%d")
+        slots_available = Slot.objects.filter(
+            date=current_date,
+            location=location,
+            sport=sport,
+            is_booked=False
+        ).exists()
+        availability[day_str] = slots_available
+    logger.info("Availability Data for %d-%02d: %s", year, month, availability)
+    initial_date = f"{year}-{month:02d}-01"
+    
+    # Generate the HTML calendar using the custom HTMLCalendar subclass.
+    cal = AvailabilityHTMLCalendar(availability, location_id, sport_id)
+    calendar_html = cal.formatmonth(year, month)
+    context = {
+        "calendar_html": calendar_html,
+        "location": location,
+        "sport": sport,
+        "year": year,
+        "month": month,
+    }
+    # Render the global template "choose_date_calender.html"
+    return render(request, "choose_date_calendar.html", context)
+Description: This view generates a calendar for the selected location and sport, highlighting the available dates based on unbooked slots. It retrieves availability from the database and constructs an HTML calendar using the AvailabilityHTMLCalendar class. The user can click on available dates to proceed with booking.
+list_slots(request, location_id, sport_id, date) code:
+@login_required
+def list_slots(request, location_id, sport_id, date):
+    """
+    Display available slots for a given date, location, and sport.
+    Handles POST requests to redirect to the confirm_booking view.
+    """
+    try:
+        selected_date = datetime.strptime(date, "%Y-%m-%d").date()
+    except ValueError:
+        logger.error("Invalid date format: %s", date)
+        messages.error(request, "Invalid date format. Please try again.")
+        return redirect("choose_date", location_id=location_id, sport_id=sport_id)
+    location = get_object_or_404(Location, pk=location_id)
+    sport = get_object_or_404(Sport, pk=sport_id)
+    
+    slots = Slot.objects.filter(
+        date=selected_date,
+        location=location,
+        sport=sport,
+        is_booked=False
+    )    
+    logger.info("Slots for %s at %s (%s): %d slots", selected_date, location.name, sport.sport_name, slots.count())
+    if not slots.exists():
+        messages.info(request, f"No slots available on {selected_date}. Please choose another date.")
+        return redirect("choose_date", location_id=location_id, sport_id=sport_id)    
+    # Handle the POST request where the user selects a slot and clicks Next.
+    if request.method == "POST":
+        slot_id = request.POST.get("slot")
+        if slot_id:
+            return redirect("confirm_booking", slot_id=slot_id)
+        else:
+            messages.error(request, "Please select a slot.")
+            # Fall through to re-rendering the page with an error message
+    context = {
+        "slots": slots,
+        "date": selected_date,
+        "location": location,
+        "sport": sport,
+        "location_id": location.pk,  # Use pk in case id is not defined
+        "sport_id": sport.pk,
+    }
+    return render(request, "list_slots.html", context)
+Description: This view displays available booking slots for a specific date, location, and sport. If no slots are available, an informational message is shown. The user can select a slot, which will redirect them to the "confirm_booking" view. If no slot is selected, an error message is displayed.
+confirm_booking(request, slot_id) code:
+@login_required
+def confirm_booking(request, slot_id):
+    slot = get_object_or_404(Slot, pk=slot_id)
+    if slot.is_booked:
+        messages.error(request, "This slot is no longer available. Please select another slot.")
+        return redirect("choose_date", location_id=slot.location.pk, sport_id=slot.sport.pk)    
+    if request.method == "POST":
+        # Create the booking without any equipment or quantity details.
+        booking = Booking.objects.create(
+            user=request.user,
+            sport=slot.sport,
+            slot=slot,
+            location=slot.location,
+            status="Booked"
+        )
+        slot.is_booked = True
+        slot.save()
+        logger.info("User %s confirmed booking %s for slot %s", request.user.username, booking.id, slot)
+        messages.success(request, "Your booking has been confirmed!")
+        # Redirect to booking success page where equipment selection can be offered.
+        return redirect("booking_success")    
+    # Render confirmation details for the slot.
+    return render(request, "confirm_booking.html", {"slot": slot})
+Description: This view allows the user to confirm a booking for a selected slot. If the slot is already booked, an error message is shown. Upon confirmation, a booking record is created, and the slot is marked as booked. The user is then redirected to the booking success page.
+booking_success(request) code:
+@login_required
+def booking_success(request):
+    logger.info("Booking success page accessed by user %s", request.user.username)
+    return render(request, "booking_success.html")
+Description: This view displays a confirmation page after a successful booking. It logs the access of the page by the user.
+my_bookings(request) code:
+@login_required
+def my_bookings(request):
+    bookings = Booking.objects.filter(user=request.user).order_by('-booking_date')
+    logger.info("User %s accessed their bookings. Total: %d", request.user.username, bookings.count())
+    return render(request, "my_bookings.html", {"bookings": bookings})
+Description: This view shows the user's past and upcoming bookings. It retrieves all bookings for the logged-in user and displays them in a list, ordered by booking date. It logs the access and count of the bookings.
+booking_detail(request, booking_id) code:
+@login_required
+def booking_detail(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
+    logger.info("User %s is viewing details of booking ID %s", request.user.username, booking_id)
+    return render(request, "booking_detail.html", {"booking": booking})
+Description: This view displays the details of a specific booking, including the location, sport, and slot information. It only allows access to the booking if the logged-in user is the one who made the booking.
+cancel_booking(request, booking_id) code:
+@login_required
+def cancel_booking(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
+    if request.method == "POST":
+        if booking.status in ["Booked", "Pending"]:
+            booking.status = "Cancelled"
+            booking.save()
+            booking.slot.is_booked = False
+            booking.slot.save()
+            messages.success(request, "Your booking has been cancelled.")
+            logger.info("User %s cancelled booking ID %s", request.user.username, booking_id)
+        else:
+            messages.error(request, "This booking cannot be cancelled.")
+            logger.warning("User %s attempted to cancel booking ID %s with status %s",
+                           request.user.username, booking_id, booking.status)
+        return redirect("my_bookings")
+    return render(request, "cancel_booking.html", {"booking": booking})
+Description: This view allows users to cancel their bookings. If the booking is in a "Booked" or "Pending" state, it can be cancelled. The status of the booking is updated, and the slot is marked as available again. If the booking cannot be cancelled, an error message is shown.
+add_slot(request) code:
+def add_slot(request):
+    """
+    Admin view to add a new slot.
+    Only staff users can access this page.
+    """
+    if request.method == "POST":
+        form = SlotForm(request.POST)
+        if form.is_valid():
+            slot = form.save(commit=False)
+            # Ensure is_booked is set to False by default
+            slot.is_booked = False
+            slot.save()
+            messages.success(request, "Slot added successfully!")
+            logger.info("Slot id %s added by admin %s", slot.pk, request.user.username)
+            # Redirect to a custom list page for slots if you have one,
+            # or simply redirect back to the add slot page.
+            return redirect("add_slot")
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = SlotForm()
+    return render(request, "add_slot.html", {"form": form})
+Description: This view is available to admin users and allows them to add a new slot to the system. The form data is validated, and the slot is saved with the is_booked flag set to False by default. The user is notified of the success or failure of the operation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

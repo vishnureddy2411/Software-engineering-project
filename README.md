@@ -36,23 +36,21 @@ SE_PROJECT/
 │   ├── payments/                 # Payment processing functionalities
 │   │   ├── ...                   # Same structure as the accounts app
 │   ├── ratings/                  # User ratings and reviews management
-│   │   ├── ...                   # Same structure as the accounts app
-│   ├── registration/             # User registration features
-│   │   ├── ...                   # Same structure as the accounts app
-│   ├── reports/                  # User reports features
-│   │   ├── ...                   # Same structure as the accounts app
-│   ├── sports/                   # Sports-related management
-│   │   ├── ...                   # Same structure as the accounts app
-├── templates/                    # Project-wide templates for rendering web pages
-│   ├── ...                       # Other app-specific templates
-├── static/                       # Global static files shared across apps
-│   ├── css/                      # Global stylesheets
-│   ├── js/                       # Global JavaScript files
-│   ├── img/                      # Global images
-├── Planning Documents/           # Contains project planning documents
-├── Minutes of Meeting/           # Meeting notes and records
-├── .gitignore                    # Specifies files/directories to ignore in version control
-├── README.md                     # General project overview and documentation
+│   │   ├── ...                   # Same structure as accounts for ratings functionality
+│   └── registration/             # User registration functionalities
+│       ├── ...                   # Same structure as accounts, focusing on user registrations
+├── migrations                    # Database migration files
+├── templates/                    # HTML templates for rendering user account pages
+├── static/                       # Static files (CSS, JavaScript, images) related to accounts
+│   ├── css/                      # Stylesheets for user accounts
+│   ├── js/                       # JavaScript files for interactive features
+│   └── img/                      # Images used in account-related templates
+├── Planning Documents/           # Contains project planning documents and specifications
+├── Minutes of Meeting/           # Records of meeting minutes, e.g., 2024-10-26_meeting.md
+│   └── ...                       # Additional meeting notes
+├── .gitignore                    # Specifies files and directories to ignore in version control
+└── README.md                     # Project overview and documentation
+
 
 
 ### Description of Key Components

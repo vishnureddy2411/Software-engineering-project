@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,3 +21,27 @@
     </main>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports List</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Sports List</h1>
+    </header>
+    <main>
+        <ul>
+            {% for sport in sports %}
+                <li>Sport: {{ sport.name }} - Category: {{ sport.category }} - Description: {{ sport.description }}</li>
+            {% endfor %}
+        </ul>
+    </main>
+</body>
+</html>
+>>>>>>> 587daca803448929c1cfa1e6e31a62917d21a21d

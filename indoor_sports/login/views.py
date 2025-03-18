@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # from django.shortcuts import render, redirect
 # from django.contrib import messages
 # from django.utils.timezone import now
@@ -71,6 +72,16 @@ from django.contrib.auth.hashers import check_password
 from django.contrib.auth import login  # Use Django's built-in login
 import logging
 
+=======
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.utils.timezone import now
+from accounts.models import User, Admin
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth import login  # Use Django's built-in login
+import logging
+
+>>>>>>> 587daca803448929c1cfa1e6e31a62917d21a21d
 logger = logging.getLogger(__name__)
 
 def login_view(request):
