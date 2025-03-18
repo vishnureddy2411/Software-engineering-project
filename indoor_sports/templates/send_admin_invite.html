@@ -1,0 +1,65 @@
+{% extends "base.html" %}{% load static %}
+{% load static %}
+
+{% block title %}Send Admin Invitation - Indoor Sports{% endblock %}
+
+{% block content %}
+<!-- Background Video -->
+<video class="video-bg" autoplay loop muted>
+    <source src="{% static 'videos/court_action.mp4' %}" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
+
+<div class="glass-card container mt-5 p-4" style="max-width: 600px;">
+    <h2 class="text-center mb-4">Send Admin Invitation</h2>
+    <p class="text-center mb-3">Invite new admins by sending them a secure registration link.</p>
+    
+    <form method="POST" id="invite-form">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="emailid" class="form-label">Admin Email:</label>
+            <input type="email" id="emailid" name="emailid" class="form-control" placeholder="Enter admin email" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Send Invitation Link</button>
+    </form>
+
+    <!-- Messages Display -->
+    {% if messages %}
+    <div class="mt-3">
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <script>
+        // Auto-clear messages after 5 seconds
+        setTimeout(() => {
+            const messageContainer = document.querySelector('.messages');
+            if (messageContainer) {
+                messageContainer.style.display = 'none';
+            }
+        }, 5000);
+
+        // Auto-redirect to admin dashboard after 1 minute of inactivity
+        let inactivityTimer;
+        function resetInactivityTimer() {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(() => {
+                window.location.href = "{% url 'admin_dashboard' %}";
+            }, 60000); // 1 minute = 60000ms
+        }
+        const form = document.getElementById('invite-form');
+        form.addEventListener('input', resetInactivityTimer);
+        form.addEventListener('click', resetInactivityTimer);
+        form.addEventListener('submit', resetInactivityTimer);
+        // Start the inactivity timer on page load.
+        resetInactivityTimer();
+    </script>
+</div>
+{% endblock %}
