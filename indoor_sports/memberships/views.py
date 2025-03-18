@@ -4,7 +4,7 @@ from django.utils.timezone import now
 from datetime import timedelta
 from .models import Membership
 
-@login_required
+#@login_required
 def membership_dashboard_view(request):
     """
     Displays the membership dashboard with active membership, upcoming plans, and available plans.
@@ -22,7 +22,7 @@ def membership_dashboard_view(request):
         'available_plans': available_plans,
     })
 
-@login_required
+#@login_required
 def confirm_new_plan_view(request, plan_name):
     """
     Handles confirmation for purchasing a new plan. Creates a new plan under the active membership.
@@ -54,7 +54,7 @@ def confirm_new_plan_view(request, plan_name):
         'active_membership': active_membership,
     })
 
-@login_required
+#@login_required
 def renew_membership_view(request, membership_id):
     """
     Renews the user's active membership. Checks for eligibility and confirms renewal.
@@ -80,7 +80,7 @@ def renew_membership_view(request, membership_id):
 
     return render(request, 'membership_renew.html', {'membership': membership})
 
-@login_required
+#@login_required
 def register_membership_view(request, plan_name):
     """
     Registers the user for a membership plan and sets the appropriate start and end dates.
@@ -113,7 +113,7 @@ def register_membership_view(request, plan_name):
     )
     return redirect('membership_dashboard')
 
-@login_required
+#@login_required
 def cancel_membership_view(request, membership_id):
     """
     Cancels the user's active or pending membership after confirmation.

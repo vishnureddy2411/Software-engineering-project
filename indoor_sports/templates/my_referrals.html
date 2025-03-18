@@ -1,16 +1,18 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}My Referrals{% endblock %}
 
 {% block content %}
 <div class="container py-5">
-    <h1 class="text-center">My Referrals</h1>
+    <h1 class="text-center mb-4">My Referrals</h1>
     <p class="text-center">Your Referral Code: <strong>{{ referral_code }}</strong></p>
+    <p class="text-center">Referral Link: <a href="{{ referral_link }}" target="_blank">{{ referral_link }}</a></p>
 
     <!-- Refer a Friend Form -->
     <div class="glass-card p-4 mt-4">
-        <h2>Refer a Friend</h2>
-        <form method="post" class="glass-form">
+        <h2 class="text-center">Refer a Friend</h2>
+        <form method="post" class="glass-form mt-3">
             {% csrf_token %}
             <div class="mb-3">
                 <label for="friend_email" class="form-label">Friend's Email:</label>
@@ -30,7 +32,7 @@
         {% if messages %}
             <div class="mt-3">
                 {% for message in messages %}
-                    <div class="alert alert-info">{{ message }}</div>
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
                 {% endfor %}
             </div>
         {% endif %}
@@ -38,10 +40,10 @@
 
     <!-- Referral History -->
     <div class="glass-card p-4 mt-4">
-        <h2>Referral History</h2>
+        <h2 class="text-center">Referral History</h2>
         {% if referrals %}
-            <table class="table glass-table">
-                <thead>
+            <table class="table table-bordered glass-table mt-3">
+                <thead class="thead-dark">
                     <tr>
                         <th>Referred User</th>
                         <th>Email</th>
@@ -53,7 +55,7 @@
                     {% for referral in referrals %}
                         <tr>
                             <td>{{ referral.username }}</td>
-                            <td>{{ referral.email }}</td>
+                            <td>{{ referral.emailid }}</td>
                             <td>{{ referral.referral_points }}</td>
                             <td>{{ referral.date_joined }}</td>
                         </tr>
@@ -61,7 +63,7 @@
                 </tbody>
             </table>
         {% else %}
-            <p>You haven't referred anyone yet.</p>
+            <p class="text-center mt-3">You haven't referred anyone yet. Invite your friends using your referral code!</p>
         {% endif %}
     </div>
 </div>

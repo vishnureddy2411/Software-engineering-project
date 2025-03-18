@@ -4,7 +4,7 @@ from accounts.models import User
 class Equipment(models.Model):
     name = models.CharField(max_length=50)
     quantity = models.IntegerField()
-    condition = models.CharField(max_length=20, default='Good')  # e.g., New, Good, Needs Repair
+    condition_of_kit = models.CharField(max_length=20, default='Good')  # e.g., New, Good, Needs Repair
     availability_status = models.CharField(max_length=20, default='Available')
 
     def __str__(self):

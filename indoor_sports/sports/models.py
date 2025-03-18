@@ -1,51 +1,189 @@
+# from django.db import models
+
+# # -------------------------------
+# # Location Model
+# # -------------------------------
+# class Location(models.Model):
+#     location_id = models.AutoField(primary_key=True)
+#     name = models.CharField(max_length=255)
+#     address = models.TextField(blank=True)  # Optional detailed address
+#     city = models.CharField(max_length=50)
+#     state = models.CharField(max_length=50)
+#     country = models.CharField(max_length=50, default='USA')
+#     zip_code = models.CharField(max_length=20)  # Renamed from postal_code to zip_code
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+
+#     class Meta:
+#         db_table = 'sports_location'
+#         ordering = ['name']
+
+#     def _str_(self):
+#         return self.name
+
+
+# # -------------------------------
+# # Sport Model
+# # -------------------------------
+# class Sport(models.Model):
+#     sport_id = models.AutoField(primary_key=True)
+#     name = models.CharField(max_length=100)  # Ensure this field name is consistent
+#     category = models.CharField(max_length=50, null=True, blank=True)  # e.g., Indoor, Outdoor
+#     # ForeignKey linking Sport to Location
+#     location = models.ForeignKey(Location, on_delete=models.CASCADE, db_column='location_id', related_name='sports')
+#     description = models.TextField(null=True, blank=True)
+#     image_path = models.CharField(max_length=255, null=True, blank=True)  # Image for sport
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+
+#     class Meta:
+#         db_table = 'sports_sport'
+#         ordering = ['name']
+
+#     def _str_(self):
+#         return self.sport_name
+
+
+# # -------------------------------
+# # Event Model
+# # -------------------------------
+# class Event(models.Model):
+#     event_id = models.AutoField(primary_key=True)
+#     title = models.CharField(max_length=200)
+#     description = models.TextField()
+#     event_date = models.DateTimeField()
+#     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='events')
+#     image_url = models.CharField(max_length=500, blank=True, null=True)  # Optional URLField
+#     status = models.CharField(
+#         max_length=20,
+#         choices=[('Upcoming', 'Upcoming'), ('Completed', 'Completed')],
+#         default='Upcoming'
+#     )
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+#     class Meta:
+#         db_table = 'sports_event'
+#         ordering = ['-event_date']
+
+#     def _str_(self):
+#         return self.title
+
+
+# # -------------------------------
+# # Game Model
+# # -------------------------------
+# class Game(models.Model):
+#     game_id = models.AutoField(primary_key=True)
+#     name = models.CharField(max_length=100, unique=True)
+#     price = models.DecimalField(max_digits=10, decimal_places=2)  # Base price
+#     available = models.IntegerField(default=20)
+#     image_url = models.URLField(max_length=255)
+    
+#     # Peak hour pricing fields
+#     peak_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+#     peak_hours_start = models.TimeField(null=True, blank=True)
+#     peak_hours_end = models.TimeField(null=True, blank=True)
+    
+#     # Optional: link Game to Sport
+#     sport = models.ForeignKey(Sport, null=True, blank=True, on_delete=models.SET_NULL, related_name='games')
+
+#     class Meta:
+#         db_table = 'sports_game'
+#         ordering = ['name']
+
+#     def _str_(self):
+#         return self.name
+
 from django.db import models
 
+# -------------------------------
+# Location Model
+# -------------------------------
 class Location(models.Model):
+    location_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
-    address = models.TextField()
+    address = models.TextField(blank=True)  # Optional detailed address
     city = models.CharField(max_length=50)
     state = models.CharField(max_length=50)
     country = models.CharField(max_length=50, default='USA')
-    zip_code = models.CharField(max_length=20)
+    zip_code = models.CharField(max_length=20)  # Renamed from postal_code to zip_code
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'sports_location'
+        ordering = ['name']
 
     def __str__(self):
         return self.name
 
+
+# -------------------------------
+# Sport Model (Merged with Game)
+# -------------------------------
 class Sport(models.Model):
-    name = models.CharField(max_length=100)
-    category = models.CharField(max_length=50, blank=True, null=True)  # e.g., Indoor, Outdoor
-    description = models.TextField(blank=True)
+    sport_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100, unique=True)  # Formerly the name field in Game
+    category = models.CharField(max_length=50, null=True, blank=True)  # e.g., Indoor, Outdoor
+    # ForeignKey linking Sport to Location
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, db_column='location_id', related_name='sports')
+    description = models.TextField(null=True, blank=True)
+    image_path = models.CharField(max_length=255, null=True, blank=True)  # Image for sport
+    price = models.DecimalField(max_digits=10, decimal_places=2)  # Base price of the sport
+    peak_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # Price during peak hours
+    peak_hours_start = models.TimeField(null=True, blank=True)
+    peak_hours_end = models.TimeField(null=True, blank=True)
+    available = models.IntegerField(default=20)  # Availability of slots or resources
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='sports')
+
+    class Meta:
+        db_table = 'sports_sport'
+        ordering = ['name']
 
     def __str__(self):
-        return self.name
+        return self.sport_name
 
-class Game(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    available = models.IntegerField(default=20)
-    image_url = models.URLField(max_length=255)
+    def get_current_price(self, current_time):
+        """
+        Returns the sport's price based on whether the current_time falls within peak hours.
+        """
+        if self.peak_hours_start and self.peak_hours_end:
+            if self.peak_hours_start <= current_time <= self.peak_hours_end:
+                return self.peak_price if self.peak_price is not None else self.price
+        return self.price
 
-    def __str__(self):
-        return self.name
 
+# -------------------------------
+# Event Model
+# -------------------------------
 class Event(models.Model):
-    STATUS_CHOICES = [
-        ('Upcoming', 'Upcoming'),
-        ('Completed', 'Completed'),
-    ]
+    event_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=200)
     description = models.TextField()
     event_date = models.DateTimeField()
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='events')
-    image_url = models.URLField(max_length=500, blank=True, null=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Upcoming')
+    image_url = models.CharField(max_length=500, blank=True, null=True)  # Optional URLField
+    status = models.CharField(
+        max_length=20,
+        choices=[('Upcoming', 'Upcoming'), ('Completed', 'Completed')],
+        default='Upcoming'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'sports_event'
+        ordering = ['event_date']
 
     def __str__(self):
         return self.title
 
+
+    def get_current_price(self, current_time):
+        """
+        Returns the game's price based on whether the current_time falls within peak hours.
+        """
+        if self.peak_hours_start and self.peak_hours_end:
+            if self.peak_hours_start <= current_time <= self.peak_hours_end:
+                return self.peak_price if self.peak_price is not None else self.price
+        return self.price

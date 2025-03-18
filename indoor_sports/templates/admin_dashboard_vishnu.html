@@ -1,0 +1,53 @@
+
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Sports Booking Platform{% endblock %}
+
+{% block content %}
+<header>
+    <div class="header">
+        <h2>Welcome to Sports Booking Platform</h2>
+        <p>Admin Dashboard</p>
+        <p>Last Login: {{ last_login }}</p>
+    </div>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="{% url 'add_admin' %}">Register a New Admin</a></li>
+        <li><a href="{% url 'invite_user' %}">Invite a New User</a></li> 
+        <li><a href="{% url 'weekly_report' %}">View Weekly Report</a></li>
+        <li><a href="{% url 'monthly_report' %}">View Monthly Report</a></li>
+        <li><a href="{% url 'yearly_report' %}">View Yearly Report</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <div class="card">
+        <h3>Add/Delete/View Sports</h3>
+        <a href="{% url 'admin_card_01' %}">
+            <button>Manage</button>
+        </a>
+    </div>
+    <div class="card">
+        <h3>View/Approve/Cancel Bookings</h3>
+        <button>View</button>
+    </div>
+    <div class="card">
+        <h3>View List of Users/Accounts</h3>
+        <button>Details</button>
+    </div>
+    <div class="card">
+        <h3>Payments & Transactions</h3>
+        <button>View Transactions</button>
+    </div>
+    <div class="card">
+        <h3>Generate Reports</h3>
+        <button>Generate</button>
+    </div>
+    <div class="card">
+        <h3>Edit Homepage</h3>
+        <button>Update</button>
+    </div>
+</div>
+{% endblock %}

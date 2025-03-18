@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Sport</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #49c5b6;
+            text-align: center;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem 0;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        h2 {
+            margin-bottom: 1.5rem;
+            color: #333;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        input {
+            width: calc(100% - 2rem);
+            padding: 0.8rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            display: inline-block;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .form-container .form-group {
+            margin-bottom: 1.5rem;
+        }
+    </style>
+     <script>
+        function showSuccessMessage(event) {
+            event.preventDefault(); // Prevent actual form submission
+            alert("Sport successfully Deleted!");
+            document.getElementById("addSportForm").reset(); // Reset form fields
+        }
+    </script>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Delete Sport</h2>
+    <form method="post">
+
+        {% csrf_token %}
+        <input type="text" name="sport_name" placeholder="Sport Name" required><br>
+        <select name="location_id" required>
+        <option value="">Select Location</option>
+        {% for location in locations %}
+            <option value="{{ location.location_id }}">{{ location.name }}</option>
+        {% endfor %}
+        </select><br>
+        <button type="submit">Delete Sport</button>
+    </form>
+
+
+
+</body>
+</html>

@@ -1,7 +1,15 @@
 from django.urls import path
-from . import views
+from .views import (
+    password_reset_request,
+    password_reset_confirm,
+    manage_profile,
+)
+from login.views import login_view, logout_view
 
 urlpatterns = [
-    path('profile/<int:user_id>/', views.user_profile, name='user_profile'),
-    path('login/', views.login_view, name='login'),
+    path('login/', login_view, name='loginpage'),
+    path('logout/', logout_view, name='logout'),
+    path('manage-profile/', manage_profile, name='manage_profile'),
+    path("password-reset/", password_reset_request, name="password_reset"),
+    path("password-reset/<str:token>/", password_reset_confirm, name="password_reset_confirm"),
 ]

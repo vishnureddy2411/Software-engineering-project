@@ -39,6 +39,8 @@ SE_PROJECT/
 │   │   ├── ...                   # Same structure as the accounts app
 │   ├── registration/             # User registration features
 │   │   ├── ...                   # Same structure as the accounts app
+│   ├── reports/                  # User reports features
+│   │   ├── ...                   # Same structure as the accounts app
 │   ├── sports/                   # Sports-related management
 │   │   ├── ...                   # Same structure as the accounts app
 ├── templates/                    # Project-wide templates for rendering web pages

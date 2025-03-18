@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Choose Location - Indoor Sports{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Select Location</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <select name="location" class="form-control">
+                <option value="">--Select Location--</option>
+                {% for loc in locations %}
+                    <option value="{{ loc.location_id }}">{{ loc.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Next</button>
+    </form>
+</div>
+{% endblock %}

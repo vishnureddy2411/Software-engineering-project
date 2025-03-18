@@ -1,20 +1,29 @@
-{% extends "base.html" %}
+{% extends "base.html" %}{% load static %}
 
 {% block title %}Home - Indoor Sports Academy{% endblock %}
 
 {% block content %}
-<div class="glass-card p-4 text-center">
-    <h2>Discover a World of Sports and Fitness</h2>
-    <p>Join us at Indoor Sports Academy where we offer a wide range of sports and fitness programs for all ages. Whether you're looking to learn a new sport, improve your skills, or stay fit, we have something for everyone.</p>
+<!-- Main Content Displayed on Home Page -->
+<div class="glass-card p-4 text-center mt-4" style="max-width: 800px; margin: 0 auto; position: relative; z-index: 1;">
+    <h2>Welcome to Indoor Sports Academy</h2>
+    <p>
+        Join us at Indoor Sports Academy where we offer a wide range of sports and fitness programs for all ages.
+        Whether you're looking to learn a new sport, improve your skills, or stay fit, we have something for everyone.
+    </p>
 </div>
 
-<div class="glass-card p-4 mt-4">
+<div class="glass-card p-4 text-center mt-4" style="max-width: 800px; margin: 0 auto; position: relative; z-index: 1;">
     <h3>Our Programs</h3>
-    <ul>
+    <ul class="list-unstyled">
         <li>Basketball Training</li>
-        <li>Yoga Classes</li>
-        <li>Soccer for Kids</li>
-        <li>Strength Training</li>
+
     </ul>
+</div>
+
+<div class="glass-card p-4 text-center mt-4" style="max-width: 800px; margin: 0 auto; position: relative; z-index: 1;">
+    <h3>Why Choose Us?</h3>
+    <p>
+        We provide experienced coaches, state-of-the-art facilities, and a welcoming community to help you achieve your fitness and sports goals.
+    </p>
 </div>
 {% endblock %}
