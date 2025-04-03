@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 {% extends "base.html" %}
 {% block title %}Cancel Booking - Indoor Sports{% endblock %}
 
@@ -19,25 +19,4 @@
     </form>
 </div>
 {% endblock %}
-=======
-{% extends "base.html" %}
-{% block title %}Cancel Booking - Indoor Sports{% endblock %}
 
-{% block content %}
-<div class="container mt-4">
-    <h2>Cancel Booking Confirmation</h2>
-    <p>Are you sure you want to cancel this booking?</p>
-    <ul class="list-group mb-3">
-        <li class="list-group-item"><strong>Sport:</strong> {{ booking.sport.sport_name }}</li>
-        <li class="list-group-item"><strong>Date:</strong> {{ booking.slot.date }}</li>
-        <li class="list-group-item"><strong>Time:</strong> {{ booking.slot.time }}</li>
-        <li class="list-group-item"><strong>Status:</strong> {{ booking.status }}</li>
-    </ul>
-    <form method="POST">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Yes, Cancel Booking</button>
-        <a href="{% url 'booking_detail' booking.booking_id %}" class="btn btn-secondary">No, Go Back</a>
-    </form>
-</div>
-{% endblock %}
->>>>>>> 587daca803448929c1cfa1e6e31a62917d21a21d

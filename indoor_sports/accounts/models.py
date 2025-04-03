@@ -1,23 +1,21 @@
 from django.db import models
 from django.core.validators import RegexValidator
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.utils.timezone import now
 import random
 import string
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
-# -----------------------------------------------------------------------------
+# ----------------------------------------------------------------------
 # Utility Function
-# -----------------------------------------------------------------------------
+# ----------------------------------------------------------------------
 def generate_referral_code(user_id):
-    """
-    Generate a unique referral code based on user_id.
-    """
+    """Generate a unique referral code based on user_id."""
     random_str = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
     return f"USER{user_id}{random_str}"
 
-
-# -----------------------------------------------------------------------------
+# ----------------------------------------------------------------------
 # Custom User Manager
-# -----------------------------------------------------------------------------
+# ----------------------------------------------------------------------
 class UserManager(BaseUserManager):
     def create_user(self, username, emailid, firstname, lastname, password=None, **extra_fields):
         if not username:
@@ -41,14 +39,11 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(username, emailid, firstname, lastname, password, **extra_fields)
 
-
-# -----------------------------------------------------------------------------
-# Custom User Model
-# -----------------------------------------------------------------------------
+# ----------------------------------------------------------------------
+# User Model
+# ----------------------------------------------------------------------
 class User(AbstractBaseUser, PermissionsMixin):
-    """
-    Custom User model that stores user information along with referral features.
-    """
+    """Custom User model that stores user information along with referral features."""
     userid = models.AutoField(primary_key=True)
     firstname = models.CharField(max_length=100)
     lastname = models.CharField(max_length=100)
@@ -63,7 +58,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     zip_code = models.CharField(max_length=10)
     gender = models.CharField(max_length=10)
     createdat = models.DateField(auto_now_add=True)
-    lastlogin = models.DateTimeField(auto_now=True)
+    lastlogin = models.DateTimeField(auto_now=True)  # Used by Django authentication system
     status = models.CharField(max_length=10, default='active')
     subscription = models.CharField(max_length=50, default="unsubscribed")
     referral_points = models.IntegerField(default=0)
@@ -80,6 +75,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name="user_groups",  # Added unique related_name
+        blank=True
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name="user_permissions",  # Added unique related_name
+        blank=True
+    )
+
     objects = UserManager()
 
     USERNAME_FIELD = 'username'
@@ -94,8 +100,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def save(self, *args, **kwargs):
         """
         Overridden save method to generate a referral code if not already set.
-        We call super().save() to make sure the instance gets a primary key before generation.
-        Then we update only the referral_code field using the queryset update to prevent recursion.
         """
         new_instance = self.pk is None
         super().save(*args, **kwargs)
@@ -103,15 +107,11 @@ class User(AbstractBaseUser, PermissionsMixin):
             self.referral_code = generate_referral_code(self.userid)
             User.objects.filter(pk=self.pk).update(referral_code=self.referral_code)
 
-
-# -----------------------------------------------------------------------------
+# ----------------------------------------------------------------------
 # Profile Model
-# -----------------------------------------------------------------------------
+# ----------------------------------------------------------------------
 class Profile(models.Model):
-    """
-    Profile model extends the default information stored for a user.
-    Contains additional data such as location, balance credits, bio, and an avatar.
-    """
+    """Profile model extends the default information stored for a user."""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     location = models.CharField(max_length=100, blank=True)
     balance_credits = models.IntegerField(default=0)
@@ -121,20 +121,34 @@ class Profile(models.Model):
     def __str__(self):
         return f"{self.user.username}'s Profile"
 
+# ----------------------------------------------------------------------
+# Custom Admin Manager
+# ----------------------------------------------------------------------
+class AdminManager(BaseUserManager):
+    def create_user(self, emailid, firstname, lastname, password=None, **extra_fields):
+        if not emailid:
+            raise ValueError("The Email ID must be set")
+        emailid = self.normalize_email(emailid)
+        admin = self.model(emailid=emailid, firstname=firstname, lastname=lastname, **extra_fields)
+        admin.set_password(password)
+        admin.save(using=self._db)
+        return admin
 
-# -----------------------------------------------------------------------------
+    def create_superuser(self, emailid, firstname, lastname, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        return self.create_user(emailid, firstname, lastname, password, **extra_fields)
+
+# ----------------------------------------------------------------------
 # Admin Model
-# -----------------------------------------------------------------------------
-class Admin(models.Model):
-    """
-    Model for administrative users.
-    Stores admin-specific data with phone number validation.
-    """
+# ----------------------------------------------------------------------
+class Admin(AbstractBaseUser, PermissionsMixin):
+    # Your fields
     adminid = models.AutoField(primary_key=True)
     firstname = models.CharField(max_length=25)
     lastname = models.CharField(max_length=25)
     emailid = models.EmailField(unique=True)
-    password = models.CharField(max_length=255)  # Supports storing hashed passwords
+    password = models.CharField(max_length=255)  # Store hashed password here
     contactnumber = models.CharField(
         max_length=10,
         validators=[RegexValidator(regex=r'^\d{10}$', message="Phone number must be exactly 10 digits.")]
@@ -145,10 +159,35 @@ class Admin(models.Model):
     country = models.CharField(max_length=50)
     zip_code = models.CharField(max_length=10)
     createdat = models.DateField(auto_now_add=True)
+    
+    # Custom lastlogin field
     lastlogin = models.DateTimeField(auto_now=True)
+    last_login = models.DateTimeField(auto_now=True)
+
     status = models.CharField(max_length=10, default='active')
     gender = models.CharField(max_length=10)
     is_verified = models.BooleanField(default=False)
+
+    # Django-required fields
+    is_superuser = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name="admin_groups",  # Added unique related_name
+        blank=True
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name="admin_permissions",  # Added unique related_name
+        blank=True
+    )
+
+    objects = AdminManager()
+
+    USERNAME_FIELD = 'emailid'
+    REQUIRED_FIELDS = ['firstname', 'lastname']
 
     class Meta:
         db_table = "admin"

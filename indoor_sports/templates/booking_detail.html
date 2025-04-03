@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 {% extends "base.html" %}
 {% block title %}Booking Details - Indoor Sports{% endblock %}
 
@@ -18,24 +18,4 @@
     <a href="{% url 'my_bookings' %}" class="btn btn-primary mt-3">Back to My Bookings</a>
 </div>
 {% endblock %}
-=======
-{% extends "base.html" %}
-{% block title %}Booking Details - Indoor Sports{% endblock %}
 
-{% block content %}
-<div class="container mt-4">
-    <h2>Booking Details</h2>
-    <ul class="list-group">
-        <li class="list-group-item"><strong>Booking ID:</strong> {{ booking.booking_id }}</li>
-        <li class="list-group-item"><strong>Sport:</strong> {{ booking.sport.name }}</li>
-        <li class="list-group-item"><strong>Date:</strong> {{ booking.slot.date }}</li>
-        <li class="list-group-item"><strong>Time:</strong> {{ booking.slot.time }}</li>
-        <li class="list-group-item"><strong>Location:</strong> {{ booking.location.name }}</li>
-        <li class="list-group-item"><strong>Status:</strong> {{ booking.status }}</li>
-        <li class="list-group-item"><strong>Quantity:</strong> {{ booking.quantity }}</li>
-        <li class="list-group-item"><strong>Booked on:</strong> {{ booking.booking_date|date:"M d, Y H:i" }}</li>
-    </ul>
-    <a href="{% url 'my_bookings' %}" class="btn btn-primary mt-3">Back to My Bookings</a>
-</div>
-{% endblock %}
->>>>>>> 587daca803448929c1cfa1e6e31a62917d21a21d

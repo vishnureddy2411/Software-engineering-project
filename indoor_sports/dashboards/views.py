@@ -9,57 +9,6 @@ from django.db.models import Q
 
 logger = logging.getLogger(__name__)
 
-# # User Dashboard
-# def user_dashboard(request):
-#     """
-#     Displays the user dashboard. Ensures the user is authenticated and is assigned the role of 'user'.
-#     """
-#     list(messages.get_messages(request))  # Clear existing messages
-
-#     if not is_role_valid(request, "user"):
-#         messages.warning(request, "You do not have permission to access this page.")
-#         return redirect("loginpage")
-
-#     try:
-#         user = User.objects.get(userid=request.session["user_id"])
-#         logger.info(f"Accessing user dashboard: User ID {user.userid}")
-#     except User.DoesNotExist:
-#         logger.error(f"User not found: User ID {request.session.get('user_id')}")
-#         messages.error(request, "User not found. Please log in again.")
-#         return redirect("loginpage")
-
-#     # # Fetch locations and sports based on selected location
-#     # locations = Location.objects.all()
-#     # selected_location_id = request.GET.get('id')
-
-#     # if selected_location_id and selected_location_id != 'all':
-#     #     sports = Sport.objects.filter(location_id=selected_location_id)
-#     # else:
-#     #     sports = Sport.objects.all()
-
-#     # # Render user dashboard
-#     # return render(request, "user_dashboard.html", {
-#     #     "last_login": user.lastlogin,
-#     #     "locations": locations,
-#     #     "sports": sports,
-#     #     "selected_location_id": selected_location_id
-#     # })
-
-#     locations = Location.objects.all()
-#     selected_location_id = request.GET.get('id')
- 
-#     if selected_location_id and selected_location_id != 'all':
-#         sports = Sport.objects.filter(id=selected_location_id)
-#     else:
-#         sports = Sport.objects.all()
- 
-#     return render(request, 'user_dashboard.html', {
-#         'locations': locations,
-#         'sports': sports,
-#         'selected_location_id': selected_location_id
-   
-#     })
-
 
 def user_dashboard(request):
     """
@@ -99,34 +48,78 @@ def user_dashboard(request):
         'selected_location_id': selected_location_id
     })
 
-# Admin Dashboard
+
+
 def admin_dashboard(request):
     """
-    Displays the admin dashboard. Ensures the admin is authenticated and has the role of 'admin'.
+    Displays the admin dashboard.
+    Ensures the admin is authenticated and has the correct role.
     """
-    list(messages.get_messages(request))  # Clear existing messages
+    list(messages.get_messages(request))  # Clear messages
 
     if not is_role_valid(request, "admin"):
         messages.warning(request, "You do not have permission to access this page.")
         return redirect("loginpage")
 
     try:
-        admin = Admin.objects.get(adminid=request.session["user_id"])
+        admin_id = request.session.get("admin_id")
+        admin = Admin.objects.get(adminid=admin_id)
         logger.info(f"Accessing admin dashboard: Admin ID {admin.adminid}")
     except Admin.DoesNotExist:
-        logger.error(f"Admin not found: Admin ID {request.session.get('user_id')}")
+        logger.error(f"Admin not found: Admin ID {admin_id}")
         messages.error(request, "Admin not found. Please log in again.")
         return redirect("loginpage")
 
     return render(request, "admin_dashboard.html", {"last_login": admin.lastlogin})
 
-# Helper function to validate user role
+
 def is_role_valid(request, expected_role):
     role = request.session.get("role")
+    admin_id = request.session.get("admin_id")
+    user_id = request.session.get("user_id")  # Add user_id for user validation
+
+    print(f"Debug: Session Data -> {dict(request.session.items())}")  # Debug print
+
     if role != expected_role:
-        logger.warning(f"Invalid role access attempt. Expected: {expected_role}, Found: {role}")
+        print(f"Debug: Role mismatch! Expected: {expected_role}, Found: {role}")
         return False
-    return True
+
+    # ✅ Admin Validation
+    if role == "admin" and admin_id:
+        try:
+            admin = Admin.objects.get(adminid=admin_id)
+            print(f"Debug: Admin found -> {admin.emailid} | Verified: {admin.is_verified} | Active: {admin.is_active}")
+            
+            if not admin.is_verified or not admin.is_active:
+                print("Debug: Admin is not verified or not active!")
+                return False
+
+            return True  # Admin is valid
+
+        except Admin.DoesNotExist:
+            print(f"Debug: Admin not found in DB! Admin ID: {admin_id}")
+            return False
+
+    # ✅ User Validation (Newly Added)
+    if role == "user" and user_id:
+        try:
+            user = User.objects.get(userid=user_id)
+            print(f"Debug: User found -> {user.username}  | Active: {user.is_active}")
+            
+            if not user.is_active:
+                print("Debug: User is not active!")
+                return False
+
+            return True  # User is valid
+
+        except User.DoesNotExist:
+            print(f"Debug: User not found in DB! User ID: {user_id}")
+            return False
+
+    return False  # Default return False if no match
+
+
+
 
 def admin_card_01(request):
     return render(request, 'admin_card_01.html')
@@ -264,3 +257,7 @@ def view_users(request):
 
 def admin_card_03(request):
     return render(request, 'admin_card_03.html')
+
+def add_slot(request):
+    # Your logic to add a slot
+    return render(request, 'add_slot.html')

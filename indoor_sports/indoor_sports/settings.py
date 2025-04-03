@@ -1,21 +1,7 @@
-
-# Django settings for indoor_sports project.
-
-# For more information on this file, see:
-# https://docs.djangoproject.com/en/5.1/topics/settings/
-
-# For the full list of settings and their values, see:
-# https://docs.djangoproject.com/en/5.1/ref/settings/
-
-# This configuration sets up environment variables via dotenv,
-# email backends, session management, and logging configurations.
-# It is tuned for development with DEBUG set to True.
-
 import os
 import logging
 from pathlib import Path
 from dotenv import load_dotenv
-from django.core.exceptions import SuspiciousOperation
 
 # Load environment variables from .env file
 load_dotenv()
@@ -23,11 +9,11 @@ load_dotenv()
 # Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings
-DEBUG = True  # Set to True for development
+# Debug mode for development
+DEBUG = True
 
-# Secret key: use environment variable if provided, else fallback to hard-coded development key
-SECRET_KEY = os.getenv('SECRET_KEY')
+# Secret key (use environment variable for production)
+SECRET_KEY = os.getenv('SECRET_KEY', 'your-development-secret-key')
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
@@ -39,8 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    # Custom apps
+    'rest_framework',  # REST framework
     'accounts',
     'bookings',
     'dashboards',
@@ -64,7 +49,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.common.BrokenLinkEmailsMiddleware',
 ]
 
 ROOT_URLCONF = 'indoor_sports.urls'
@@ -80,7 +64,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'notifications.context_processors.unread_notifications_count',
             ],
         },
     },
@@ -88,33 +71,25 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'indoor_sports.wsgi.application'
 
-# Database configuration using environment variables with fallback defaults
+# Database configuration using MySQL
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
-        'CONN_MAX_AGE': 600,
+        'NAME': os.getenv('DB_NAME', 'indoor_sports'),
+        'USER': os.getenv('DB_USER', 'root'),
+        'PASSWORD': os.getenv('DB_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', '127.0.0.1'),
+        'PORT': os.getenv('DB_PORT', '3306'),
+        'CONN_MAX_AGE': 600,  # Persistent connections
     }
 }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 # Internationalization
@@ -135,23 +110,23 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Email configuration
+# Email backend configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'your-email@example.com')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'your-email-password')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-# Sessions configuration
+# Sessions configuration (use database-backed sessions)
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-SESSION_COOKIE_AGE = 86400
+SESSION_COOKIE_AGE = 86400  # 1 day (in seconds)
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False  # Should be True in production
 SESSION_SAVE_EVERY_REQUEST = True
 
-# Logging configuration
+# # Logging configuration
 # LOGGING = {
 #     'version': 1,
 #     'disable_existing_loggers': False,
@@ -177,9 +152,6 @@ SESSION_SAVE_EVERY_REQUEST = True
 #             'level': 'DEBUG',
 #             'formatter': 'verbose',
 #         },
-#         'null': {
-#             'class': 'logging.NullHandler',
-#         },
 #     },
 #     'loggers': {
 #         'django': {
@@ -187,21 +159,8 @@ SESSION_SAVE_EVERY_REQUEST = True
 #             'level': 'DEBUG',
 #             'propagate': True,
 #         },
-#         'django.request': {
-#             'handlers': ['console', 'file'],
-#             'level': 'DEBUG',
-#             'propagate': True,
-#         },
-#         'django.security.SuspiciousOperation': {
-#             'handlers': ['null'],
-#             'propagate': False,
-#         },
 #     },
 # }
-
-logging.getLogger('django.server').addFilter(
-    lambda record: 'Broken pipe' not in record.getMessage()
-)
 
 # Custom user model
 AUTH_USER_MODEL = 'accounts.User'

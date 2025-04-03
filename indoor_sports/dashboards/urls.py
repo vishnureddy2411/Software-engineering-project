@@ -1,16 +1,9 @@
-# from django.urls import path
-# from dashboards import views
 
-# urlpatterns = [
-#     path('user/', views.user_dashboard, name='user_dashboard'),  # User Dashboard
-#     path('admin/', views.admin_dashboard, name='admin_dashboard'),  # Admin Dashboard
-#     path('admin/card_01/', views.admin_card_01, name='admin_card_01'),
-# ]
 
 from django.urls import path
 from .views import (
     admin_dashboard, user_dashboard, home, edit_profile, view_sports, add_sport,
-    del_sport, update_sport, view_bookings, view_payments, contact,admin_card_01,view_users,admin_card_03,add_users,add_admins
+    del_sport, update_sport, view_bookings, view_payments, contact,admin_card_01,view_users,admin_card_03,add_users,add_admins,add_slot
 )
 
 urlpatterns = [
@@ -30,4 +23,6 @@ urlpatterns = [
     path('add_users/', add_users, name='add_users'),
     path('add_admin/', add_admins, name='add_admins'),
     path('contact/', contact, name='contact'),
+    path('add-slot/', add_slot, name='add-slot'),
+
 ]
