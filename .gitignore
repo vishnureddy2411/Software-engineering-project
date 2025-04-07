@@ -1,89 +1,49 @@
-indoor_sports/indoor_sports/.env
-indoor_sports/indoor_sports/.env
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\accounts
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\bookings
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\dashboards
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\equipment
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\login
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\my_referrals
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\notifications
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\ratings
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\registration
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\reports
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\sports
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\about.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\add_admins.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\add_slot.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\add_sport.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\add_users.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\admin_card_01.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\admin_card_03.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\admin_dashboard.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\Badminton.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\base.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\Basketball.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\booking_detail.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\booking_list.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\booking_success.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\Bowling.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\cancel_booking.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\choose_date_calendar.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\choose_location.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\choose_sport.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\Circket.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\common_report.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\confirm_booking.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\contact.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\create_equipment.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\del_sport.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\edit_profile.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\email_detail.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\email_list.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\email_message.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\equipment_list.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\home copy.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\home.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\list_equipment.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\list_slots.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\login.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\membership_cancel.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\membership_confirmation.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\membership_dashboard.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\membership_register.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\membership_renew_error.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\membership_renew.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\membership_success.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\my_bookings.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\my_referrals.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\password_reset_confirm.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\password_reset.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\Pickleball.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\Pool.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\promotional_email.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\referral_email.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\register_admin.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\register_user.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\reviews.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\select_equipment.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\send_admin_invite.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\send_email.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\send_user_invite.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\sport_list.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\Table Tennis.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\transactional_email.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\update_equipment.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\update_sport.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\user_dashboard.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\user_equipment.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\user_profile.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\view_bookings.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\view_payments.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\view_sports.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\view_users.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\templates\Volleyball.html
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\memberships\__pycache__
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\memberships\migrations
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\memberships\__init__.py
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\memberships\admin.py
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\memberships\models.py
-C:\Users\harsh\Downloads\SoftWare Engineering project\Software-engineering-project\Software-engineering-project\indoor_sports\memberships\tests.py
+
+
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\bookings
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\dashboards
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\my_referrals
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\memberships
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\equipment
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\notifications
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\payments
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\ratings
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\sports
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\debug.log
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\reports
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\add_slot.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\booking_detail.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\booking_list.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\booking_success.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\cancel_booking.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\choose_date_calendar.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\choose_location.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\choose_sport.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\common_report.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\confirm_booking.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\email_detail.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\email_list.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\email_message.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\equipment_list.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\list_slots.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\membership_cancel.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\membership_confirmation.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\membership_dashboard.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\membership_register.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\membership_renew_error.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\membership_renew.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\my_bookings.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\my_referrals.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\payment_list.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\promotional_email.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\sport_list.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\transactional_email.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\payment_cancel.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\payment_failed.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\payment_list.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\payment_success.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\promotional_email.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\referral_email.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\mem_payment_failed.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\templates\mem_payment_success.html
+C:\Users\lenovo\Desktop\Software-engineering-project\indoor_sports\utils

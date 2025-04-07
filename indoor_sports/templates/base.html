@@ -16,6 +16,8 @@
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body class="glass-bg">
 
@@ -60,12 +62,11 @@
                         <a class="nav-link" href="#">Sports</a>
                     </li>
                     <li class="nav-item">
-                        <!-- {% if user.is_authenticated %}
-                            <a class="nav-link" href="{% url 'choose_location' %}">Bookings</a>
-                        {% else %}
-                            <a class="nav-link" href="{% url 'loginpage' %}?next={% url 'choose_location' %}">Bookings</a>
-                        {% endif %} -->
-                        <a class="nav-link" href="{% url 'choose_location' %}">Bookings</a>
+                        
+                        <a class="nav-link" href="{% url 'choose_location' %}">Book Slot</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'my_bookings' %}">View My Bookings</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'my_referrals' %}">My Referrals</a>
@@ -83,17 +84,14 @@
                             {% endif %}
                         </a>
                     </li>
-                    <!-- <li class="nav-item">
-                        {% if user.is_authenticated %}
-                            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                        {% else %}
-                            <a class="nav-link" href="{% url 'loginpage' %}">Login</a>
-                        {% endif %}
-                    </li> -->
+                    
 
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Manage Profile 
+                            <i class="fas fa-user-circle" style="font-size: 24px;"></i> Profile <!-- Default avatar icon -->
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="profileDropdown">
                             <li><a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Profile</a></li>
@@ -101,11 +99,7 @@
                             <li><a class="dropdown-item" href="{% url 'loginpage' %}">Logout</a></li>
                         </ul>
                     </li>
-                    
          
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'contact' %}">Contact</a>
-                    </li>
                 </ul>
             </div>
         </div>
