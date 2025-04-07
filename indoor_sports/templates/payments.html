@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}Make Payment{% endblock %}
+
+{% block content %}
+<div class="glass-container">
+    <h2>Complete Your Payment</h2>
+    <p><strong>Booking ID:</strong> {{ booking.booking_id }}</p>
+    <p><strong>Sport:</strong> {{ booking.sport.name }}</p>
+    <p><strong>Slot Price:</strong> ${{ booking.sport.price }}</p>
+    {% if booking.equipment %}
+        <p><strong>Equipment:</strong> {{ booking.equipment.name }}</p>
+        <p><strong>Equipment Quantity:</strong> {{ booking.quantity }}</p>
+        <p><strong>Equipment Price:</strong> ${{ equipment_price }}</p>
+        <p><strong>Total Amount:</strong> ${{ total_price }}</p>
+    {% endif %}
+    <p><strong>Referral Discount:</strong> -${{ discount }}</p>
+    <button class="glass-btn" id="select-payment-button">Choose Payment Method</button>
+</div>
+
+
+<!-- Payment Method Selection Modal -->
+<div id="payment-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <h3>Select Payment Method</h3>
+        <button class="glass-btn" id="pay-card">Pay with Card</button>
+        <button class="glass-btn" id="pay-apple">Apple Pay</button>
+        <button class="glass-btn" id="close-modal">Cancel</button>
+    </div>
+</div>
+
+<!-- Card Payment Form (Hidden by Default) -->
+<div id="card-payment-form" class="glass-container" style="display: none;">
+    <h3>Enter Card Details</h3>
+    <form id="payment-form">
+        <div id="card-element"></div>
+        <button class="glass-btn" id="submit-card-payment">Pay Now</button>
+    </form>
+</div>
+
+<!-- Stripe Integration Script -->
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    // Initialize Stripe
+    const stripe = Stripe("{{ STRIPE_PUBLIC_KEY }}");
+    const elements = stripe.elements();
+    const card = elements.create("card");
+    card.mount("#card-element");
+
+    // Open payment method modal
+    document.getElementById("select-payment-button").onclick = function () {
+        document.getElementById("payment-modal").style.display = "block";
+    };
+
+    // Close modal
+    document.getElementById("close-modal").onclick = function () {
+        document.getElementById("payment-modal").style.display = "none";
+    };
+
+    // Process Apple Pay
+    document.getElementById("pay-apple").onclick = function () {
+        fetch("{% url 'process_payment' booking.booking_id %}", {
+            method: "POST",
+            headers: { 
+                "X-CSRFToken": "{{ csrf_token }}",  // Include CSRF token for security
+                "Content-Type": "application/json"
+            },
+        })
+        .then(response => response.json())
+        .then(session => {
+            if (session.error) {
+                alert("Error processing payment: " + session.details);
+            } else {
+                stripe.redirectToCheckout({ sessionId: session.id });
+            }
+        })
+        .catch(error => {
+            console.error("An unexpected error occurred:", error);
+            alert("An unexpected error occurred while initiating payment.");
+        });
+    };
+
+    // Show card payment form
+    document.getElementById("pay-card").onclick = function () {
+        document.getElementById("payment-modal").style.display = "none";
+        document.getElementById("card-payment-form").style.display = "block";
+    };
+
+    // Handle card payment submission
+    document.getElementById("submit-card-payment").onclick = function (event) {
+        event.preventDefault();
+        stripe.createPaymentMethod({
+            type: "card",
+            card: card,
+        }).then(function (result) {
+            if (result.error) {
+                alert(result.error.message);
+            } else {
+                fetch("{% url 'process_card_payment' booking.booking_id %}", {
+                    method: "POST",
+                    headers: { 
+                        "X-CSRFToken": "{{ csrf_token }}", 
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ payment_method_id: result.paymentMethod.id })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Payment Successful!");
+                        window.location.href = "{% url 'payment_success' booking.booking_id %}";
+                    } else {
+                        alert("Payment Failed: " + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error("Payment error occurred:", error);
+                    alert("An error occurred while completing your payment.");
+                });
+            }
+        });
+    };
+</script>
+
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px gray;
+    }
+    .modal-content {
+        text-align: center;
+    }
+    .glass-btn {
+        padding: 10px;
+        border: none;
+        background: #3498db;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}

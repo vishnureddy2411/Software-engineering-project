@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Payment Cancelled{% endblock %}
+
+{% block content %}
+<div class="glass-container">
+    <h2>Payment Cancelled</h2>
+    <p>We're sorry, but your payment was not completed. You can try again later or contact support if you need assistance.</p>
+    <a href="{% url 'home' %}" class="glass-btn">Go Back to Home</a>
+    <a href="{% url 'booking_details' booking.booking_id %}" class="glass-btn">View Booking Details</a>
+</div>
+
+<style>
+    .glass-container {
+        padding: 20px;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.7);
+        border-radius: 10px;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    }
+    .glass-btn {
+        padding: 10px;
+        border: none;
+        background-color: #3498db;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 10px;
+    }
+    .glass-btn:hover {
+        background-color: #2980b9;
+    }
+</style>
+{% endblock %}

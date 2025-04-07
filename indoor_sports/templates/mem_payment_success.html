@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1>Payment Successful!</h1>
+        <p>Thank you for your subscription to the <strong>{{ plan_name }} Subscription</strong>.</p>
+        <p>Your payment was successfully processed, and your subscription will start shortly.</p>
+
+        <h3>Subscription Details</h3>
+        <ul>
+            <li><strong>Plan:</strong> {{ plan_name }}</li>
+            <li><strong>Amount:</strong> ${{ price }}</li>
+            <li><strong>Start Date:</strong> {{ start_date }}</li>
+            <li><strong>End Date:</strong> {{ end_date }}</li>
+        </ul>
+
+        <p>We have sent a confirmation email to <strong>{{ request.user.emailid }}</strong>.</p>
+
+        
+        <p>Enjoy your subscription, and thank you for choosing us!</p>
+
+        <h3>Redirecting...</h3>
+        <p>If you are not redirected automatically, <a href="{% url 'membership_dashboard' %}">click here</a>.</p>
+
+        <!-- Stripe Redirection Script -->
+        <script src="https://js.stripe.com/v3/"></script>
+        <script>
+            var stripe = Stripe('pk_test_51R5YC8AzH5PP5Ex8WSpFF1x6PBonNRznnQfxmtJf0F8exXT0cA50SjtUrB8ZAMu2yOptIXbFmX6YdCI7xsE20Qbs00TiKRHyRg');  // Replace with your actual Stripe public key
+
+            // Pass the session ID received from the backend
+            var sessionId = "{{ session_id }}";  // This needs to be passed from the backend
+
+            // Redirect to Stripe Checkout
+            stripe.redirectToCheckout({ sessionId: sessionId })
+                .then(function (result) {
+                    // Handle any errors
+                    if (result.error) {
+                        alert(result.error.message);
+                    }
+                });
+        </script>
+    </div>
+{% endblock %}

@@ -13,6 +13,7 @@ class Payment(models.Model):
     payment_method = models.CharField(max_length=20, blank=True, null=True)  # Examples: Credit Card, PayPal
     payment_date = models.DateTimeField(auto_now_add=True)
     payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default='Pending')
+    stripe_payment_id = models.CharField(max_length=100, unique=True, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
