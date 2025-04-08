@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Equipment List{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>All Equipment</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Condition</th>
+                <th>Status</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if equipment_list %}
+                {% for equipment in equipment_list %}
+                <tr>
+                    <td>{{ equipment.equipment_id }}</td>
+                    <td>{{ equipment.name }}</td>
+                    <td>{{ equipment.quantity }}</td>
+                    <td>{{ equipment.condition_of_kit }}</td>
+                    <td>{{ equipment.availability_status }}</td>
+                    <td>${{ equipment.price }}</td>
+                    <td>
+                        <!-- Edit Equipment Button -->
+                        <a href="{% url 'update_equipment' equipment.equipment_id %}" class="btn btn-warning btn-sm">Edit</a>
+                        
+                        <!-- Delete Equipment Form -->
+                        <form method="POST" action="{% url 'delete_equipment' equipment.equipment_id %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="7" class="text-center">No equipment found.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    
+</div>
+{% endblock %}
