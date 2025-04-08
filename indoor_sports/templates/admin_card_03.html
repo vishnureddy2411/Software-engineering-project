@@ -1,0 +1,32 @@
+{% extends 'base_admin.html' %}
+
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center">
+        <h2>Welcome to Sports Booking Platform</h2>
+        <p class="lead">Admin Dashboard</p>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">View Users</h3>
+                    <a href="{% url 'view_users' %}" class="btn btn-info">View</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">Add Users</h3>
+                    <a href="{% url 'add_users' %}" class="btn btn-primary">Add</a>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends 'base_admin.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard - Indoor Sports{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center">
+        <h2>Welcome to Sports Booking Platform</h2>
+        <p class="lead">Admin Dashboard</p>
+    </div>
+
+    <!-- CRUD Operations Section for Equipment Management -->
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">Add Equipment</h3>
+                    <a href="{% url 'create_equipment' %}" class="btn btn-success" target="_blank">Add</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">View Equipment</h3>
+                    <a href="{% url 'list_equipment' %}" class="btn btn-info" target="_blank">View</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">Update Equipment</h3>
+                    <p class="text-muted">Select equipment from the "View Equipment" page to update.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-4 offset-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">Delete Equipment</h3>
+                    <p class="text-muted">Select equipment from the "View Equipment" page to delete.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Existing Dashboard Options -->
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">Manage Sports</h3>
+                    <a href="{% url 'admin_card_01' %}" class="btn btn-primary" target="_blank">Manage</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">Bookings</h3>
+                    <button class="btn btn-info">View</button>
+                    <h3 class="card-title mt-3">Add Slots</h3>
+                    <a href="{% url 'add-slot' %}" class="btn btn-success" target="_blank">Manage</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">Manage Users</h3>
+                    <a href="{% url 'admin_card_03' %}" class="btn btn-primary" target="_blank">Manage</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">Add Admin</h3>
+                    <a href="{% url 'add_admin' %}" class="btn btn-warning" target="_blank">Manage</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">Payments & Transactions</h3>
+                    <button class="btn btn-secondary">View Transactions</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">Generate Reports</h3>
+                    <button class="btn btn-danger">Generate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-4 offset-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">Edit Homepage</h3>
+                    <button class="btn btn-dark">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
