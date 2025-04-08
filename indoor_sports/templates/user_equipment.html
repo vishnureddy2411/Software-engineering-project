@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Book Equipment{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Equipment at {{ location.name }}</h2>
+    <ul>
+        {% for equipment in equipment_list %}
+            <li>{{ equipment.name }} - Available: {{ equipment.quantity }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'select_equipment' location.location_id %}" class="btn btn-primary">Select Equipment</a>
+</div>
+{% endblock %}

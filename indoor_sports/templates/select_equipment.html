@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Select Equipment{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Select Equipment at {{ location.name }}</h2>
+    <form method="POST">
+        {% csrf_token %}
+
+        <!-- Equipment Selection -->
+        <label for="equipment">Select Equipment:</label>
+        <select id="equipment" name="equipment" required>
+            {% for equipment in equipment_list %}
+                <option value="{{ equipment.equipment_id }}">{{ equipment.name }} (Available: {{ equipment.quantity }})</option>
+            {% endfor %}
+        </select>
+
+        <!-- Quantity Input -->
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" min="1" required>
+
+        <!-- Slot Dropdown -->
+        <!-- Read-Only Slot Information -->
+        <label for="slot">Selected Slot:</label>
+            <div id="slot" class="form-control" readonly>
+                {{ selected_slot.date }} - {{ selected_slot.time }}
+            </div>
+        <input type="hidden" name="slot" value="{{ selected_slot.slot_id }}">
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-success mt-3">Book Now</button>
+    </form>
+</div>
+{% endblock %}
+
+
