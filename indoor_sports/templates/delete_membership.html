@@ -1,0 +1,16 @@
+<!-- templates/membership/delete_membership.html -->
+{% extends "base.html" %}
+{% block content %}
+<div class="glass-card fade-in">
+    <h2 class="text-center">Delete Membership</h2>
+    
+    <p>Are you sure you want to delete the membership of {{ membership.user.email }}?</p>
+    
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+    </form>
+    
+    <a href="{% url 'membership_list' %}" class="btn btn-sm btn-secondary">Cancel</a>
+</div>
+{% endblock %}
