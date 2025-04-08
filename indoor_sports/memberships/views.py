@@ -10,6 +10,11 @@ from django.http import JsonResponse
 from django.urls import reverse
 from django.contrib import messages
 from django.core.mail import send_mail
+from accounts.models import Admin  # import your custom Admin model
+from .models import Membership, MembershipPlan
+from .forms import MembershipForm
+from .forms import MembershipPlanForm
+from django.http import HttpResponse
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 #@login_required
@@ -238,3 +243,119 @@ def subscription_send_payment_email(user, plan, start_date, end_date, price):
     from_email = settings.DEFAULT_FROM_EMAIL
     recipient_list = [user.emailid]
     send_mail(subject, message, from_email, recipient_list)
+
+# @login_required
+def view_user_memberships(request):
+    # Ensure only logged-in users with role 'admin' can access
+    if request.session.get('role') != 'admin' or not request.session.get('is_authenticated'):
+        print("Access denied: Not an admin or not authenticated.")
+        messages.error(request, "Access denied. Admins only.")
+        return redirect('loginpage')
+
+    try:
+        # Get admin_id from session and fetch Admin object
+        admin_id = request.session.get('admin_id')
+        admin = Admin.objects.get(adminid=admin_id)
+        print(f"Admin fetched: {admin.emailid}")
+
+        if not admin.is_verified:
+            print("Access denied: Admin is not verified.")
+            messages.error(request, "Access denied. Verified Admins only.")
+            return redirect('loginpage')
+
+        memberships = Membership.objects.select_related('user').all().order_by('-created_at')
+        print(f"Membership records fetched: {len(memberships)}")
+
+        return render(request, 'admin_membership_view.html', {
+            'memberships': memberships,
+            'admin': admin
+        })
+
+    except Admin.DoesNotExist:
+        print("Admin not found.")
+        messages.error(request, "Access denied. Admin not found.")
+        return redirect('loginpage')
+
+
+
+
+def update_membership(request, id):
+    # Check admin role and authentication from session
+    if request.session.get('role') != 'admin' or not request.session.get('is_authenticated'):
+        print("Access denied: Not an admin or not authenticated.")
+        messages.error(request, "Access denied. Admins only.")
+        return redirect('loginpage')
+
+    try:
+        admin_id = request.session.get('admin_id')
+        admin = Admin.objects.get(adminid=admin_id)
+        print(f"Admin fetched: {admin.emailid}")
+
+        # Check if admin is verified
+        if not admin.is_verified:
+            print("Access denied: Admin is not verified.")
+            messages.error(request, "Access denied. Verified Admins only.")
+            return redirect('loginpage')
+
+        # Get the membership object by ID
+        membership = get_object_or_404(Membership, id=id)
+
+        if request.method == 'POST':
+            # Get values from the form
+            plan = request.POST.get('plan_id')
+            price = request.POST.get('price')
+            status = request.POST.get('status')
+
+            # Update membership fields
+            membership.plan_id = plan
+            membership.price = price
+            membership.status = status
+            membership.save()
+
+            messages.success(request, "Membership updated successfully.")
+            return redirect('view_user_memberships')
+
+        # Render the form with membership data
+        return render(request, 'membership_form.html', {
+            'membership': membership,
+            'admin': admin
+        })
+
+    except Admin.DoesNotExist:
+        print("Admin not found.")
+        messages.error(request, "Access denied. Admin not found.")
+        return redirect('loginpage')
+    
+# views.py
+def membership_plan_list(request):
+    plans = MembershipPlan.objects.all()  # Make sure to fetch all membership plans
+    return render(request, 'membership_plan_list.html', {'plans': plans})
+
+def admin_dashboard(request):
+    memberships = Membership.objects.select_related('plan').all()  # Fetch memberships with related plans
+    return render(request, 'dashboards/admin_dashboard.html', {'memberships': memberships})
+
+
+# View for updating a membership plan
+def update_membership_plan(request, plan_id):
+    plan = get_object_or_404(MembershipPlan, id=plan_id)  # Ensure the plan exists
+
+    if request.method == 'POST':
+        form = MembershipPlanForm(request.POST, instance=plan)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_dashboard')  # Redirect back to the admin dashboard
+    else:
+        form = MembershipPlanForm(instance=plan)
+
+    return render(request, 'update_membership.html', {'form': form, 'plan': plan})
+
+# View for deleting a membership plan
+def delete_membership_plan(request, plan_id):
+    plan = get_object_or_404(MembershipPlan, id=plan_id)  # Ensure the plan exists
+
+    if request.method == 'POST':
+        plan.delete()
+        return redirect('admin_dashboard')  # Redirect back to the admin dashboard
+
+    return render(request, 'membership_plan/delete_membership.html', {'plan': plan})
