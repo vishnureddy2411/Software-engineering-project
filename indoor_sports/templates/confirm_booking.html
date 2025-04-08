@@ -1,6 +1,4 @@
-
 {% extends "base.html" %}
-{% load static %}
 {% block title %}Confirm Booking{% endblock %}
 
 {% block content %}
@@ -17,9 +15,13 @@
         {% csrf_token %}
         <div class="d-flex justify-content-between">
             <button type="button" onclick="window.history.back()" class="btn btn-secondary">Back</button>
-            <button type="submit" class="btn btn-primary">Confirm Booking</button>
+            <button type="submit" class="btn btn-primary">Proceed To Payment</button>
         </div>
     </form>
+    <div class="mt-3">
+        <!-- Updated link to select equipment page -->
+        <a href="{% url 'select_equipment' slot.location.location_id slot.slot_id %}" class="btn btn-success">Select Equipment</a>
+    </div>
+    
 </div>
 {% endblock %}
-

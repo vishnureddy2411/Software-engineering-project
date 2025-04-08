@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 {% extends "base.html" %}
 {% block title %}My Bookings - Indoor Sports{% endblock %}
 
@@ -40,46 +40,3 @@
     {% endif %}
 </div>
 {% endblock %}
-=======
-{% extends "base.html" %}
-{% block title %}My Bookings - Indoor Sports{% endblock %}
-
-{% block content %}
-<div class="container mt-4">
-    <h2>My Bookings</h2>
-    {% if bookings %}
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Booking ID</th>
-          <th>Sport</th>
-          <th>Date</th>
-          <th>Time</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for booking in bookings %}
-        <tr>
-          <td>{{ booking.booking_id }}</td>
-          <td>{{ booking.sport.name }}</td>
-          <td>{{ booking.slot.date }}</td>
-          <td>{{ booking.slot.time }}</td>
-          <td>{{ booking.status }}</td>
-          <td>
-            <a href="{% url 'booking_detail' booking.booking_id %}" class="btn btn-info btn-sm">Details</a>
-            {% if booking.status in "Booked,Pending" %}
-              <a href="{% url 'cancel_booking' booking.booking_id %}" class="btn btn-danger btn-sm">Cancel</a>
-            {% endif %}
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    {% else %}
-    <p>You have no bookings.</p>
-    {% endif %}
-</div>
-{% endblock %}
->>>>>>> 587daca803448929c1cfa1e6e31a62917d21a21d
