@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Sports Venue Booking - Badminton{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="header">Badminton Booking</div>
+        <div class="content">
+            <!-- Left section for image and title -->
+            <div class="image-container">
+                <img src="{% static 'images/badminton.jpg' %}" alt="Badminton">
+                <h2>Badminton</h2>
+            </div>
+
+            <!-- Right section for booking info (aligned to the right) -->
+            <div class="info-container">
+                <div class="booking-container">
+                    <div class="price-box">
+                        ${{ price }}
+                        {% if price == sport.peak_price %}
+                            <span style="color: red; font-weight: normal;"></span>
+                        {% else %}
+                            <span style="color: green; font-weight: normal;"></span>
+                        {% endif %}
+                    </div>
+                    <a href="{% url 'choose_date' location.location_id sport.sport_id %}" class="book-button">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="separator"></div>
+
+        <!-- Location Details Section -->
+        <div class="location-section">
+            <div class="location-title">Location Details</div>
+            <div class="location-address">
+                <p><span>{{ location.name }} is located at: </span> {{ address }}</p>
+            </div>
+        </div>
+        <div class="separator"></div>
+
+        <!-- Description Section -->
+        <div class="section-title">Description of Badminton</div>
+        <div class="description">
+            <p>Badminton is a fast-paced sport played by two players (singles) or four players (doubles) who use rackets to hit a shuttlecock over a net. The objective is to score points by landing the shuttlecock in the opponent's court. Badminton requires agility, precision, and excellent reflexes, making it an exciting and challenging sport to play and watch.</p>
+            <p>It is one of the most popular sports globally, especially in Asia, and is a staple in the Olympics. The sport promotes cardiovascular fitness, improves hand-eye coordination, and enhances flexibility and endurance.</p>
+        </div>
+        <div class="separator"></div>
+
+        <!-- Reviews Section -->
+        <div class="section-title">Reviews & Ratings</div>
+        <div class="reviews">
+            <a href="{% url 'reviews' sport.sport_id %}" class="reviews-button">Go to Reviews</a>
+        </div>
+    </div>
+{% endblock %}

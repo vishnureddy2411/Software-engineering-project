@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load static %} 
+
+{% block title %}Sports Venue Booking - Bowling{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="header">Bowling Booking</div>
+        <div class="content">
+            <!-- Left section for image and title -->
+            <div class="image-container">
+                <img src="{% static 'images/Bowling.jpg' %}" alt="Bowling">
+                <h2>Bowling</h2>
+            </div>
+
+            <!-- Right section for booking info (aligned to the right) -->
+            <div class="info-container">
+                <div class="booking-container">
+                    <div class="price-box">
+                        ${{ price }}
+                        {% if price == sport.peak_price %}
+                            <span style="color: red; font-weight: normal;"></span>
+                        {% else %}
+                            <span style="color: green; font-weight: normal;"></span>
+                        {% endif %}
+                    </div>
+                    <a href="{% url 'choose_date' location.location_id sport.sport_id %}" class="book-button">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="separator"></div>
+
+        <!-- Location Details Section -->
+        <div class="location-section">
+            <div class="location-title">Location Details</div>
+            <div class="location-address">
+                <p><span>{{ location.name }} is located at: </span> {{ address }}</p>
+            </div>
+        </div>
+        <div class="separator"></div>
+
+        <!-- Description Section -->
+        <div class="section-title">Description of Bowling</div>
+        <div class="description">
+            <p>The indoor bowling alley features smooth, polished lanes with automatic pinsetters and digital scoreboards for an enhanced experience. It includes comfortable seating, ambient lighting, and climate control, ensuring a relaxed atmosphere. Equipped with various ball weights, lane bumpers for beginners, and safety measures, it caters to all skill levels. Ideal for casual games, leagues, and competitive tournaments year-round.</p>
+        </div>
+        <div class="separator"></div>
+
+        <!-- Reviews Section -->
+        <div class="section-title">Reviews & Ratings</div>
+        <div class="reviews">
+            <a href="{% url 'reviews' sport.sport_id %}" class="reviews-button">Go to Reviews</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Pool Booking{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="header">Pool Booking</div>
+        <div class="content">
+            <div class="image-container">
+                <img src="{% static 'images/poolboard.jpg' %}" alt="Pool">
+                <h2>Pool</h2>
+            </div>
+            <div class="info-container">
+                <div class="booking-container">
+                    <div class="price-box">
+                        ${{ price }}
+                        {% if price == sport.peak_price %}
+                            <span style="color: red; font-weight: normal;">Peak Price</span>
+                        {% else %}
+                            <span style="color: green; font-weight: normal;">Standard Price</span>
+                        {% endif %}
+                    </div>
+                    <a href="{% url 'choose_date' location.location_id sport.sport_id %}" class="book-button">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="separator"></div>
+        
+        <!-- Location Details Section -->
+        <div class="location-section">
+            <div class="location-title">Location Details</div>
+            <div class="location-address">
+                <p><span>{{ location.name }} is located at: </span> {{ address }}</p>
+            </div>
+        </div>
+        <div class="separator"></div>
+        
+        <!-- Description Section -->
+        <div class="section-title">Description of Pool</div>
+        <div class="description">
+            <p>The *indoor pool hall* features *professional-grade billiards tables* with smooth felt surfaces, precise cushioning, and well-balanced cue sticks. The facility includes *proper lighting, climate control, and comfortable seating, ensuring an ideal playing environment. Equipped for **casual games, tournaments, and practice sessions, it caters to players of all skill levels. Perfect for a **relaxing yet competitive experience* in a well-maintained indoor setting.</p>
+        </div>
+        <div class="separator"></div>
+        
+        <!-- Reviews Section -->
+        <div class="section-title">Reviews & Ratings</div>
+        <div class="reviews">
+            <a href="{% url 'reviews' sport.sport_id %}" class="reviews-button">Go to Reviews</a>
+        </div>
+    </div>
+{% endblock %}
