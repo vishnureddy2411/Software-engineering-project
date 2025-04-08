@@ -9,6 +9,7 @@ from django.core.validators import MinValueValidator
 # Slot Model: Represents available time slots at a location for a specific sport.
 # ------------------------------------------------------------------------------
 class Slot(models.Model):
+    slot_id = models.BigAutoField(primary_key=True)
     SLOT_TYPE_CHOICES = [
         ('Peak', 'Peak Hours'),
         ('Non-Peak', 'Non-Peak Hours'),
@@ -23,6 +24,7 @@ class Slot(models.Model):
     is_booked = models.BooleanField(default=False)
     location = models.ForeignKey("sports.Location", on_delete=models.CASCADE, related_name="slots")
     sport = models.ForeignKey("sports.Sport", on_delete=models.CASCADE, related_name="slots")
+
 
     def __str__(self):
         return f"{self.date} {self.time} ({self.slot_type}) at {self.location.name}"
@@ -121,6 +123,8 @@ class BookingReport(models.Model):
 
     def __str__(self):
         return f"{self.sport} at {self.location} on {self.date} by user {self.userid}"
+
+
 
 
 # ------------------------------------------------------------------------------
