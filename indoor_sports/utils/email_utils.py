@@ -39,3 +39,4 @@ def send_email(notification_type, recipient_email, context, subject=None, templa
     except Exception as e:
         logger.error(f"Failed to generate {notification_type} email for {recipient_email}: {e}")
         return False
+
