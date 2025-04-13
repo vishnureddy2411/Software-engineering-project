@@ -42,7 +42,6 @@ urlpatterns = [
     path('notifications/', include('notifications.urls')),
     path('', include('accounts.urls')),  # Include login and logout views, if defined in accounts app
 
-    
     # Redirect the root URL directly to the login page.
     path('', lambda request: redirect('loginpage')),  # 'loginpage' must match the URL name defined in login.urls
 ]

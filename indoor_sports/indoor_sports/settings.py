@@ -162,6 +162,7 @@ SESSION_SAVE_EVERY_REQUEST = True
 #     },
 # }
 
+
 # Custom user model
 AUTH_USER_MODEL = 'accounts.User'
 
