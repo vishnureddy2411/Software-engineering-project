@@ -12,8 +12,6 @@ from accounts.models import User, Admin
 import logging
 logger = logging.getLogger(__name__)
 
-
-
 def choose_location(request):
     locations = Location.objects.all().order_by('name')
     if request.method == "POST":
@@ -27,13 +25,31 @@ def choose_location(request):
 def choose_sport(request, location_id):
     location = get_object_or_404(Location, pk=location_id)
     sports = Sport.objects.filter(location=location)
+
     if request.method == "POST":
         sport_id = request.POST.get("sport")
+        sport = get_object_or_404(Sport, sport_id=sport_id)
+
         if sport_id:
             logger.info("Sport %s chosen at location %s by user %s", sport_id, location.name, request.user.username)
-            return redirect("choose_date", location_id=location_id, sport_id=sport_id)
+
+            current_time = datetime.now().time()  # Use server's current time in the right timezone
+            current_price = sport.get_current_price(current_time)
+
+            return render(request, sport.name + ".html", {
+                "location": location,
+                "sport": sport,
+                "price": current_price,
+                "address": location.address,
+                "is_peak": current_price == sport.peak_price and sport.peak_price is not None,
+                "normal_price": sport.price,
+                "peak_price": sport.peak_price
+            })
+
         messages.error(request, "Please select a sport.")
+
     return render(request, "choose_sport.html", {"location": location, "sports": sports})
+
 
 class AvailabilityHTMLCalendar(calendar.HTMLCalendar):
     def __init__(self, availability, location_id, sport_id):
@@ -102,83 +118,188 @@ def choose_date(request, location_id, sport_id):
     }
     return render(request, "choose_date_calendar.html", context)
 
+# def list_slots(request, location_id, sport_id, date):
+#     """
+#     Display available slots for a given date, location, and sport.
+#     Handles POST requests to redirect to the confirm_booking view.
+#     """
+#     try:
+#         selected_date = datetime.strptime(date, "%Y-%m-%d").date()
+#     except ValueError:
+#         logger.error("Invalid date format: %s", date)
+#         messages.error(request, "Invalid date format. Please try again.")
+#         return redirect("choose_date", location_id=location_id, sport_id=sport_id)
+#     location = get_object_or_404(Location, pk=location_id)
+#     sport = get_object_or_404(Sport, pk=sport_id)
+    
+#     slots = Slot.objects.filter(
+#         date=selected_date,
+#         location=location,
+#         sport=sport,
+#         is_booked=False
+#     )
+    
+#     logger.info("Slots for %s at %s (%s): %d slots", selected_date, location.name, sport.name, slots.count())
+#     if not slots.exists():
+#         messages.info(request, f"No slots available on {selected_date}. Please choose another date.")
+#         return redirect("choose_date", location_id=location_id, sport_id=sport_id)
+    
+#     # Handle the POST request where the user selects a slot and clicks Next.
+#     if request.method == "POST":
+#         slot_id = request.POST.get("slot")
+#         if slot_id:
+#             return redirect("confirm_booking", slot_id=slot_id)
+#         else:
+#             messages.error(request, "Please select a slot.")
+#             # Fall through to re-rendering the page with an error message
+#     context = {
+#         "slots": slots,
+#         "date": selected_date,
+#         "location": location,
+#         "sport": sport,
+#         "location_id": location.pk,  # Use pk in case id is not defined
+#         "sport_id": sport.pk,
+#     }
+#     return render(request, "list_slots.html", context)
+
+
+
 def list_slots(request, location_id, sport_id, date):
     """
     Display available slots for a given date, location, and sport.
-    Handles POST requests to redirect to the confirm_booking view.
+    Handles slot selection and redirects to the confirm_booking view.
     """
     try:
+        # Parse and validate the selected date
         selected_date = datetime.strptime(date, "%Y-%m-%d").date()
     except ValueError:
-        logger.error("Invalid date format: %s", date)
         messages.error(request, "Invalid date format. Please try again.")
         return redirect("choose_date", location_id=location_id, sport_id=sport_id)
-    location = get_object_or_404(Location, pk=location_id)
-    sport = get_object_or_404(Sport, pk=sport_id)
-    
+
+    location = get_object_or_404(Location, location_id=location_id)
+    sport = get_object_or_404(Sport, sport_id=sport_id)
+
+    # Fetch available slots
     slots = Slot.objects.filter(
         date=selected_date,
         location=location,
         sport=sport,
         is_booked=False
     )
-    
-    logger.info("Slots for %s at %s (%s): %d slots", selected_date, location.name, sport.name, slots.count())
+
     if not slots.exists():
         messages.info(request, f"No slots available on {selected_date}. Please choose another date.")
         return redirect("choose_date", location_id=location_id, sport_id=sport_id)
-    
-    # Handle the POST request where the user selects a slot and clicks Next.
+
     if request.method == "POST":
         slot_id = request.POST.get("slot")
         if slot_id:
+            # Redirect to confirm_booking with the selected slot_id
             return redirect("confirm_booking", slot_id=slot_id)
         else:
             messages.error(request, "Please select a slot.")
-            # Fall through to re-rendering the page with an error message
+
     context = {
         "slots": slots,
         "date": selected_date,
         "location": location,
+        "location_id": location_id,  # Pass location ID explicitly
+        "sport_id": sport_id,
         "sport": sport,
-        "location_id": location.pk,  # Use pk in case id is not defined
-        "sport_id": sport.pk,
     }
     return render(request, "list_slots.html", context)
 
+
+
+# def confirm_booking(request, slot_id):
+#     """Handles the booking confirmation process with payment before confirming the booking."""
+#     slot = get_object_or_404(Slot, pk=slot_id)
+
+#     if slot.is_booked:
+#         messages.error(request, "This slot is no longer available. Please select another slot.")
+#         return redirect("choose_date", location_id=slot.location.pk, sport_id=slot.sport.pk)
+#     print(f"User Authenticated: {request.user.is_authenticated}")
+#     print(f"User Object: {request.user}")
+
+
+#     if request.method == "POST":
+#         # Create the booking without confirming
+#         # if request.user.is_authenticated: 
+#         booking = Booking.objects.create(
+#                 user=request.user,
+#                 sport=slot.sport,
+#                 slot=slot,
+#                 location=slot.location,
+#                 status="Pending",
+#                 time_slot=slot.time
+#         )
+#         slot.is_booked = True
+#         slot.save()
+
+#         # Redirect to the payment page before confirming the booking
+#         return redirect("payments_page", booking_id=booking.booking_id)
+
+#     # Render confirmation details for the slot
+#     return render(request, "confirm_booking.html", {"slot": slot})
+
+
+
+@login_required
 def confirm_booking(request, slot_id):
+    """
+    Handles the booking confirmation process with payment before confirming the booking.
+    Also includes logic to retrieve slot details for display.
+    """
+    # Fetch the slot by slot_id
     slot = get_object_or_404(Slot, pk=slot_id)
+
+    # Handle the case if the slot is already booked
     if slot.is_booked:
         messages.error(request, "This slot is no longer available. Please select another slot.")
         return redirect("choose_date", location_id=slot.location.pk, sport_id=slot.sport.pk)
-    
+
+    print(f"User Authenticated: {request.user.is_authenticated}")
+    print(f"User Object: {request.user}")
+
+    # Process POST request for confirming booking
     if request.method == "POST":
-        # Create the booking without any equipment or quantity details.
+        # Create the booking without confirming payment yet
         booking = Booking.objects.create(
             user=request.user,
-            
             sport=slot.sport,
             slot=slot,
             location=slot.location,
-            status="Booked",
-            time_slot=slot.time
+            status="Pending",
+            time_slot=slot.time,
         )
+
+        # Mark the slot as booked
         slot.is_booked = True
         slot.save()
-        logger.info("User %s confirmed booking %s for slot %s", request.user.username, booking.id, slot)
-        messages.success(request, "Your booking has been confirmed!")
-        # Redirect to booking success page where equipment selection can be offered.
-        return redirect("booking_success")
-    
-    # Render confirmation details for the slot.
-    return render(request, "confirm_booking.html", {"slot": slot})
 
+        # Redirect to the payment page before finalizing booking
+        return redirect("payments_page", booking_id=booking.booking_id)
 
+    # Fetch additional slots for the location to pass to the equipment selection page
+    available_slots = Slot.objects.filter(location=slot.location, is_booked=False)
+
+    # Pass slot details to the template along with the equipment selection link
+    context = {
+        "slot": slot,  # Slot details
+        "available_slots": available_slots,  # Additional slots for selection
+    }
+
+    return render(request, "confirm_booking.html", context)
 
 def booking_success(request):
-    logger.info("Booking success page accessed by user %s", request.user.username)
-    return render(request, "booking_success.html")
+    # Get the latest booking for the user
+    booking = Booking.objects.filter(user=request.user).last()
 
+    # Handle case where no booking exists
+    if not booking:
+        return render(request, "error.html", {"message": "No booking found!"})  
+
+    return render(request, "booking_success.html", {"booking": booking})
 def my_bookings(request):
     bookings = Booking.objects.filter(user=request.user).order_by('-booking_date')
     logger.info("User %s accessed their bookings. Total: %d", request.user.username, bookings.count())

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Sports Venue Booking - Volleyball{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="header">Volleyball Booking</div>
+        <div class="content">
+            <!-- Left section for image and title -->
+            <div class="image-container">
+                <img src="{% static 'images/volleyball.jpg' %}" alt="Volleyball">
+                <h2>Volleyball</h2>
+            </div>
+
+            <!-- Right section for booking info (aligned to the right) -->
+            <div class="info-container">
+                <div class="booking-container">
+                    <div class="price-box">
+                        ${{ price }}
+                        {% if price == sport.peak_price %}
+                            <span style="color: red; font-weight: normal;"></span>
+                        {% else %}
+                            <span style="color: green; font-weight: normal;"></span>
+                        {% endif %}
+                    </div>
+                    <a href="{% url 'choose_date' location.location_id sport.sport_id %}" class="book-button">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="separator"></div>
+
+        <!-- Location Details Section -->
+        <div class="location-section">
+            <div class="location-title">Location Details</div>
+            <div class="location-address">
+                <p><span>{{ location.name }} is located at: </span> {{ address }}</p>
+            </div>
+        </div>
+        <div class="separator"></div>
+
+        <!-- Description Section -->
+        <div class="section-title">Description of Volleyball</div>
+        <div class="description">
+            <p>The *indoor volleyball court* features a *standard 18m x 9m playing area* with a professional-grade wooden or synthetic floor for enhanced grip and shock absorption. It includes *adjustable nets, clear boundary markings, proper lighting, and climate control* for an optimal playing experience. The facility is designed for *both casual and competitive matches, offering **seating for spectators and ample space for team play. Ideal for **training, leagues, and tournaments*, ensuring a high-energy and engaging environment for all skill levels.</p>
+        </div>
+        <div class="separator"></div>
+
+        <!-- Reviews Section -->
+        <div class="section-title">Reviews & Ratings</div>
+        <div class="reviews">
+            <a href="{% url 'reviews' sport.sport_id %}" class="reviews-button">Go to Reviews</a>
+        </div>
+    </div>
+{% endblock %}

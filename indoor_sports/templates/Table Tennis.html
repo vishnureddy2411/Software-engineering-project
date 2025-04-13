@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}TableTennis Booking{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="header">TableTennis Booking</div>               
+        <div class="content">
+            <div class="image-container">
+                <img src="{% static 'images/Table-tennis.jpg' %}" alt="TableTennis">
+                <h2>TableTennis</h2>
+            </div>
+            <div class="info-container">
+                <div class="booking-container">
+                    <div class="price-box">
+                        ${{ price }}
+                        {% if price == sport.peak_price %}
+                            <span style="color: red; font-weight: normal;">Peak Price</span>
+                        {% else %}
+                            <span style="color: green; font-weight: normal;">Standard Price</span>
+                        {% endif %}
+                    </div>                   
+                    <a href="{% url 'choose_date' location.location_id sport.sport_id %}" class="book-button">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="separator"></div>
+        
+        <!-- Location Details Section -->
+        <div class="location-section">
+            <div class="location-title">Location Details</div>
+            <div class="location-address">
+                <p><span>{{ location.name }} is located at: </span> {{ address }}</p>
+            </div>
+        </div>
+        <div class="separator"></div>
+        
+        <!-- Description Section -->
+        <div class="section-title">Description of TableTennis</div>
+        <div class="description">
+            <p>The *indoor table tennis facility* features *professional-grade tables* with a smooth playing surface, regulation-height nets, and ample playing space. It is equipped with *proper lighting, climate control, and cushioned flooring* to enhance player comfort and performance. The setup caters to *casual games, training sessions, and competitive tournaments, making it ideal for players of all skill levels. Enjoy a **fast-paced and exciting experience* in a well-maintained indoor environment.</p>
+        </div>
+        <div class="separator"></div>
+        
+        <!-- Reviews Section -->
+        <div class="section-title">Reviews & Ratings</div>
+        <div class="reviews">
+            <a href="{% url 'reviews' sport.sport_id %}" class="reviews-button">Go to Reviews</a>
+        </div>
+    </div>
+{% endblock %}

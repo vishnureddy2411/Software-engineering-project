@@ -1,0 +1,48 @@
+{% extends 'base_admin.html' %}
+
+
+{% block title %}Delete Sport{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h2 class="text-center mb-4">Delete Sport</h2>
+                    <form id="deleteSportForm" method="post" onsubmit="showSuccessMessage(event)">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="sport_name" class="form-label">Sport Name</label>
+                            <input type="text" class="form-control" name="sport_name" id="sport_name" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="location_id" class="form-label">Location</label>
+                            <select class="form-select" name="location_id" id="location_id" required>
+                                <option value="">Select Location</option>
+                                {% for location in locations %}
+                                    <option value="{{ location.location_id }}">{{ location.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-danger w-100">Delete Sport</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showSuccessMessage(event) {
+        event.preventDefault(); // Prevent actual form submission
+        alert("Sport successfully deleted!");
+        document.getElementById("deleteSportForm").reset(); // Reset form fields
+    }
+</script>
+{% endblock %}
