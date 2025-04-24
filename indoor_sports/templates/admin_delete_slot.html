@@ -1,0 +1,11 @@
+{% extends "base_admin.html" %}
+{% load static %}
+{% block content %}
+    <h1>Delete Slot</h1>
+    <p>Are you sure you want to delete this slot?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+        <a href="{% url 'admin_list_slots' %}">Cancel</a>
+    </form>
+{% endblock %}

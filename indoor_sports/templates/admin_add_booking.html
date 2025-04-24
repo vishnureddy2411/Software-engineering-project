@@ -1,0 +1,10 @@
+{% extends 'base_admin.html' %}
+    {% block content %}
+        <h1>Admin: Add Booking</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Add Booking</button>
+            <a href="{% url 'admin_list_bookings' %}">Cancel</a>
+        </form>
+    {% endblock %}

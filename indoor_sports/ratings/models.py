@@ -9,6 +9,7 @@ class Review(models.Model):
     sport = models.ForeignKey('sports.Sport', on_delete=models.CASCADE)
     rating = models.IntegerField()
     review_text = models.TextField()
+    location = models.ForeignKey("sports.Location", on_delete=models.CASCADE, related_name="reviews")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

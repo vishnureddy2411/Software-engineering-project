@@ -5,123 +5,181 @@
 
 {% block content %}
 <div class="container mt-5">
-    <div class="text-center">
+    <div class="text-center mb-4">
         <h2>Welcome to Sports Booking Platform</h2>
         <p class="lead">Admin Dashboard</p>
     </div>
 
-    <!-- CRUD Operations Section for Equipment Management -->
-    <div class="row mt-4">
+    <!-- First Row: Manage Equipment, Manage Sports, Manage Users -->
+    <div class="row mb-4">
         <div class="col-md-4">
-            <div class="card text-center">
+            <div class="card h-100 shadow text-center">
                 <div class="card-body">
-                    <h3 class="card-title">Add Equipment</h3>
-                    <a href="{% url 'create_equipment' %}" class="btn btn-success" target="_blank">Add</a>
+                    <h4 class="card-title fw-bold">Manage Equipment</h4>
+                    <div class="dropdown mt-3">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            Select Action
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'create_equipment' %}" target="_blank">Add Equipment</a></li>
+                            <li><a class="dropdown-item" href="{% url 'list_equipment' %}" target="_blank">Edit Equipment</a></li>
+                            <li><a class="dropdown-item" href="{% url 'list_equipment' %}" target="_blank">Delete Equipment</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card text-center">
+            <div class="card h-100 shadow text-center">
                 <div class="card-body">
-                    <h3 class="card-title">View Equipment</h3>
-                    <a href="{% url 'list_equipment' %}" class="btn btn-info" target="_blank">View</a>
+                    <h4 class="card-title fw-bold">Manage Sports</h4>
+                    <a href="{% url 'admin_card_01' %}" class="btn btn-primary mt-3" target="_blank">Manage</a>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card text-center">
+            <div class="card h-100 shadow text-center">
                 <div class="card-body">
-                    <h3 class="card-title">Update Equipment</h3>
-                    <p class="text-muted">Select equipment from the "View Equipment" page to update.</p>
+                    <h4 class="card-title fw-bold">Manage Users</h4>
+                    <a href="{% url 'admin_card_03' %}" class="btn btn-primary mt-3" target="_blank">Manage</a>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="row mt-4">
         <div class="col-md-4 offset-md-4">
             <div class="card text-center">
                 <div class="card-body">
-                    <h3 class="card-title">Delete Equipment</h3>
-                    <p class="text-muted">Select equipment from the "View Equipment" page to delete.</p>
+                    <h3 class="card-title">manage slot</h3>
+                    <a href="{% url 'admin_manage_slots' %}" class="btn btn-info">View</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-4 offset-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">View Slot Calendar</h3>
+                    <a href="{% url 'admin_slot_calendar' %}" class="btn btn-info">View</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Existing Dashboard Options -->
-    <div class="row mt-4">
+    <!-- Second Row: Payments -->
+    <div class="row mb-4">
         <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h3 class="card-title">Manage Sports</h3>
-                    <a href="{% url 'admin_card_01' %}" class="btn btn-primary" target="_blank">Manage</a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h3 class="card-title">Bookings</h3>
-                    <button class="btn btn-info">View</button>
-                    <h3 class="card-title mt-3">Add Slots</h3>
-                    <a href="{% url 'add-slot' %}" class="btn btn-success" target="_blank">Manage</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h3 class="card-title">Manage Users</h3>
-                    <a href="{% url 'admin_card_03' %}" class="btn btn-primary" target="_blank">Manage</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mt-4">
-        <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h3 class="card-title">Add Admin</h3>
-                    <a href="{% url 'add_admin' %}" class="btn btn-warning" target="_blank">Manage</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card text-center">
+            <div class="card text-center h-100 shadow">
                 <div class="card-body">
                     <h3 class="card-title">Payments & Transactions</h3>
-                    <button class="btn btn-secondary">View Transactions</button>
+                    <a href="{% url 'admin_view_payments' %}" class="btn btn-warning" target="_blank">View Payments</a>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card text-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card text-center h-100 shadow">
                 <div class="card-body">
-                    <h3 class="card-title">Generate Reports</h3>
-                    <button class="btn btn-danger">Generate</button>
+                    <h3 class="card-title">Reviews</h3>
+                    <a href="{% url 'admin_reviews' %}" class="btn btn-primary" target="_blank">Show</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card text-center h-100 shadow">
+                <div class="card-body">
+                    <h3 class="card-title">Manage Bookings</h3>
+                    <a href="{% url 'admin_manage_bookings' %}" class="btn btn-outline-primary" target="_blank">View Bookings</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row mt-4">
-        <div class="col-md-4 offset-md-4">
-            <div class="card text-center">
+    
+    
+
+    <!-- Third Row: Membership Management -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card text-center shadow">
                 <div class="card-body">
-                    <h3 class="card-title">Edit Homepage</h3>
-                    <button class="btn btn-dark">Update</button>
+                    <h3 class="card-title">View Memberships</h3>
+                    <a href="{% url 'view_user_memberships' %}" class="btn btn-outline-primary" target="_blank">View</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card text-center shadow">
+                <div class="card-body">
+                    <h3 class="card-title">Manage Membership Plans</h3>
+                    <a href="{% url 'membership_plan_list' %}" class="btn btn-outline-secondary" target="_blank">Manage Plans</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fifth Row: Individual Membership Plan Actions -->
+    <div class="row mb-4">
+        {% for membership in memberships %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card text-center shadow">
+                    <div class="card-body">
+                        <h3 class="card-title">Edit Membership Plan</h3>
+                        <a href="{% url 'update_membership_plan' plan_id=membership.plan.id %}" class="btn btn-sm btn-primary">Edit</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card text-center shadow">
+                    <div class="card-body">
+                        <h3 class="card-title">Delete Membership Plan</h3>
+                        <a href="{% url 'delete_membership_plan' plan_id=membership.plan.id %}" class="btn btn-outline-danger">Delete Plan</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Sixth Row -->
+<div class="row mb-4">
+    <!-- Generate Reports Card -->
+    <div class="col-md-6">
+        <div class="card text-center shadow h-100">
+            <div class="card-body">
+                <h3 class="card-title">Generate Reports</h3>
+                <a href="{% url 'report_view' 'weekly' %}" class="btn btn-primary m-1">Weekly Report</a>
+                <a href="{% url 'report_view' 'monthly' %}" class="btn btn-primary m-1">Monthly Report</a>
+                <a href="{% url 'report_view' 'yearly' %}" class="btn btn-primary m-1">Yearly Report</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manage Homepage Card -->
+    <div class="col-md-6">
+        <div class="card h-100 shadow text-center">
+            <div class="card-body">
+                <h4 class="card-title fw-bold">Manage Homepage</h4>
+                <div class="dropdown mt-3">
+                    <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        Select Action
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'list_events' %}" target="_blank">View Events</a></li>
+                        <li><a class="dropdown-item" href="{% url 'create_event' %}" target="_blank">Add Event</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-muted" href="{% url 'list_events' %}" target="_blank">Edit/Delete from List</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+    
+</div>
 {% endblock %}

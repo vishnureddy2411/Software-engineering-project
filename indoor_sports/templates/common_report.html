@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_admin.html" %}
 
 {% block title %}{{ report_title }}{% endblock %}
 
@@ -46,11 +46,11 @@
                         <td>{{ booking.time|time:"h:i A" }}</td>
                         <td>{{ booking.gender|title }}</td>
                         <td>
-                            {% if booking.status == "confirmed" %}
+                            {% if booking.status|lower == "confirmed" %}
                                 <span class="badge bg-success">✅ Confirmed</span>
-                            {% elif booking.status == "pending" %}
+                            {% elif booking.status|lower == "pending" %}
                                 <span class="badge bg-warning text-dark">⏳ Pending</span>
-                            {% elif booking.status == "cancelled" %}
+                            {% elif booking.status|lower == "cancelled" %}
                                 <span class="badge bg-danger">❌ Cancelled</span>
                             {% else %}
                                 <span class="badge bg-secondary">❓ Unknown</span>

@@ -1,7 +1,7 @@
 {% extends 'base_admin.html' %}
-
+ 
 {% block title %}Admin Dashboard{% endblock %}
-
+ 
 {% block content %}
 <div class="container mt-5">
     <div class="text-center">
@@ -17,14 +17,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h3 class="card-title">Delete Sport</h3>
-                    <a href="{% url 'del_sport' %}" class="btn btn-danger">Delete</a>
-                </div>
-            </div>
-        </div>
+       
         <div class="col-md-4">
             <div class="card text-center">
                 <div class="card-body">
@@ -33,6 +26,7 @@
                 </div>
             </div>
         </div>
+       
     </div>
 </div>
 {% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base_admin.html' %}
+
+{% block title %}All User Reviews{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">All User Reviews</h2>
+
+    <div class="list-group">
+        {% for review in reviews %}
+            <div class="list-group-item">
+                <strong>{{ review.user.username }}</strong> rated 
+                <strong>{{ review.sport.name }}</strong>
+                <br>
+                Rating: <span style="color: gold; font-weight: bold;">{{ review.rating }}/5</span>
+                <br>
+                <p>{{ review.review_text }}</p>
+                <small class="text-muted">Submitted at: {{ review.created_at }}</small>
+            </div>
+        {% empty %}
+            <p>No reviews available.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

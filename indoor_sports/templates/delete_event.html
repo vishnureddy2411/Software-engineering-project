@@ -1,0 +1,23 @@
+{% extends "base_admin.html" %}
+{% load static %}
+
+{% block title %}Delete Event{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Delete Event</h4>
+        </div>
+        <div class="card-body text-center">
+            <p class="lead">Are you sure you want to delete the event:</p>
+            <h5 class="text-danger">"{{ event.title }}"</h5>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                <a href="{% url 'list_events' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

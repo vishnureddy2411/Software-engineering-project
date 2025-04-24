@@ -1,0 +1,52 @@
+{% extends 'base_admin.html' %}
+
+{% block title %}View All Sports{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-body">
+            <h2 class="text-center mb-4">List of All Sports</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Sport ID</th>
+                            <th>Sport Name</th>
+                            <th>Category</th>
+                            <th>Location</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Peak Price</th>
+                            <th>Peak Hours Start</th>
+                            <th>Peak Hours End</th>
+                            <th>Available Slots</th>
+                            <th>Actions</th> <!-- Added actions column -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sport in sports %}
+                        <tr>
+                            <td>{{ sport.sport_id }}</td>
+                            <td>{{ sport.name }}</td>
+                            <td>{{ sport.category }}</td>
+                            <td>{{ sport.location.name }}</td>
+                            <td>{{ sport.description }}</td>
+                            <td>${{ sport.price }}</td>
+                            <td>${{ sport.peak_price }}</td>
+                            <td>{{ sport.peak_hours_start }}</td>
+                            <td>{{ sport.peak_hours_end }}</td>
+                            <td>{{ sport.available }}</td>
+                            <td>
+                                <a href="{% url 'update_sport' sport_id=sport.sport_id %}" class="btn btn-warning btn-sm">Update</a>
+                                <a href="{% url 'del_sport' sport_id=sport.sport_id %}" class="btn btn-danger btn-sm">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

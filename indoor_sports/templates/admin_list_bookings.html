@@ -1,0 +1,54 @@
+{% extends 'base_admin.html' %}
+{% load static %}
+{% block content %}
+    <h1>Bookings</h1>
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary mb-2">Dashboard</a>
+    <a href="{% url 'admin_add_booking' %}" class="btn btn-success mb-2">Add New Booking</a>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Sport</th>
+                    <th>Slot</th>
+                    <th>Status</th>
+                    <th>Quantity</th>
+                    <th>Equipment</th>
+                    <th>Date</th>
+                    <th>Time Slot</th>
+                    <th>Location</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.booking_id }}</td>
+                        <td>{{ booking.user.username }}</td>
+                        <td>{{ booking.sport.name }}</td>
+                        <td>{{ booking.slot }}</td>
+                        <td>{{ booking.status }}</td>
+                        <td>{{ booking.quantity|default:"-" }}</td>  {# Handle null quantity #}
+                        <td>{{ booking.equipment|default:"-" }}</td> {# Handle null equipment #}
+                        <td>{{ booking.date }}</td>
+                        <td>{{ booking.time_slot }}</td>
+                        <td>{{ booking.location.name }}</td>
+                        <td>
+                            <a href="{% url 'admin_update_booking' booking_id=booking.booking_id %}" class="btn btn-sm btn-primary">Edit</a>
+                            {% if booking.status == "Booked" or booking.status == "Pending" %}
+                                <a href="{% url 'admin_cancel_booking' booking_id=booking.booking_id %}" class="btn btn-sm btn-warning">Cancel</a>
+                                <a href="{% url 'approve_booking' booking_id=booking.booking_id %}" class="btn btn-sm btn-success">Approve</a>
+                            {% endif %}
+                            <a href="{% url 'admin_delete_booking' booking_id=booking.booking_id %}" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="11" class="text-center">No bookings found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
