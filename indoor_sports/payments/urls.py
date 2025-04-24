@@ -20,4 +20,8 @@ urlpatterns = [
     # path("approve_refund/<int:refund_id>/", views.approve_refund, name="approve_refund"),
     # path("reject_refund/<int:refund_id>/", views.reject_refund, name="reject_refund"),
 
+    path('admin/payments/', views.admin_view_payments, name='admin_view_payments'),
+    path('admin/payments/refund/<int:id>/', views.process_refund, name='process_refund'),  # Use `id` here   
+
+
 ]

@@ -17,7 +17,7 @@ from notifications.models import Notification
 from django.utils.timezone import now
 from decimal import Decimal
 from datetime import datetime, timezone
-
+from django.utils.timezone import make_aware
 
 # Set Stripe API key
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -261,4 +261,124 @@ def payments_page(request, booking_id):
         "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLIC_KEY
     })
 
+
+def admin_view_payments(request):
+    """
+    Admin view to display all payments and calculate refund eligibility.
+    Refunds are eligible only if:
+    - Booking status is 'Cancelled'.
+    - Payment status is 'Success'.
+    - Cancellation time is at least 24 hours before slot time and date.
+    """
+    payments = Payment.objects.all()  # Fetch all payments
+
+    for payment in payments:
+        try:
+            # Get booking details linked to the payment
+            booking = Booking.objects.get(booking_id=payment.booking_id)
+
+            # Check refund eligibility criteria
+            payment_status_valid = ["Success", "Completed"]
+            if payment.payment_status in payment_status_valid and booking.status == "Cancelled":
+                # Get slot date and time
+                slot_datetime = make_aware(datetime.combine(booking.date, booking.time_slot))
+                
+                # Get cancellation time
+                cancellation_time = booking.cancellation_time
+                
+                # Handle cases where cancellation_time is missing
+                if cancellation_time is None:
+                    payment.refund_eligible = False  # Refund not eligible
+                    continue
+
+                # Ensure timezone-awareness for cancellation time
+                if cancellation_time.tzinfo is None:
+                    cancellation_time = make_aware(cancellation_time)
+
+                # Calculate time difference in hours
+                time_diff = (slot_datetime - cancellation_time).total_seconds() / 3600
+
+                # Refund eligibility check (24 hours or more difference)
+                payment.refund_eligible = time_diff >= 24
+            else:
+                payment.refund_eligible = False  # Refund not eligible
+        except Booking.DoesNotExist:
+            payment.refund_eligible = False  # Refund not eligible if booking is missing
+
+    return render(request, 'admin_view_payments.html', {'payments': payments})
+
+
+
+
+def send_refund_email(booking, payment):
+    """
+    Sends a refund email to the user when the refund is processed.
+    """
+    try:
+        subject = f"Refund Processed for Booking {booking.booking_id}"
+        message = f"""Dear {booking.user.firstname},
+
+Your refund for the booking of {booking.sport.name} at {booking.location.name} on {booking.date} has been approved.
+You will receive the amount of ${payment.amount} within 3 business days.
+
+Booking ID: {booking.booking_id}
+Slot: {booking.time_slot}
+
+Thank you for using our service, and we hope to serve you again in the future!
+
+Best Regards,
+Indoor Sports Team
+"""
+        from_email = settings.DEFAULT_FROM_EMAIL
+        recipient_list = [booking.user.emailid]  # Ensure 'emailid' is correctly set in your User model
+
+        # Send email
+        send_mail(subject, message, from_email, recipient_list)
+        print(f"Refund email successfully sent to {booking.user.emailid}")
+    except Exception as e:
+        print(f"Failed to send refund email: {e}")
+
+def process_refund(request, id):
+    """
+    Processes refunds for eligible payments.
+    Refunds are processed only if:
+    - Booking status is 'Cancelled'.
+    - Payment status is 'Success'.
+    - Cancellation time is at least 24 hours before slot time and date.
+    """
+    payment = get_object_or_404(Payment, id=id)
+    booking = get_object_or_404(Booking, booking_id=payment.booking_id)
+
+    if payment.payment_status in ["Success", "Completed"] and booking.status == "Cancelled":
+        # Combine slot date and time into a single datetime object
+        slot_datetime = make_aware(datetime.combine(booking.date, booking.time_slot))
+        
+        # Ensure cancellation time is present and timezone-aware
+        cancellation_time = booking.cancellation_time
+        if cancellation_time is None:
+            messages.error(request, "Refund not possible as cancellation time is missing.")
+            return redirect('admin_view_payments')
+
+        if cancellation_time.tzinfo is None:
+            cancellation_time = make_aware(cancellation_time)
+
+        # Calculate time difference in hours
+        time_diff = (slot_datetime - cancellation_time).total_seconds() / 3600
+
+        # Refund eligibility check
+        if time_diff >= 24:
+            payment.payment_status = "Refunded"
+            payment.save()
+
+            # Send refund email to the user
+            send_refund_email(booking, payment)
+
+            # Notify admin of successful refund
+            messages.success(request, f"Refund for Payment ID {payment.id} processed successfully.")
+        else:
+            messages.error(request, "Refund not eligible as cancellation did not occur 24 hours before the slot time.")
+    else:
+        messages.error(request, "Refund not possible for this payment.")
+
+    return redirect('admin_view_payments')
 
