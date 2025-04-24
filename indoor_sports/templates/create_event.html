@@ -1,0 +1,29 @@
+{% extends "base_admin.html" %}
+{% load static %}
+
+{% block title %}Create New Event{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Create New Event</h4>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                <p>
+                    
+                    
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    
+                  </p>
+                  
+                
+                <button type="submit" class="btn btn-success">Create Event</button>
+                <a href="{% url 'list_events' %}" class="btn btn-secondary">Back</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

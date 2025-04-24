@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 import logging
 from sports.models import Event, Location, Sport
 from django.db.models import Q
-
+from .forms import EventForm
 
 logger = logging.getLogger(__name__)
 
@@ -261,3 +261,32 @@ def admin_card_03(request):
 def add_slot(request):
     # Your logic to add a slot
     return render(request, 'add_slot.html')
+
+def list_events(request):
+    events = Event.objects.all()
+    return render(request, 'list_events.html', {'events': events})
+
+def create_event(request):
+    form = EventForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        messages.success(request, "Event created successfully!")
+        return redirect('list_events')
+    return render(request, 'create_event.html', {'form': form})
+
+def update_event(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    form = EventForm(request.POST or None, instance=event)
+    if form.is_valid():
+        form.save()
+        messages.success(request, "Event updated successfully!")
+        return redirect('list_events')
+    return render(request, 'update_event.html', {'form': form})
+
+def delete_event(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    if request.method == 'POST':
+        event.delete()
+        messages.success(request, "Event deleted.")
+        return redirect('list_events')
+    return render(request, 'delete_event.html', {'event': event})

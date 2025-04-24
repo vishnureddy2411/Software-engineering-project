@@ -3,6 +3,28 @@
 {% block title %}Home - Indoor Sports Academy{% endblock %}
 
 {% block content %}
+<style>
+    @keyframes highlightFadeIn {
+        0% {
+            transform: scale(0.95);
+            opacity: 0;
+            box-shadow: none;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+    }
+    
+    .upcoming-highlight {
+        animation: highlightFadeIn 1.5s ease-out forwards;
+        border: 2px solid #ffc107;
+        background-color: #fff8e1;
+        transition: all 0.3s ease;
+    }
+    </style>
+    
 <!-- Main Content Displayed on Home Page -->
 <div class="glass-card p-4 text-center mt-4" style="max-width: 800px; margin: 0 auto; position: relative; z-index: 1;">
     <h2>Welcome to Indoor Sports Academy</h2>
@@ -12,12 +34,22 @@
     </p>
 </div>
 
-<div class="glass-card p-4 text-center mt-4" style="max-width: 800px; margin: 0 auto; position: relative; z-index: 1;">
-    <h3>Our Programs</h3>
-    <ul class="list-unstyled">
-        <li>Basketball Training</li>
-
-    </ul>
+<div class="glass-card p-4 text-center mt-4 upcoming-highlight" style="max-width: 800px; margin: 0 auto; position: relative; z-index: 1;">
+    <h3>Upcoming Events</h3>
+    {% if upcoming_events %}
+        <ul class="list-unstyled">
+            {% for event in upcoming_events %}
+                <li class="mb-3">
+                    <strong>{{ event.title }}</strong><br>
+                    {{ event.description }}<br>
+                    <small>{{ event.event_date|date:"M d, Y H:i" }}</small><br>
+                    <small>Location: {{ event.location.name }}</small>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No upcoming events at the moment.</p>
+    {% endif %}
 </div>
 
 <div class="glass-card p-4 text-center mt-4" style="max-width: 800px; margin: 0 auto; position: relative; z-index: 1;">
@@ -27,3 +59,4 @@
     </p>
 </div>
 {% endblock %}
+
