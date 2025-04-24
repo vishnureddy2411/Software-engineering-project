@@ -10,3 +10,5 @@ urlpatterns = [
     path('check_email_exists/', views.check_email_exists, name='check_email_exists'),
     path('check_username/', views.check_username, name="check_username"),
 ]
+
+
