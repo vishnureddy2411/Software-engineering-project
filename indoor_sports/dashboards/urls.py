@@ -14,8 +14,8 @@ urlpatterns = [
     path('edit_profile/', edit_profile, name='edit_profile'),
     path('view_sports/', view_sports, name='view_sports'),
     path('add_sport/', add_sport, name='add_sport'),
-    path('del_sport/', del_sport, name='del_sport'),
-    path('update_sport/', update_sport, name='update_sport'),
+    path('update_sport/<int:sport_id>/', update_sport, name='update_sport'),
+    path('del_sport/<int:sport_id>/', del_sport, name='del_sport'),
     path('view_bookings/', view_bookings, name='view_bookings'),
     path('view_users/', view_users, name='view_users'),
     path('admin_card_03/', admin_card_03, name='admin_card_03'),
@@ -30,3 +30,4 @@ urlpatterns = [
     path('delete_event/<int:event_id>/', delete_event, name='delete_event'),
 
 ]
+

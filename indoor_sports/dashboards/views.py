@@ -135,46 +135,9 @@ def home(request):
         'past_events': past_events
     })
 
-# views.py
-def view_sports(request):
-    sports = Sport.objects.all()  # or you can filter if needed
-    return render(request, 'view_sports.html', {'sports': sports})
 
 
-# Add Sport
-def add_sport(request):
-    locations = Location.objects.all()
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        category = request.POST.get('category')
-        location_id = request.POST.get('location_id')
-        description = request.POST.get('description', '')
-        image_path = request.POST.get('image_path', '')
 
-        location = Location.objects.get(id=location_id)
-        Sport.objects.create(
-            sport_name=name,
-            category=category,
-            location=location,
-            description=description,
-            image_path=image_path
-        )
-        return redirect('view_sports')
-
-    return render(request, 'add_sport.html', {'locations': locations})
-
-# Delete Sport
-def del_sport(request):
-    locations = Location.objects.all()
-    message = ''
-    if request.method == 'POST':
-        name = request.POST['name']
-        location_id = request.POST['location_id']
-        deleted, _ = Sport.objects.filter(sport_name=name, location_id=location_id).delete()
-        message = f"{deleted} sport(s) deleted."
-      
-
-    return render(request, 'del_sport.html', {'locations': locations, 'message': message})
 @ login_required
 def edit_profile(request):
     user = request.user
@@ -188,9 +151,6 @@ def edit_profile(request):
     return render(request, 'edit_profile.html', {'user': user})
 
 
-# Update Sport
-def update_sport(request):
-    return render(request, 'update_sport.html')
 
 # View Bookings
 def view_bookings(request):
@@ -290,3 +250,90 @@ def delete_event(request, event_id):
         messages.success(request, "Event deleted.")
         return redirect('list_events')
     return render(request, 'delete_event.html', {'event': event})
+
+#sports
+def view_sports(request):
+    """
+    Displays all sports with full details.
+    """
+    sports = Sport.objects.all()  # Retrieve all sports
+    return render(request, 'view_sports.html', {'sports': sports})
+ 
+def add_sport(request):
+    """
+    Handles adding a new sport with complete information.
+    """
+    locations = Location.objects.all()
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        category = request.POST.get('category')
+        location_id = request.POST.get('location_id')
+        description = request.POST.get('description', '')
+        image_path = request.POST.get('image_path', '')
+        price = request.POST.get('price')
+        peak_price = request.POST.get('peak_price')
+        peak_hours_start = request.POST.get('peak_hours_start')
+        peak_hours_end = request.POST.get('peak_hours_end')
+        available = request.POST.get('available')
+ 
+        location = Location.objects.get(location_id=location_id)  # Fetch location instance
+ 
+        # Create the sport with all fields
+        Sport.objects.create(
+            name=name,
+            category=category,
+            location=location,
+            description=description,
+            image_path=image_path,
+            price=price,
+            peak_price=peak_price,
+            peak_hours_start=peak_hours_start,
+            peak_hours_end=peak_hours_end,
+            available=available,
+        )
+        return redirect('view_sports')
+ 
+    return render(request, 'add_sport.html', {'locations': locations})
+ 
+ 
+ 
+ 
+ 
+def del_sport(request, sport_id):
+    """
+    Handles fetching sport details and confirmation before deletion.
+    """
+    # Fetch the sport instance using sport_id
+    sport = get_object_or_404(Sport, sport_id=sport_id)
+    locations = Location.objects.all()  # Fetch all locations for the dropdown, if needed
+ 
+    if request.method == 'POST':  # Confirm deletion
+        sport.delete()  # Delete the sport
+        return redirect('view_sports')  # Redirect after deletion
+ 
+    # Render the confirmation page with sport details auto-populated
+    return render(request, 'del_sport.html', {'sport': sport, 'locations': locations})
+ 
+ 
+ 
+def update_sport(request, sport_id):
+    """Fetch and populate sport details in the update form for editing."""
+    sport = get_object_or_404(Sport, sport_id=sport_id)
+    locations = Location.objects.all()  # Fetch all locations for dropdown
+ 
+    if request.method == 'POST':
+        sport.name = request.POST.get('name', sport.name)
+        sport.category = request.POST.get('category', sport.category)
+        sport.description = request.POST.get('description', sport.description)
+        sport.image_path = request.POST.get('image_path', sport.image_path)
+        sport.price = request.POST.get('price', sport.price)
+        sport.peak_price = request.POST.get('peak_price', sport.peak_price)
+        sport.peak_hours_start = request.POST.get('peak_hours_start', sport.peak_hours_start)
+        sport.peak_hours_end = request.POST.get('peak_hours_end', sport.peak_hours_end)
+        sport.available = request.POST.get('available', sport.available)
+        sport.location_id = request.POST.get('location_id', sport.location_id)
+ 
+        sport.save()
+        return redirect('view_sports')  # Redirect to sports list after update
+ 
+    return render(request, 'update_sport.html', {'sport': sport, 'locations': locations})

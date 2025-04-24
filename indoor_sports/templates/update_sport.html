@@ -1,0 +1,74 @@
+{% extends 'base_admin.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Update Sport</h1>
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="sport_id" class="form-label">Sport ID:</label>
+            <input type="text" class="form-control" id="sport_id" name="sport_id" value="{{ sport.sport_id }}" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ sport.name }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="category" class="form-label">Category:</label>
+            <input type="text" class="form-control" id="category" name="category" value="{{ sport.category }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="location_id" class="form-label">Location:</label>
+            <select class="form-select" id="location_id" name="location_id">
+                {% for location in locations %}
+                <option value="{{ location.location_id }}" {% if sport.location_id == location.location_id %}selected{% endif %}>
+                    {{ location.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description:</label>
+            <textarea class="form-control" id="description" name="description" rows="3">{{ sport.description }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="image_path" class="form-label">Image Path:</label>
+            <input type="text" class="form-control" id="image_path" name="image_path" value="{{ sport.image_path }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">Price:</label>
+            <input type="number" class="form-control" id="price" name="price" step="0.01" value="{{ sport.price }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="peak_price" class="form-label">Peak Price:</label>
+            <input type="number" class="form-control" id="peak_price" name="peak_price" step="0.01" value="{{ sport.peak_price }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="peak_hours_start" class="form-label">Peak Hours Start:</label>
+            <input type="time" class="form-control" id="peak_hours_start" name="peak_hours_start" value="{{ sport.peak_hours_start }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="peak_hours_end" class="form-label">Peak Hours End:</label>
+            <input type="time" class="form-control" id="peak_hours_end" name="peak_hours_end" value="{{ sport.peak_hours_end }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="available" class="form-label">Available:</label>
+            <input type="number" class="form-control" id="available" name="available" value="{{ sport.available }}">
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary w-100">Update Sport</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
