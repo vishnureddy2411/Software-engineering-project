@@ -1,7 +1,0 @@
-Django==5.1.5
-python-dotenv
-mysqlclient
-mysql-connector-python
-matplotlib
-stripe
-pytz
