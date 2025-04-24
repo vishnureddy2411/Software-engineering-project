@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 from django.urls import path
 from .views import (
     password_reset_request,
@@ -16,5 +16,4 @@ urlpatterns = [
 ]
 
 
-=======
->>>>>>> b6584a8d078e6a712ef3b889d1551d570db80ceb
+

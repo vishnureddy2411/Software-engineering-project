@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -118,5 +118,4 @@ def password_reset_confirm(request, token):
     return render(request, "password_reset_confirm.html", {"token": token})
 
 
-=======
->>>>>>> b6584a8d078e6a712ef3b889d1551d570db80ceb
+
