@@ -1,0 +1,58 @@
+{% extends "base_admin.html" %}
+{% load static %}
+
+{% block content %}
+    <h1>Admin Slot Calendar</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="date" class="form-label">Select Date:</label>
+            <input type="date" name="date" id="date" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">View Slots</button>
+    </form>
+
+    {% if selected_date %}
+        <h2>Slots for {{ selected_date }}</h2>
+        {% if slots %}
+            <ul class="list-group">
+                {% for slot in slots %}
+                    <li class="list-group-item">
+                        <strong>Time:</strong> {{ slot.time }}<br>
+                        <strong>Location:</strong> {{ slot.location.name }}<br>
+                        <strong>Sport:</strong> {{ slot.sport.name }}<br>
+                        <strong>Date:</strong> {{ slot.date }}<br>
+                        {# Add other details as needed #}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No slots available for this date.</p>
+        {% endif %}
+    {% endif %}
+
+    <div id="calendar" class="mt-4"></div>
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: '{% url "get_slot_data" %}',
+                eventClick: function(info) {
+                    info.jsEvent.preventDefault(); // don't let the browser navigate
+                    if (info.event.url) {
+                        window.open(info.event.url); // Open the admin change page
+                    }
+                }
+            });
+            calendar.render();
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base_admin.html' %}
+{% block content %}
+    <h1>Manage Bookings</h1>
+
+    <div class="container">
+        <div class="card">
+            <h3>View Bookings</h3>
+            <p>View and manage existing bookings.</p>
+            <a href="{% url 'admin_list_bookings' %}" class="btn btn-primary">View Bookings</a>
+        </div>
+        <div class="card">
+            <h3>Add Booking</h3>
+            <p>Create a new booking.</p>
+            <a href="{% url 'admin_add_booking' %}" class="btn btn-success">Add Booking</a>
+        </div>
+        <div class="card">
+            <h3>Delete Booking</h3>
+            <p>Delete an existing booking.</p>
+            <a href="{% url 'admin_delete_booking' booking_id=0 %}" class="btn btn-danger">Delete Booking</a>
+        </div>
+        <div class="card">
+            <h3>Update Booking</h3>
+            <p>Update an existing booking.</p>
+            <a href="{% url 'admin_list_bookings' %}" class="btn btn-warning">Update Booking</a>
+            </div>
+        </div>
+    </div>
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+
+{% endblock %}

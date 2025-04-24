@@ -24,6 +24,7 @@ class Slot(models.Model):
     is_booked = models.BooleanField(default=False)
     location = models.ForeignKey("sports.Location", on_delete=models.CASCADE, related_name="slots")
     sport = models.ForeignKey("sports.Sport", on_delete=models.CASCADE, related_name="slots")
+    is_active = models.BooleanField(default=True)  # Add this field
 
 
     def __str__(self):
@@ -38,6 +39,8 @@ class Slot(models.Model):
         if self.slot_type == "Peak":
             return self.sport.peak_price if self.sport.peak_price is not None else self.sport.price
         return self.sport.price
+
+
 
 
 # ------------------------------------------------------------------------------
@@ -57,7 +60,7 @@ class Booking(models.Model):
         related_name="bookings"
     )
     sport = models.ForeignKey("sports.Sport", on_delete=models.CASCADE, related_name="bookings")
-    slot = models.ForeignKey(Slot, on_delete=models.CASCADE, related_name="bookings")
+    slot = models.ForeignKey(Slot, on_delete=models.CASCADE, related_name="bookings") 
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
@@ -79,11 +82,18 @@ class Booking(models.Model):
     date = models.DateField(default=datetime.date.today) 
     time_slot = models.TimeField(null=True, blank=True)
     booking_date = models.DateTimeField(auto_now_add=True)
+    cancellation_time = models.DateTimeField(null=True, blank=True)
     location = models.ForeignKey("sports.Location", on_delete=models.CASCADE, related_name="bookings")
-
+    submitted_review = models.BooleanField(default=False)
     def __str__(self):
         full_name = getattr(self.user, "get_full_name", lambda: self.user.username)()
         return f"Booking {self.id} by {full_name} for {self.sport.name}"
+    
+    class Meta:
+        db_table = 'bookings_booking'
+        ordering = ['sport']
+
+
 
 
 # ------------------------------------------------------------------------------

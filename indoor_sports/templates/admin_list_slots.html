@@ -1,0 +1,55 @@
+{% extends "base_admin.html" %}
+{% load static %}
+{% block content %}
+    <div class="container my-5">
+        <h1>Slots</h1>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary mb-3">Dashboard</a>
+        <a href="{% url 'admin_add_slot' %}" class="btn btn-success mb-3">Add New Slot</a>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Slot Type</th>
+                        <th>Location</th>
+                        <th>Sport</th>
+                        <th>Is Booked</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for slot in slots %}
+                        <tr>
+                            <td>{{ slot.slot_id }}</td>
+                            <td>{{ slot.date }}</td>
+                            <td>{{ slot.time|time:"H:i" }}</td>
+                            <td>{{ slot.slot_type }}</td>
+                            <td>{{ slot.location.name }}</td>
+                            <td>{{ slot.sport.name }}</td>
+                            <td>
+                                {% if slot.is_booked %}
+                                    <span class="badge badge-danger">Booked</span>
+                                {% else %}
+                                    <span class="badge badge-success">Available</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'admin_update_slot' slot.slot_id %}" class="btn btn-sm btn-primary">Update</a>
+                                    <a href="{% url 'admin_delete_slot' slot.slot_id %}" class="btn btn-sm btn-danger"
+                                       onclick="return confirm('Are you sure you want to delete this slot?')">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="8" class="text-center">No slots found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
