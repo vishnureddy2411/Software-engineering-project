@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_admin.html" %}
 {% block title %}Update Equipment{% endblock %}
 
 {% block content %}
@@ -6,31 +6,46 @@
     <h2>Update Equipment</h2>
     <form method="POST">
         {% csrf_token %}
-        <input type="hidden" name="equipment_id" value="{{ equipment.equipment_id }}">
+        <input type="hidden" name="equipment_id" value="{{ equipment.id }}">
+
         <div class="mb-3">
             <label for="name" class="form-label">Name:</label>
             <input type="text" name="name" class="form-control" value="{{ equipment.name }}" required>
         </div>
+
         <div class="mb-3">
             <label for="quantity" class="form-label">Quantity:</label>
             <input type="number" name="quantity" class="form-control" value="{{ equipment.quantity }}" required>
         </div>
+
         <div class="mb-3">
             <label for="condition_of_kit" class="form-label">Condition:</label>
             <input type="text" name="condition_of_kit" class="form-control" value="{{ equipment.condition_of_kit }}" required>
         </div>
+
         <div class="mb-3">
             <label for="availability_status" class="form-label">Availability Status:</label>
-            <input type="text" name="availability_status" class="form-control" value="{{ equipment.availability_status }}" required>
+            <select name="availability_status" class="form-control" required>
+                <option value="Available" {% if equipment.availability_status == "Available" %}selected{% endif %}>Available</option>
+                <option value="Not Available" {% if equipment.availability_status == "Not Available" %}selected{% endif %}>Not Available</option>
+            </select>
         </div>
+
+        <div class="mb-3">
+            <label for="location_name" class="form-label">Location:</label>
+            <select name="location_name" class="form-control" required>
+                <option value="" disabled selected>-- Select Location --</option>
+                {% for location in locations %}
+                    <option value="{{ location.name }}" {% if location.name == equipment.location.name %}selected{% endif %}>{{ location.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
         <div class="mb-3">
             <label for="price" class="form-label">Price:</label>
             <input type="number" step="0.01" name="price" class="form-control" value="{{ equipment.price }}" required>
         </div>
-        <div class="mb-3">
-            <label for="location_id" class="form-label">Location ID:</label>
-            <input type="number" name="location_id" class="form-control" value="{{ equipment.location.pk }}" required>
-        </div>
+
         <button type="submit" class="btn btn-success">Update Equipment</button>
     </form>
 </div>
