@@ -1,7 +1,6 @@
 
 
 from django.urls import path
-from django.views.generic import TemplateView
 
 from .views import (
     admin_dashboard, user_dashboard, home, edit_profile, view_sports, add_sport,
@@ -34,7 +33,6 @@ urlpatterns = [
     path('Terms_service/', Terms_service, name='Terms_service'),
     path('about-us/', about_us, name='about_us'),
     path('edit_profile_admin/',edit_profile_admin, name='edit_profile_admin'),
-     path('user_activities/', TemplateView.as_view(template_name='user_activities.html'), name='user_activities'),  # Add this
-
+     
 ]
 
