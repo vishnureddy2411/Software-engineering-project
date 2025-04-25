@@ -17,7 +17,6 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
 
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body class="glass-bg">
@@ -57,14 +56,14 @@
                         <a class="nav-link" href="{% url 'home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'choose_location' %}">Sports</a>
+                        <a class="nav-link" href="{% url 'about_us' %}">About Us</a>
                     </li>
+                    
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'my_bookings' %}">My Bookings</a>
+                        
+                        <a class="nav-link" href="{% url 'choose_location' %}">Book Slot</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'membership_dashboard' %}">Membership Plans</a>
-                    </li>
+                    
                     <li class="nav-item position-relative">
                         <a class="nav-link" href="{% url 'email_list' %}">
                             Notifications
@@ -75,8 +74,10 @@
                             {% endif %}
                         </a>
                     </li>
+                    
+
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'contact' %}">Support</a>
+                        <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
                     </li>
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
@@ -84,9 +85,9 @@
                                 <i class="fas fa-user-circle" style="font-size: 24px;"></i> Profile
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="profileDropdown">
-                                <li><a class="dropdown-item" href="{% url 'user_dashboard' %}">Dashboard</a></li>
-                                <li><a class="dropdown-item" href="{% url 'user_profile' user.userid %}">Profile</a></li>
-                                <li><a class="dropdown-item" href="{% url 'about_us' %}">About Us</a></li>
+                                <li><a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url 'password_reset' %}">Change Password</a></li>
+                                 
                                 <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                             </ul>
                         </li>
@@ -97,6 +98,8 @@
                             </a>
                         </li>
                     {% endif %}
+
+         
                 </ul>
             </div>
         </div>
@@ -125,8 +128,7 @@
         <p>
             <a href="{% url 'privacy_policy' %}" class="text-decoration-none me-3">Privacy Policy</a>
             <a href="{% url 'Terms_service' %}" class="text-decoration-none me-3">Terms of Service</a>
-            <a href="{% url 'contact' %}" class="text-decoration-none me-3">Support</a>
-            <a href="{% url 'about_us' %}" class="text-decoration-none me-3">About Us</a>
+            <a href="{% url 'contact' %}" class="text-decoration-none">Contact Us</a>
         </p>
     </footer>
 
@@ -181,3 +183,8 @@
     {% block extra_js %}{% endblock %}
 </body>
 </html>
+
+
+
+
+

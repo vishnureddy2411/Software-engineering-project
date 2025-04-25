@@ -19,3 +19,4 @@ urlpatterns = [
     path('password-reset/', password_reset_request, name='password_reset'),                # Request password reset
     path('password-reset/<str:token>/', password_reset_confirm, name='password_reset_confirm'),  # Confirm password reset
 ]
+
