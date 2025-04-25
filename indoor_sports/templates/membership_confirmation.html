@@ -17,8 +17,11 @@
             {% endif %}
             <form method="POST">
                 {% csrf_token %}
-                <button type="submit" name="confirm-new-plan" class="btn btn-success">Confirm Purchase</button>
-            </form>
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" name="confirm-new-plan" class="btn btn-success">Confirm Purchase</button>
+                </form>
+                            </form>
         </div>
     </div>
 </div>
