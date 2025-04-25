@@ -134,13 +134,31 @@ def create_checkout_session(request, plan):
         return redirect('membership_dashboard')
 
 
+DURATION_MAPPING = {
+    'Weekly': 7,
+    'Monthly': 30,
+    'Yearly': 365,
+}
+
 @login_required
 def subscription_payment_success(request, plan_duration):
-    membership_plan = get_object_or_404(MembershipPlan, duration=plan_duration)
+    """
+    Handles successful subscription payments and activates the membership.
+    """
+    # Get the MembershipPlan by name (e.g., "Gold", "Silver", "Platinum")
+    membership_plan = get_object_or_404(MembershipPlan, name=plan_duration)
 
+    # Map duration (e.g., "Monthly") to integer day count
+    duration_in_days = DURATION_MAPPING.get(membership_plan.duration)
+    if not duration_in_days:
+        messages.error(request, f"Invalid duration '{membership_plan.duration}' specified for the plan.")
+        return redirect('membership_dashboard')
+
+    # Calculate start and end dates
     start_date = now().date()
-    end_date = start_date + timedelta(days=int(membership_plan.duration))
+    end_date = start_date + timedelta(days=duration_in_days)
 
+    # Create the membership
     Membership.objects.create(
         user=request.user,
         plan=membership_plan,
@@ -150,10 +168,16 @@ def subscription_payment_success(request, plan_duration):
         status='Active',
     )
 
+    # Send confirmation email
     subscription_send_payment_email(
-        request.user, membership_plan.name, start_date, end_date, membership_plan.price
+        user=request.user,
+        plan=membership_plan.name,
+        start_date=start_date,
+        end_date=end_date,
+        price=membership_plan.price
     )
 
+    # Create a notification
     Notification.objects.create(
         notification_type="Payment Received",
         recipient_email=request.user.emailid,
@@ -166,6 +190,7 @@ def subscription_payment_success(request, plan_duration):
         user_id=request.user.userid
     )
 
+    # Display success message
     messages.success(request, f"Your {membership_plan.name} subscription has been successfully activated!")
     return render(request, 'mem_payment_success.html', {
         'plan': membership_plan.name,
