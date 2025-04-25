@@ -10,7 +10,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Debug mode for development
-DEBUG = False
+DEBUG = True
 
 # Secret key (use environment variable for production)
 SECRET_KEY = os.getenv('SECRET_KEY', 'your-development-secret-key')
@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',  # REST framework
     'accounts',
     'bookings',
     'dashboards',
