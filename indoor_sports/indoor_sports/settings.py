@@ -10,7 +10,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Debug mode for development
-DEBUG = True
+DEBUG = False
 
 # Secret key (use environment variable for production)
 SECRET_KEY = os.getenv('SECRET_KEY', 'your-development-secret-key')
