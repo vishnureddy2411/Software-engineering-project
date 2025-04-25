@@ -27,7 +27,7 @@
           <td>{{ booking.status }}</td>
           <td>
             <a href="{% url 'booking_detail' booking.booking_id %}" class="btn btn-info btn-sm">Details</a>
-            {% if booking.status in "Booked,Pending" %}
+            {% if booking.status in "Booked,booked,Pending" %}
               <a href="{% url 'cancel_booking' booking.booking_id %}" class="btn btn-danger btn-sm">Cancel</a>
             {% endif %}
           </td>
