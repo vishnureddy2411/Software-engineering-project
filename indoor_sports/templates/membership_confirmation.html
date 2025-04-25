@@ -4,8 +4,9 @@
 
 {% block content %}
 <div class="container py-5 position-relative">
+    <div class="glass-card p-4 mt-4">
     <h1 class="text-center mb-4">Confirm New Membership</h1>
-    <div class="card">
+    <div class="glass-card p-4 mt-4 style="width: 90%; max-width: 600px;">
         <div class="card-body text-center">
             <h4>Plan: {{ plan_name }}</h4>
             {% if active_membership %}
@@ -19,10 +20,11 @@
                 {% csrf_token %}
                 <form method="POST">
                     {% csrf_token %}
-                    <button type="submit" name="confirm-new-plan" class="btn btn-success">Confirm Purchase</button>
+                    <button type="submit" name="confirm-new-plan" class="btn btn-primary">Confirm Purchase</button>
                 </form>
-                            </form>
+            </form>
         </div>
+    </div>
     </div>
 </div>
 {% endblock %}

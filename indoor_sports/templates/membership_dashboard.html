@@ -5,6 +5,7 @@
 
 {% block content %}
 <div class="container py-5">
+    <div class="glass-card p-4 mt-4">
     <h1 class="text-center mb-4">Membership Dashboard</h1>
 
     <ul class="nav nav-tabs" id="membershipTabs" role="tablist">
@@ -28,7 +29,7 @@
             <div class="row">
                 {% for plan in available_plans %}
                     <div class="col-md-4 mb-3">
-                        <div class="card">
+                        <div class="glass-card p-4 mt-4">
                             <div class="card-body">
                                 <h4>{{ plan.name }}</h4>
                                 <p>Duration: {{ plan.duration }}</p>
@@ -45,13 +46,13 @@
         <div class="tab-pane fade" id="details" role="tabpanel" aria-labelledby="details-tab">
             <h2>Your Membership Details</h2>
             {% if active_membership %}
-                <div class="card mb-3">
+                <div class="glass-card p-4 mt-4">
                     <div class="card-body">
                         <h4>Current Plan: {{ active_membership.plan }}</h4>
                         <p>Start Date: {{ active_membership.start_date }}</p>
                         <p>End Date: {{ active_membership.end_date }}</p>
                         <p>Status: {{ active_membership.status }}</p>
-                        <a href="{% url 'renew_membership_view' active_membership.id %}" class="btn btn-success">Renew Membership</a>
+                        <a href="{% url 'renew_membership_view' active_membership.id %}" class="btn btn-primary">Renew Membership</a>
                         <form method="GET" action="{% url 'cancel_membership' active_membership.id %}" class="d-inline">
                             <button type="submit" class="btn btn-danger">Cancel Membership</button>
                         </form>
@@ -64,7 +65,7 @@
             <h2>Upcoming Plans</h2>
             {% for membership in user_memberships %}
                 {% if membership.status == 'Pending' %}
-                    <div class="card mb-3">
+                    <div class="glass-card p-4 mt-4">
                         <div class="card-body">
                             <h4>Plan: {{ membership.plan }}</h4>
                             <p>Start Date: {{ membership.start_date }}</p>
@@ -79,6 +80,7 @@
             {% endfor %}
         </div>
 
+    </div>
     </div>
 </div>
 {% endblock %}
