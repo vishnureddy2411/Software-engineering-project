@@ -131,6 +131,7 @@ def admin_card_01(request):
 
 
 # Home Page
+@login_required
 def home(request):
     upcoming_events = Event.objects.filter(status="Upcoming").order_by('event_date')
     past_events = Event.objects.filter(status="Completed").order_by('-event_date')
