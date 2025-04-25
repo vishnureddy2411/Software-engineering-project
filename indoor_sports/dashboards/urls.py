@@ -3,7 +3,7 @@
 from django.urls import path
 from .views import (
     admin_dashboard, user_dashboard, home, edit_profile, view_sports, add_sport,
-    del_sport, update_sport, view_bookings, view_payments, contact,admin_card_01,view_users,admin_card_03,add_users,add_admins,add_slot,list_events,create_event,update_event,delete_event
+    del_sport, update_sport, view_bookings, view_payments, contact,admin_card_01,view_users,admin_card_03,add_users,add_admins,add_slot,list_events,create_event,update_event,delete_event,privacy_policy,Terms_service,about_us,edit_profile_admin
 ) 
 
 urlpatterns = [
@@ -28,6 +28,14 @@ urlpatterns = [
     path('create_event',create_event,name='create_event'),
     path('update_event/<int:event_id>/', update_event, name='update_event'),
     path('delete_event/<int:event_id>/', delete_event, name='delete_event'),
+    path('privacy/', privacy_policy, name='privacy_policy'),
+    path('Terms_service/', Terms_service, name='Terms_service'),
+    path('about-us/', about_us, name='about_us'),
+    path('edit_profile_admin/',edit_profile_admin, name='edit_profile_admin'),
+
+
+
+
 
 ]
 

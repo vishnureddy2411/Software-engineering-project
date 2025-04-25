@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load tz %} {# Load the timezone filters if not already globally available #}
+
+{% block title %}Terms of Service - Indoor Sports Academy{% endblock %}
+
+{% block content %}
+<style>
+    /* Custom styles - Identical to privacy_policy.html for consistency */
+    .policy-container {
+        background-color: #ffffff; /* Solid white background */
+        padding: 30px 40px; /* More padding */
+        border-radius: 15px; /* More rounded corners */
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        border: 1px solid rgba(0, 0, 0, 0.05); /* Very light border */
+        margin-top: 2rem; /* Add some space from the navbar/header */
+        margin-bottom: 2rem; /* Add space before the footer */
+    }
+
+    .policy-container h2 {
+        color: #0056b3; /* A distinct primary color for the main heading */
+        font-weight: 600; /* Bolder */
+        margin-bottom: 2rem; /* More space below */
+        padding-bottom: 0.5rem; /* Space for the border */
+        border-bottom: 2px solid #dee2e6; /* Subtle underline */
+        text-align: center; /* Center align */
+        display: flex; /* Use flex for icon alignment */
+        align-items: center;
+        justify-content: center; /* Center icon and text */
+    }
+     .policy-container h2 i {
+         margin-right: 10px; /* Space between icon and text */
+         font-size: 1.5rem; /* Slightly smaller icon */
+     }
+
+
+    .policy-container h4 {
+        color: #343a40; /* Darker color for section headings */
+        margin-top: 2rem; /* Space above each section */
+        margin-bottom: 1rem; /* Space below heading */
+        font-weight: 500; /* Medium weight */
+        display: flex; /* Align icon with text */
+        align-items: center;
+    }
+
+    .policy-container h4 i {
+        margin-right: 8px; /* Space after icon */
+        color: #007bff; /* Bootstrap primary blue for icons */
+        font-size: 1.2rem; /* Adjust icon size */
+        min-width: 20px; /* Ensure icons align well */
+    }
+
+    .policy-container p,
+    .policy-container ul {
+        line-height: 1.7; /* Improve readability */
+        color: #495057; /* Slightly lighter text color */
+        margin-bottom: 1rem; /* Consistent bottom margin */
+    }
+
+    .policy-container ul {
+        padding-left: 25px; /* Indent lists */
+        list-style: none; /* Remove default bullets */
+    }
+
+    .policy-container ul li::before {
+        content: "\f105"; /* Font Awesome angle-right icon */
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900; /* Make icon solid */
+        color: #007bff; /* Icon color */
+        display: inline-block;
+        width: 1em; /* Ensure space */
+        margin-left: -1.3em; /* Position icon correctly */
+        margin-right: 0.3em; /* Space after icon */
+    }
+
+    .policy-container strong {
+        color: #212529; /* Darker color for emphasized text */
+    }
+
+    .policy-container .contact-info-section {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e9ecef; /* Separator line */
+        background-color: #f8f9fa; /* Slightly different background for contact */
+        padding: 1.5rem;
+        border-radius: 8px;
+    }
+    .policy-container .contact-info-section p {
+        margin-bottom: 0.5rem; /* Less margin in contact block */
+    }
+     .policy-container .contact-info-section i {
+         margin-right: 8px;
+         color: #17a2b8; /* Use info color for contact icons */
+         width: 1.1em; /* Align icons */
+     }
+</style>
+
+<div class="container policy-container">
+    <h2><i class="fas fa-file-contract"></i>Terms of Service</h2>
+
+    <h4>1. Acceptance of Terms</h4>
+    <p>By accessing or using our Indoor Sports Academy platform ("Service"), you agree to comply with and be bound by these Terms of Service ("Terms"). If you do not agree to these terms, please do not use our Service.</p>
+
+    <h4>2. User Eligibility</h4>
+    <p>You must be at least 18 years old, or have obtained explicit parental or guardian consent, to register an account and use this Service. By using our Service, you represent and warrant that you meet this requirement and that all information you provide is accurate, current, and complete.</p>
+
+    <h4>3. Account Registration</h4>
+    <p>To access certain features, including making bookings, users must register for an account. You agree to provide accurate information and keep it updated. You are responsible for maintaining the confidentiality of your account password and for all activities that occur under your account. Notify us immediately of any unauthorized use.</p>
+
+    <h4>4. Booking & Payments</h4>
+    <ul>
+        <li>All bookings for facility use or equipment rentals are subject to availability and confirmation by the Service.</li>
+        <li>Full payment is required at the time of booking using the accepted payment methods displayed on the platform.</li>
+        <li>Bookings can be canceled or rescheduled subject to our official cancellation policy, detailed separately or during the booking process.</li>
+        <li>Transaction processing is handled by secure third-party payment gateways.</li>
+    </ul>
+
+    <h4>5. Use of Facilities and Equipment</h4>
+    <ul>
+        <li>Users must adhere to scheduled booking times and vacate the facility promptly at the end of their slot.</li>
+        <li>All users must comply with the specific rules, safety guidelines, and code of conduct posted at the facility and/or provided by the Service.</li>
+        <li>Equipment provided must be used responsibly and only for its intended purpose. Users may be held financially liable for any damage caused due to misuse or negligence.</li>
+        <li>Smoking, vaping, consuming alcohol, or engaging in disruptive or abusive behavior within the facilities is strictly prohibited and may result in removal and account suspension.</li>
+    </ul>
+
+    <h4>6. Cancellations & Refunds</h4>
+    <p>Cancellations made at least <strong>24 hours</strong> prior to the scheduled booking time may be eligible for a full or partial refund or credit, as outlined in our detailed refund policy. Cancellations made less than 24 hours in advance and no-shows are typically not eligible for refunds. Specific policies may vary by location or activity.</p>
+
+    <h4>7. Prohibited Activities</h4>
+    <p>Users agree not to engage in any of the following prohibited activities:</p>
+    <ul>
+        <li>Using fraudulent, false, or misleading information during registration or booking.</li>
+        <li>Subletting or transferring bookings to unauthorized third parties.</li>
+        <li>Violating any applicable local, state, national, or international laws or regulations.</li>
+        <li>Attempting to interfere with, compromise the system integrity or security, or decipher any transmissions to or from the servers running the Service.</li>
+        <li>Uploading invalid data, viruses, worms, or other software agents through the Service.</li>
+    </ul>
+
+    <h4>8. Intellectual Property</h4>
+    <p>All content, features, functionality, logos, trademarks, and service marks on this Service are the exclusive property of Indoor Sports Academy or its licensors and are protected by copyright, trademark, and other intellectual property laws. You may not copy, modify, distribute, sell, or lease any part of our Service or included software, nor may you reverse engineer or attempt to extract the source code, without explicit written permission.</p>
+
+    <h4>9. Termination</h4>
+    <p>We reserve the right to suspend or terminate your access to the Service immediately, without prior notice or liability, for any reason whatsoever, including, without limitation, if you breach these Terms. Upon termination, your right to use the Service will cease immediately.</p>
+
+    <h4>10. Limitation of Liability</h4>
+    <p>To the maximum extent permitted by applicable law, Indoor Sports Academy shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses, resulting from (a) your access to or use of or inability to access or use the Service; (b) any conduct or content of any third party on the Service; (c) any content obtained from the Service; or (d) unauthorized access, use, or alteration of your transmissions or content. This includes liability for personal injury or property damage occurring at the facilities, except where caused by our gross negligence or willful misconduct.</p>
+
+    <h4>11. Changes to Terms</h4>
+    <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material, we will provide at least 30 days' notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion. By continuing to access or use our Service after any revisions become effective, you agree to be bound by the revised terms.</p>
+    {% now "UTC" as utc_now %}
+    <p><strong>Last Updated:</strong> {{ utc_now|timezone:"America/Denver"|date:"F j, Y" }}</p>
+    {# Adjust "America/Denver" to your server's or target audience's timezone #}
+
+
+    <h4>12. Contact Us</h4>
+    <div class="contact-info-section">
+        <p>If you have any questions about these Terms of Service, please contact us:</p>
+        <p>
+            <i class="fas fa-envelope"></i><strong>Email:</strong> support@sportsbooking.com<br>
+            <i class="fas fa-phone-alt"></i><strong>Phone:</strong> +1 (123) 456-7890<br>
+            <i class="fas fa-map-marker-alt"></i><strong>Location:</strong> 123 Indoor Sports Arena, TX, USA
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}
