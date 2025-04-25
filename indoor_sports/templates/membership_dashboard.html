@@ -1,4 +1,5 @@
-{% extends "base.html" %}{% load static %}
+{% extends "base.html" %}
+{% load static %}
 
 {% block title %}Membership Dashboard{% endblock %}
 
@@ -6,7 +7,6 @@
 <div class="container py-5">
     <h1 class="text-center mb-4">Membership Dashboard</h1>
 
-    <!-- Tabs Navigation -->
     <ul class="nav nav-tabs" id="membershipTabs" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="plans-tab" data-bs-toggle="tab" data-bs-target="#plans" type="button" role="tab" aria-controls="plans" aria-selected="true">
@@ -20,7 +20,6 @@
         </li>
     </ul>
 
-    <!-- Tabs Content -->
     <div class="tab-content mt-3" id="membershipTabsContent">
 
         <!-- Membership Plans Section -->
@@ -34,7 +33,7 @@
                                 <h4>{{ plan.name }}</h4>
                                 <p>Duration: {{ plan.duration }}</p>
                                 <p>Price: ${{ plan.price }}</p>
-                                <a href="{% url 'confirm_new_plan' plan.name %}" class="btn btn-primary">Select Plan</a>
+                                <a href="{% url 'confirm_new_plan' plan.id %}" class="btn btn-primary">Subscribe</a>
                             </div>
                         </div>
                     </div>
@@ -52,8 +51,7 @@
                         <p>Start Date: {{ active_membership.start_date }}</p>
                         <p>End Date: {{ active_membership.end_date }}</p>
                         <p>Status: {{ active_membership.status }}</p>
-                        <a href="{% url 'renew_membership' active_membership.id %}" class="btn btn-success">Renew Membership</a>
-                        <!-- Cancel Active Membership Button -->
+                        <a href="{% url 'renew_membership_view' active_membership.id %}" class="btn btn-success">Renew Membership</a>
                         <form method="GET" action="{% url 'cancel_membership' active_membership.id %}" class="d-inline">
                             <button type="submit" class="btn btn-danger">Cancel Membership</button>
                         </form>
@@ -72,7 +70,6 @@
                             <p>Start Date: {{ membership.start_date }}</p>
                             <p>End Date: {{ membership.end_date }}</p>
                             <p>Status: {{ membership.status }}</p>
-                            <!-- Cancel Upcoming Plan Button -->
                             <form method="GET" action="{% url 'cancel_membership' membership.id %}" class="d-inline">
                                 <button type="submit" class="btn btn-danger">Cancel Plan</button>
                             </form>
