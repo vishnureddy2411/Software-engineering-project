@@ -21,7 +21,7 @@ from .forms import MembershipPlanForm
 from django.http import HttpResponse
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
-#@login_required
+@login_required
 def membership_dashboard_view(request):
     """
     Displays the membership dashboard with active membership, upcoming plans, and available plans.
