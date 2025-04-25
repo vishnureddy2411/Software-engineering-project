@@ -36,7 +36,7 @@
                         <td>{{ booking.location.name }}</td>
                         <td>
                             <a href="{% url 'admin_update_booking' booking_id=booking.booking_id %}" class="btn btn-sm btn-primary">Edit</a>
-                            {% if booking.status == "Booked" or booking.status == "Pending" %}
+                            {% if booking.status|lower == "booked" or booking.status == "Pending" %}
                                 <a href="{% url 'admin_cancel_booking' booking_id=booking.booking_id %}" class="btn btn-sm btn-warning">Cancel</a>
                                 <a href="{% url 'approve_booking' booking_id=booking.booking_id %}" class="btn btn-sm btn-success">Approve</a>
                             {% endif %}
