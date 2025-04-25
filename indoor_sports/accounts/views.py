@@ -133,3 +133,4 @@ def password_reset_confirm(request, token):
         else:
             messages.error(request, "Passwords do not match.")
     return render(request, "password_reset_confirm.html", {"token": token})
+
