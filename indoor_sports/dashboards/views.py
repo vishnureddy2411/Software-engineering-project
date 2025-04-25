@@ -9,7 +9,7 @@ from .forms import EventForm
 
 logger = logging.getLogger(__name__)
 
-
+@login_required
 def user_dashboard(request):
     """
     Displays the user dashboard. Ensures the user is authenticated and assigned the role of 'user'.
