@@ -1,35 +1,50 @@
-{% extends "base.html" %}
-{% block title %}Creating new Equipment{% endblock %}
+{% extends "base_admin.html" %}
+{% block title %}Create New Equipment{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
     <h2>Add New Equipment</h2>
     <form method="POST">
         {% csrf_token %}
+        
         <div class="mb-3">
             <label for="name" class="form-label">Name:</label>
             <input type="text" name="name" class="form-control" required>
         </div>
+
         <div class="mb-3">
             <label for="quantity" class="form-label">Quantity:</label>
             <input type="number" name="quantity" class="form-control" required>
         </div>
+
         <div class="mb-3">
             <label for="condition_of_kit" class="form-label">Condition:</label>
             <input type="text" name="condition_of_kit" class="form-control" value="Good" required>
         </div>
+
         <div class="mb-3">
             <label for="availability_status" class="form-label">Availability Status:</label>
-            <input type="text" name="availability_status" class="form-control" value="Available" required>
+            <select name="availability_status" class="form-control" required>
+                <option value="Available">Available</option>
+                <option value="Not Available">Not Available</option>
+            </select>
         </div>
+
+        <div class="mb-3">
+            <label for="location_name" class="form-label">Location:</label>
+            <select name="location_name" class="form-control" required>
+                <option value="" disabled selected>-- Select Location --</option>
+                {% for location in locations %}
+                    <option value="{{ location.name }}">{{ location.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
         <div class="mb-3">
             <label for="price" class="form-label">Price:</label>
             <input type="number" step="0.01" name="price" class="form-control" required>
         </div>
-        <div class="mb-3">
-            <label for="location_id" class="form-label">Location ID:</label>
-            <input type="number" name="location_id" class="form-control" required>
-        </div>
+
         <button type="submit" class="btn btn-success">Add Equipment</button>
     </form>
 </div>

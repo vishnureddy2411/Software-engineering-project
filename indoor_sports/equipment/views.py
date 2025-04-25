@@ -161,19 +161,21 @@ def handle_invalid_equipment_path(request, extra):
 def create_equipment(request):
     """Create new equipment and add it to the database."""
     print("[DEBUG] Accessing create_equipment view")
-    
+
+    locations = Location.objects.all()  # Fetch all locations
+
     if request.method == 'POST':
         name = request.POST.get('name')
         quantity = request.POST.get('quantity')
         condition_of_kit = request.POST.get('condition_of_kit', 'Good')
         availability_status = request.POST.get('availability_status', 'Available')
         price = request.POST.get('price')
-        location_id = request.POST.get('location_id')
+        location_name = request.POST.get('location_name')  # Get location by name
 
-        print(f"[DEBUG] Received POST data: name={name}, quantity={quantity}, condition={condition_of_kit}, status={availability_status}, price={price}, location_id={location_id}")
+        print(f"[DEBUG] Received POST data: name={name}, quantity={quantity}, condition={condition_of_kit}, status={availability_status}, price={price}, location_name={location_name}")
 
         try:
-            location = get_object_or_404(Location, pk=location_id)
+            location = get_object_or_404(Location, name=location_name)  # Find location by name
             Equipment.objects.create(
                 name=name,
                 quantity=quantity,
@@ -188,8 +190,8 @@ def create_equipment(request):
         except Exception as e:
             print(f"[ERROR] Failed to add equipment: {e}")
             messages.error(request, f"Error adding equipment: {e}")
-    
-    return render(request, 'create_equipment.html')
+
+    return render(request, 'create_equipment.html', {'locations': locations})
 
 def list_equipment(request):
     """Display all equipment available in the database."""
@@ -203,6 +205,7 @@ def update_equipment(request, equipment_id):
     """Update existing equipment details."""
     print(f"[DEBUG] Accessing update_equipment view with equipment_id={equipment_id}")
     equipment = get_object_or_404(Equipment, pk=equipment_id)
+    locations = Location.objects.all()
 
     if request.method == 'POST':
         print("[DEBUG] Processing update request")
@@ -211,14 +214,22 @@ def update_equipment(request, equipment_id):
         equipment.condition_of_kit = request.POST.get('condition_of_kit', equipment.condition_of_kit)
         equipment.availability_status = request.POST.get('availability_status', equipment.availability_status)
         equipment.price = request.POST.get('price', equipment.price)
-        equipment.location_id = request.POST.get('location_id', equipment.location_id)
+
+        # Validate location_name instead of location_id
+        location_name = request.POST.get('location_name')
+        if location_name:
+            location = get_object_or_404(Location, name=location_name)
+            equipment.location = location
+        else:
+            messages.error(request, "Invalid location selection. Please choose a valid location.")
+            return render(request, 'update_equipment.html', {'equipment': equipment, 'locations': locations})
 
         equipment.save()
         print(f"[DEBUG] Equipment '{equipment.name}' updated successfully!")
         messages.success(request, f"Equipment '{equipment.name}' updated successfully!")
         return redirect('list_equipment')
-    
-    return render(request, 'update_equipment.html', {'equipment': equipment})
+
+    return render(request, 'update_equipment.html', {'equipment': equipment, 'locations': locations})
 
 def delete_equipment(request, equipment_id):
     """Delete equipment from the database."""
