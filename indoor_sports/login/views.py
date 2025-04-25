@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.utils.timezone import now
 from accounts.models import User, Admin
+from bookings.models import Booking
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import login, logout
 import logging
@@ -35,6 +36,15 @@ def login_view(request):
             user.save(update_fields=["lastlogin"])
             print(f"User {user.username} logged in successfully. Redirecting to user dashboard.")
             logger.info(f"User {user.username} logged in successfully.")
+
+            # Extra logic: Redirect to review page for incomplete booking reviews
+            booking = Booking.objects.filter(user=user, status__in=['booked', 'Booked']).order_by('-booking_date', '-time_slot').first()
+            if booking is not None and not booking.submitted_review:
+                print("Redirecting to review page for booking:", booking)
+                logger.info(f"Redirecting {user.username} to review page for booking {booking.booking_id}.")
+                return redirect('reviews_by_location_booking', 
+                booking_id=booking.booking_id, location_id=booking.location.location_id, sport_id=booking.sport.sport_id)
+            
             return redirect("user_dashboard")
 
         # Admin authentication
@@ -112,3 +122,6 @@ def set_admin_session(request, admin):
     request.session.modified = True
     request.session.save()
     print(f"Admin session set: {request.session.items()}")
+
+
+    
