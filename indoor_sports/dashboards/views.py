@@ -12,21 +12,27 @@ logger = logging.getLogger(__name__)
 
 def user_dashboard(request):
     """
-    Displays the user dashboard. Ensures the user is authenticated and is assigned the role of 'user'.
+    Displays the user dashboard. Ensures the user is authenticated and assigned the role of 'user'.
     """
     # Clear existing messages
     list(messages.get_messages(request))
 
-    # Check if user has the correct role (e.g., 'user')
-    if not is_role_valid(request, "user"):
-        messages.warning(request, "You do not have permission to access this page.")
+    # Authentication and Role Check
+    if not request.session.get("is_authenticated") or request.session.get("role") != "user":
+        messages.error(request, "Access denied. Please log in.")
+        return redirect("loginpage")
+
+    user_id = request.session.get("user_id")
+    if not user_id:
+        logger.error("Session user_id is missing.")
+        messages.error(request, "Session expired. Please log in again.")
         return redirect("loginpage")
 
     try:
-        user = User.objects.get(userid=request.session["user_id"])
+        user = User.objects.get(userid=user_id)
         logger.info(f"Accessing user dashboard: User ID {user.userid}")
     except User.DoesNotExist:
-        logger.error(f"User not found: User ID {request.session.get('user_id')}")
+        logger.error(f"User not found: User ID {user_id}")
         messages.error(request, "User not found. Please log in again.")
         return redirect("loginpage")
 
@@ -47,7 +53,6 @@ def user_dashboard(request):
         'sports': sports,
         'selected_location_id': selected_location_id
     })
-
 
 
 def admin_dashboard(request):
