@@ -129,9 +129,8 @@ def is_role_valid(request, expected_role):
 def admin_card_01(request):
     return render(request, 'admin_card_01.html')
 
-
-# Home Page
 @login_required
+# Home Page
 def home(request):
     upcoming_events = Event.objects.filter(status="Upcoming").order_by('event_date')
     past_events = Event.objects.filter(status="Completed").order_by('-event_date')
@@ -144,20 +143,76 @@ def home(request):
 
 
 
-@ login_required
+@login_required
 def edit_profile(request):
     user = request.user
+    profile = getattr(user, 'profile', None)  # get profile if it exists
+
     if request.method == 'POST':
-        user.first_name = request.POST.get('first_name', '')
-        user.last_name = request.POST.get('last_name', '')
-        user.emailid = request.POST.get('emailid', '')
+        # Update User fields only if the value is provided
+        user.firstname = request.POST.get('firstname', user.firstname)
+        user.lastname = request.POST.get('lastname', user.lastname)
+        user.username = request.POST.get('username', user.username)
+        user.emailid = request.POST.get('emailid', user.emailid)
+        user.contactnumber = request.POST.get('contactnumber', user.contactnumber)
+        user.address = request.POST.get('address', user.address)
+        user.city = request.POST.get('city', user.city)
+        user.state = request.POST.get('state', user.state)
+        user.country = request.POST.get('country', user.country)
+        user.zip_code = request.POST.get('zip_code', user.zip_code)
+        user.gender = request.POST.get('gender', user.gender)
+
         user.save()
-        return redirect('user_dashboard')
 
-    return render(request, 'edit_profile.html', {'user': user})
+        # If user has a profile, update profile fields
+        if profile:
+            profile.location = request.POST.get('location', profile.location)
+            profile.bio = request.POST.get('bio', profile.bio)
+            if 'avatar' in request.FILES:
+                profile.avatar = request.FILES['avatar']
+            profile.save()
 
+        messages.success(request, 'Your profile has been updated successfully.')
+        return redirect('edit_profile')  # or wherever you want to redirect
 
+    context = {
+        'user': user
+    }
+    return render(request, 'edit_profile.html', context)
 
+@login_required
+def edit_profile_admin(request):
+    # Get the logged-in user (assuming the user is an instance of the Admin model)
+    admin = request.user
+
+    # Handle the POST request to update the profile
+    if request.method == 'POST':
+        # Update the admin's details with the data from the form
+        admin.firstname = request.POST.get('firstname', admin.firstname)
+        admin.lastname = request.POST.get('lastname', admin.lastname)
+        admin.emailid = request.POST.get('emailid', admin.emailid)
+        admin.contactnumber = request.POST.get('contactnumber', admin.contactnumber)
+        admin.address = request.POST.get('address', admin.address)
+        admin.city = request.POST.get('city', admin.city)
+        admin.state = request.POST.get('state', admin.state)
+        admin.country = request.POST.get('country', admin.country)
+        admin.zip_code = request.POST.get('zip_code', admin.zip_code)
+        admin.gender = request.POST.get('gender', admin.gender)
+
+        # Save the updated admin profile
+        admin.save()
+
+        # Display a success message and redirect back to the profile page
+        messages.success(request, 'Admin profile updated successfully.')
+        return redirect('edit_profile_admin')  # Redirect back to this view after saving
+
+    # Pass the admin instance to the template for pre-populating the form
+    context = {
+        'admin': admin
+    }
+    
+    # Render the form with the admin's current details
+    return render(request, 'edit_profile_admin.html', context)
 # View Bookings
 def view_bookings(request):
     return render(request, 'view_bookings.html')
@@ -343,3 +398,13 @@ def update_sport(request, sport_id):
         return redirect('view_sports')  # Redirect to sports list after update
  
     return render(request, 'update_sport.html', {'sport': sport, 'locations': locations})
+
+
+def privacy_policy(request):
+    return render(request, 'privacy_policy.html')
+
+def Terms_service(request):
+    return render(request, 'Terms_service.html')
+
+def about_us(request):
+    return render(request, 'about_us.html')

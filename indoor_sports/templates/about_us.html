@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - Indoor Sports Booking{% endblock %}
+
+{% block content %}
+<style>
+    /* Custom styles for the About Us page */
+    .policy-container {
+        background-color: #ffffff; /* Or solid white */
+        padding: 30px 40px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .policy-container h2 {
+        color: #0056b3; 
+        font-weight: 600;
+        margin-bottom: 2rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #dee2e6;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .policy-container h4 {
+        color: #343a40;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+    }
+
+    .policy-container p, .policy-container ul {
+        line-height: 1.7;
+        color: #495057;
+        margin-bottom: 1rem;
+    }
+
+    .policy-container ul {
+        padding-left: 25px;
+        list-style: none;
+    }
+
+    .policy-container ul li::before {
+        content: "\f105"; 
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        color: #007bff;
+        display: inline-block;
+        width: 1em;
+        margin-left: -1.3em;
+        margin-right: 0.3em;
+    }
+
+    .policy-container .contact-info-section {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e9ecef;
+        background-color: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+    }
+</style>
+
+<div class="container policy-container">
+    <h2>About Us</h2>
+
+    <p>
+        Welcome to <strong>Indoor Sports Booking</strong> — your go-to platform for reserving indoor sports facilities with ease and convenience.
+    </p>
+
+    <h4>Our Mission</h4>
+    <p>
+        We aim to revolutionize the way sports enthusiasts access and manage indoor sports spaces. Our mission is to simplify the booking process, promote healthy lifestyles, and foster a vibrant sporting community by providing a reliable and user-friendly digital platform.
+    </p>
+
+    <h4>Who We Are</h4>
+    <p>
+        We are a passionate team of developers, designers, and sports lovers who saw the need for a smarter way to access indoor sports facilities. Whether you're a beginner or a seasoned athlete, our platform is designed to meet your needs—offering streamlined booking, real-time availability, and the option to rent equipment.
+    </p>
+
+    <h4>What We Offer</h4>
+    <ul>
+        <li>Real-time slot booking for multiple sports such as badminton, table tennis, indoor football, and more.</li>
+        <li>Easy equipment rental options during your booking process.</li>
+        <li>Secure payment integration and instant booking confirmations.</li>
+        <li>User-friendly dashboard to manage your bookings.</li>
+        <li>Event creation and viewing to promote local sports activities.</li>
+    </ul>
+
+    <h4>Why Choose Us?</h4>
+    <p>
+        With Indoor Sports Booking, there’s no need to call or walk-in to reserve a court. Our technology enables you to book from anywhere, at any time. We value transparency, fairness, and community engagement—and we’re constantly evolving based on user feedback.
+    </p>
+
+    <h4>Join Our Community</h4>
+    <p>
+        We believe that sports build not only physical strength but also strong relationships and a sense of belonging. Join our community and experience a better way to play.
+    </p>
+
+    <div class="contact-info-section">
+        <h4>Contact Us</h4>
+        <p>If you have any questions or suggestions, please reach out to us:</p>
+        <p>
+            <strong>Email:</strong> support@sportsbooking.com<br>
+            <strong>Phone:</strong> +1 (123) 456-7890
+        </p>
+    </div>
+</div>
+{% endblock %}

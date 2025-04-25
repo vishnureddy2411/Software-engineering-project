@@ -4,41 +4,105 @@
 {% block title %}Edit Profile - Indoor Sports{% endblock %}
 
 {% block content %}
-
-<div class="glass-card mx-auto mt-5" style="max-width: 400px;">
+<div class="glass-card mx-auto mt-5" style="max-width: 500px;">
     <h2 class="text-center mb-4">Edit Profile</h2>
     
-    <!-- Display messages for feedback -->
+    <!-- Feedback messages -->
     {% if messages %}
-    <div class="messages">
-        {% for message in messages %}
-        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-            {{ message }}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
     {% endif %}
 
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
+
         <div class="mb-3">
-            <label for="first_name" class="form-label">First Name</label>
-            <input type="text" name="first_name" id="first_name" class="form-control" value="{{ user.first_name }}" required>
+            <label class="form-label">First Name</label>
+            <input type="text" name="firstname" class="form-control" value="{{ user.firstname }}">
         </div>
+
         <div class="mb-3">
-            <label for="last_name" class="form-label">Last Name</label>
-            <input type="text" name="last_name" id="last_name" class="form-control" value="{{ user.last_name }}" required>
+            <label class="form-label">Last Name</label>
+            <input type="text" name="lastname" class="form-control" value="{{ user.lastname }}">
         </div>
+
         <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" name="username" id="username" class="form-control" value="{{ user.username }}" required>
+            <label class="form-label">Username</label>
+            <input type="text" name="username" class="form-control" value="{{ user.username }}">
         </div>
+
         <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" name="email" id="email" class="form-control" value="{{ user.email }}" required>
+            <label class="form-label">Email</label>
+            <input type="email" name="emailid" class="form-control" value="{{ user.emailid }}">
         </div>
-        <button type="submit" class="btn btn-primary w-100">Update Profile</button>
+
+        <div class="mb-3">
+            <label class="form-label">Contact Number</label>
+            <input type="text" name="contactnumber" class="form-control" value="{{ user.contactnumber }}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Address</label>
+            <input type="text" name="address" class="form-control" value="{{ user.address }}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">City</label>
+            <input type="text" name="city" class="form-control" value="{{ user.city }}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">State</label>
+            <input type="text" name="state" class="form-control" value="{{ user.state }}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Country</label>
+            <input type="text" name="country" class="form-control" value="{{ user.country }}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Zip Code</label>
+            <input type="text" name="zip_code" class="form-control" value="{{ user.zip_code }}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Gender</label>
+            <select name="gender" class="form-select">
+                <option value="">Select Gender</option>
+                <option value="Male" {% if user.gender == 'Male' %}selected{% endif %}>Male</option>
+                <option value="Female" {% if user.gender == 'Female' %}selected{% endif %}>Female</option>
+                <option value="Other" {% if user.gender == 'Other' %}selected{% endif %}>Other</option>
+            </select>
+        </div>
+
+        <!-- Optional Profile model fields -->
+        {% if user.profile %}
+            <div class="mb-3">
+                <label class="form-label">Location</label>
+                <input type="text" name="location" class="form-control" value="{{ user.profile.location }}">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Bio</label>
+                <textarea name="bio" class="form-control">{{ user.profile.bio }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Avatar</label>
+                <input type="file" name="avatar" class="form-control">
+                {% if user.profile.avatar %}
+                    <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="img-fluid mt-2 rounded" style="max-height: 100px;">
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary w-100 mt-3">Update Profile</button>
     </form>
 </div>
-
 {% endblock %}

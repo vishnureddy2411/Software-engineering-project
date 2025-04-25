@@ -56,7 +56,7 @@
                         <a class="nav-link" href="{% url 'home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">About Us</a>
+                        <a class="nav-link" href="{% url 'about_us' %}">About Us</a>
                     </li>
                     
                     <li class="nav-item">
@@ -87,16 +87,25 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user-circle" style="font-size: 24px;"></i> Profile <!-- Default avatar icon -->
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="profileDropdown">
-                            <li><a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Profile</a></li>
-                            <li><a class="dropdown-item" href="{% url 'password_reset' %}">Change Password</a></li>
-                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-                        </ul>
-                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle" style="font-size: 24px;"></i> Profile
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+                                <li><a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url 'password_reset' %}">Change Password</a></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'loginpage' %}">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </a>
+                        </li>
+                    {% endif %}
+
          
                 </ul>
             </div>
@@ -124,9 +133,9 @@
     <footer class="glass-card text-center py-3">
         <p>&copy; 2025 Indoor Sports Academy. All rights reserved.</p>
         <p>
-            <a href="#" class="text-decoration-none me-3">Privacy Policy</a>
-            <a href="#" class="text-decoration-none me-3">Terms of Service</a>
-            <a href="#" class="text-decoration-none">Contact Us</a>
+            <a href="{% url 'privacy_policy' %}" class="text-decoration-none me-3">Privacy Policy</a>
+            <a href="{% url 'Terms_service' %}" class="text-decoration-none me-3">Terms of Service</a>
+            <a href="{% url 'contact' %}" class="text-decoration-none">Contact Us</a>
         </p>
     </footer>
 
