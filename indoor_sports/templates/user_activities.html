@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+User Activities - Indoor Sports Academy
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">User Activities</h2>
+    <p class="text-muted">Access various activities from here:</p>
+
+    <ul class="list-group">
+        <li class="list-group-item">
+            <a class="nav-link" href="{% url 'my_bookings' %}">View My Bookings</a>
+        </li>
+        <li class="list-group-item">
+            <a class="nav-link" href="{% url 'my_referrals' %}">My Referrals</a>
+        </li>
+        <li class="list-group-item">
+            <a class="nav-link" href="{% url 'membership_dashboard' %}">My Membership</a>
+        </li>
+    </ul>
+</div>
+{% endblock %}

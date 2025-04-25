@@ -63,7 +63,7 @@
                         
                         <a class="nav-link" href="{% url 'choose_location' %}">Book Slot</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="{% url 'my_bookings' %}">View My Bookings</a>
                     </li>
                     <li class="nav-item">
@@ -71,7 +71,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'membership_dashboard' %}">My Membership</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item position-relative">
                         <a class="nav-link" href="{% url 'email_list' %}">
                             Notifications
@@ -95,6 +95,7 @@
                             <ul class="dropdown-menu" aria-labelledby="profileDropdown">
                                 <li><a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Profile</a></li>
                                 <li><a class="dropdown-item" href="{% url 'password_reset' %}">Change Password</a></li>
+                                <li><a class="dropdown-item" href="{% url 'user_activities' %}">User Activities</a></li> 
                                 <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                             </ul>
                         </li>
@@ -190,3 +191,8 @@
     {% block extra_js %}{% endblock %}
 </body>
 </html>
+
+
+
+
+
