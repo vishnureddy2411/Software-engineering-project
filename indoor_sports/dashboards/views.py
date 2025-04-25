@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from accounts.models import User, Admin
+from accounts.models import Profile, User, Admin
 from django.contrib.auth.decorators import login_required
 import logging
 from sports.models import Event, Location, Sport
 from django.db.models import Q
 from .forms import EventForm
+from base64 import b64encode
+from MySQLdb import Binary
 
 logger = logging.getLogger(__name__)
 
@@ -142,7 +144,6 @@ def home(request):
 
 
 
-
 @login_required
 def edit_profile(request):
     user = request.user
@@ -177,7 +178,7 @@ def edit_profile(request):
     context = {
         'user': user
     }
-    return render(request, 'edit_profile.html', context)
+    return render(request, 'edit_profile.html', context) 
 
 
 def edit_profile_admin(request):

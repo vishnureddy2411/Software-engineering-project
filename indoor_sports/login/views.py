@@ -8,7 +8,9 @@ from django.contrib.auth import login, logout
 import logging
 
 logger = logging.getLogger(__name__)
+from django.views.decorators.csrf import csrf_protect
 
+@csrf_protect
 def login_view(request):
     """
     Handles login for both regular users and admins.
