@@ -179,7 +179,7 @@ def edit_profile(request):
     }
     return render(request, 'edit_profile.html', context)
 
-@login_required
+
 def edit_profile_admin(request):
     # Get the logged-in user (assuming the user is an instance of the Admin model)
     admin = request.user
