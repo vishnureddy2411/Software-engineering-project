@@ -62,7 +62,7 @@ def home(request):
 
 
 # -------------------- Password Reset Functionality -------------------- #
-
+@login_required
 def password_reset_request(request):
     """
     Handles password reset requests by sending an email with a reset link.
