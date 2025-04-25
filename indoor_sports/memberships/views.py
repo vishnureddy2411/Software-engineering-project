@@ -2,13 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
 from datetime import timedelta
-<<<<<<< HEAD
-
 import stripe
-=======
 from .models import Membership
 import stripe # type: ignore
->>>>>>> 313d5eabd8350ec332fcc8f0cdaa3b4e22a33b0c
 from django.conf import settings
 from notifications.models import Notification
 from django.http import JsonResponse
@@ -262,12 +258,7 @@ def subscription_send_payment_email(user, plan, start_date, end_date, price):
     recipient_list = [user.emailid]
     send_mail(subject, message, from_email, recipient_list)
 
-<<<<<<< HEAD
-
-# @login_required
-=======
 @login_required
->>>>>>> 313d5eabd8350ec332fcc8f0cdaa3b4e22a33b0c
 def view_user_memberships(request):
     # Ensure only logged-in users with role 'admin' can access
     if request.session.get('role') != 'admin' or not request.session.get('is_authenticated'):
