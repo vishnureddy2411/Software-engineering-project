@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}My Referrals{% endblock %}
+{% block title %}My Referrals | Refer a Friend{% endblock %}
 
 {% block content %}
 <div class="container py-5">
-    <h1 class="text-center mb-4">My Referrals</h1>
+    <h1 class="text-center mb-4">My Referrals | Refer a Friend</h1>
     <p class="text-center">Your Referral Code: <strong>{{ referral_code }}</strong></p>
     <p class="text-center">Referral Link: <a href="{{ referral_link }}" target="_blank">{{ referral_link }}</a></p>
 
@@ -47,7 +47,7 @@
                     <tr>
                         <th>Referred User</th>
                         <th>Email</th>
-                        <th>Points Earned</th>
+                        <th>Credits Earned</th>
                         <th>Date Joined</th>
                     </tr>
                 </thead>

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Update Profile{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-4">Update Profile</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" name="location" id="location" class="form-control" value="{{ profile.location }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="balance_credits" class="form-label">Balance Credits</label>
+            <input type="number" name="balance_credits" id="balance_credits" class="form-control" value="{{ profile.balance_credits }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="bio" class="form-label">Bio</label>
+            <textarea name="bio" id="bio" class="form-control" rows="4" required>{{ profile.bio }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="avatar" class="form-label">Avatar</label>
+            <input type="text" name="avatar" id="avatar" class="form-control" value="{{ profile.avatar }}" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+    </form>
+</div>
+{% endblock %}

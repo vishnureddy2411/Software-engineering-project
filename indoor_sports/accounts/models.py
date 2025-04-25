@@ -111,15 +111,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 # Profile Model
 # ----------------------------------------------------------------------
 class Profile(models.Model):
-    """Profile model extends the default information stored for a user."""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    location = models.CharField(max_length=100, blank=True)
-    balance_credits = models.IntegerField(default=0)
     bio = models.TextField(blank=True)
-    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True)
 
-    def __str__(self):
-        return f"{self.user.username}'s Profile"
 
 # ----------------------------------------------------------------------
 # Custom Admin Manager

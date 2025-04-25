@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .models import Notification
 
-#@login_required
+@login_required
 def email_list_view(request):
     """
     Displays sent and received notifications (emails) for the logged-in user.

@@ -23,7 +23,7 @@ from django.http import JsonResponse
 
 
 logger = logging.getLogger(__name__)
-
+@login_required
 def choose_location(request):
     locations = Location.objects.all().order_by('name')
     if request.method == "POST":
@@ -33,7 +33,7 @@ def choose_location(request):
             return redirect("choose_sport", location_id=location_id)
         messages.error(request, "Please select a location.")
     return render(request, "choose_location.html", {"locations": locations})
-
+@login_required
 def choose_sport(request, location_id):
     location = get_object_or_404(Location, pk=location_id)
     sports = Sport.objects.filter(location=location)
@@ -249,12 +249,13 @@ def booking_success(request):
         return render(request, "error.html", {"message": "No booking found!"}) 
 
     return render(request, "booking_success.html", {"booking": booking})
+@login_required
 def my_bookings(request):
     bookings = Booking.objects.filter(user=request.user).order_by('-booking_date')
     logger.info("User %s accessed their bookings. Total: %d", request.user.username, bookings.count())
     return render(request, "my_bookings.html", {"bookings": bookings})
 
-
+@login_required
 def booking_detail(request, booking_id):
     booking = get_object_or_404(Booking, booking_id=booking_id, user=request.user)
     logger.info("User %s is viewing details of booking ID %s", request.user.username, booking_id)
@@ -264,6 +265,7 @@ def booking_detail(request, booking_id):
 
 logger = logging.getLogger(__name__)
 
+@login_required
 def cancel_booking(request, booking_id):
     """
     Allows a user to cancel their booking only if the stored status matches "booked".

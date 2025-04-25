@@ -166,7 +166,6 @@ def edit_profile(request):
 
         # If user has a profile, update profile fields
         if profile:
-            profile.location = request.POST.get('location', profile.location)
             profile.bio = request.POST.get('bio', profile.bio)
             if 'avatar' in request.FILES:
                 profile.avatar = request.FILES['avatar']

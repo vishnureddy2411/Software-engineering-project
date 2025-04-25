@@ -1,31 +1,65 @@
-{% extends "base.html" %}{% load static %}
+{% extends "base.html" %}
+{% load static %}
 
-{% block title %}User Dashboard - Sports Booking Platform{% endblock %}
+{% block title %}User Dashboard{% endblock %}
 
 {% block content %}
-<header>
-    
-{% endblock %}
+<div class="container py-5">
+    <h1 class="text-center mb-4">User Dashboard</h1>
 
-{% block extra_js %}
-<script>
-    function filterSportsByLocation() {
-        const selectedLocation = document.getElementById("locationSelect").value;
-        const sportsCards = document.querySelectorAll(".sports-card");
+    <!-- Display Referral Points -->
+    <div class="card mb-4">
+        <div class="card-body text-center">
+            <h4>Your Credits </h4>
+            <p class="display-4">{{ referral_points }}</p>
+        </div>
+    </div>
 
-        sportsCards.forEach(card => {
-            const sportLocation = card.getAttribute("data-location")?.trim().toLocaleLowerCase();
+    <!-- Navigation Cards -->
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4>My Bookings</h4>
+                    <a href="{% url 'my_bookings' %}" class="btn btn-primary">View My Bookings</a>
+                </div>
+            </div>
+        </div>
 
-            if (!sportLocation) {
-                console.error("Missing data-location attribute on:", card);
-            }
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4>My Referrals</h4>
+                    <a href="{% url 'my_referrals' %}" class="btn btn-primary">My Referrals</a>
+                </div>
+            </div>
+        </div>
 
-            if (selectedLocation === "all" || sportLocation === selectedLocation) {
-                card.style.display = "block";
-            } else {
-                card.style.display = "none";
-            }
-        });
-    }
-</script>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4>My Membership</h4>
+                    <a href="{% url 'membership_dashboard' %}" class="btn btn-primary">My Membership</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4>Update Profile</h4>
+                    <a class="btn btn-primary" href="{% url 'edit_profile' %}">Update Profile</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4>Change Password</h4>
+                    <a class="btn btn-primary" href="{% url 'password_reset' %}">Change Password</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -90,7 +90,6 @@ def my_referrals(request):
         "referrals": referrals,
     })
 
-
 @login_required(login_url="loginpage")
 def logout_view(request):
     """
