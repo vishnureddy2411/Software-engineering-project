@@ -101,9 +101,9 @@ def cancel_membership_view(request, membership_id):
     return render(request, 'membership_cancel.html', {'membership': membership})
 
 STRIPE_PRICE_MAPPING = {
-    "Silver": "price_1R8pYGAzH5PP5Ex8N9IIAL5c",
-    "Gold": "price_1R8pNjAzH5PP5Ex8msvzQvUp",
-    "Platinum": "price_1R8pZFAzH5PP5Ex8gFOuqKB0",
+    "Silver": "price_1RHqlGAzH5PP5Ex8P6WV6oDL",
+    "Gold": "price_1RHqnDAzH5PP5Ex8twjG11UO",
+    "Platinum": "price_1RHqoeAzH5PP5Ex8ocPRHHtU",
 }
 
 
