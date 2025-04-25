@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
 from datetime import timedelta
-from .models import Membership
+
 import stripe
 from django.conf import settings
 from notifications.models import Notification
@@ -10,7 +10,11 @@ from django.http import JsonResponse
 from django.urls import reverse
 from django.contrib import messages
 from django.core.mail import send_mail
+
+
 from accounts.models import Admin  # import your custom Admin model
+
+
 from .models import Membership, MembershipPlan
 from .forms import MembershipForm
 from .forms import MembershipPlanForm
@@ -161,7 +165,9 @@ def create_checkout_session(request, plan):
                 'quantity': 1,
             }],
             mode='subscription',
-            success_url=request.build_absolute_uri(reverse('subscription_payment_success', kwargs={'plan': plan})) + '?session_id={CHECKOUT_SESSION_ID}',
+            success_url=request.build_absolute_uri(
+                reverse('subscription_payment_success', kwargs={'plan_duration': plan})  # Updated to use 'plan_duration'
+            ) + '?session_id={CHECKOUT_SESSION_ID}',
             cancel_url=request.build_absolute_uri(reverse('subscription_payment_cancel')),
         )
 
@@ -172,54 +178,61 @@ def create_checkout_session(request, plan):
         return redirect('membership_dashboard')
 
 
+
+
+
 @login_required
-def subscription_payment_success(request, plan):
-    """Handles subscription payment success and updates notifications."""
-    price_mapping = {
-        'WEEKLY': 10.0,
-        'MONTHLY': 30.0,
-        'YEARLY': 300.0,
-    }
+def subscription_payment_success(request, plan_duration):
+    """Handles subscription payment success and updates user memberships with correct foreign key references."""
 
-    duration_mapping = {
-        'WEEKLY': timedelta(weeks=1),
-        'MONTHLY': timedelta(days=30),
-        'YEARLY': timedelta(days=365),
-    }
+    # Fetch the MembershipPlan instance based on its duration
+    membership_plan = get_object_or_404(MembershipPlan, duration=plan_duration)
 
+    # Calculate start and end dates based on the plan's duration
     start_date = now().date()
-    end_date = start_date + duration_mapping.get(plan, timedelta(weeks=1))
-    price = price_mapping.get(plan, 0)
+    end_date_mapping = {
+        'Weekly': timedelta(weeks=1),
+        'Monthly': timedelta(days=30),
+        'Yearly': timedelta(days=365),
+    }
+    end_date = start_date + end_date_mapping.get(plan_duration, timedelta(weeks=1))  # Default to Weekly duration if not found
 
+    # Create a new membership linked to the MembershipPlan
     subscription = Membership.objects.create(
         user=request.user,
-        plan=plan,
+        plan=membership_plan,  # Assigning the ForeignKey reference
         start_date=start_date,
         end_date=end_date,
-        price=price,
+        price=membership_plan.price,  # Fetching price directly from MembershipPlan
         status='Active',
     )
 
-    subscription_send_payment_email(request.user, plan, start_date, end_date, price)
+    # Send payment confirmation email
+    subscription_send_payment_email(
+        request.user, membership_plan.name, start_date, end_date, membership_plan.price
+    )
 
+    # Create a notification to inform the user
     Notification.objects.create(
         notification_type="Payment Received",
         recipient_email=request.user.emailid,
         subject="Subscription Payment Confirmation",
-        message=f"We have received your payment for the {plan} subscription. Your subscription is active from {start_date} to {end_date}.",
+        message=f"We have received your payment for the {membership_plan.name} subscription. "
+                f"Your subscription is active from {start_date} to {end_date}.",
         status="sent",
         created_at=now(),
         updated_at=now(),
         user_id=request.user.userid
     )
 
-    messages.success(request, f"Your {plan} subscription has been successfully activated!")
+    # Display success message and render the payment success page
+    messages.success(request, f"Your {membership_plan.name} subscription has been successfully activated!")
 
     return render(request, 'mem_payment_success.html', {
-        'plan': plan,
+        'plan': membership_plan.name,
         'start_date': start_date,
         'end_date': end_date,
-        'price': price,
+        'price': membership_plan.price,
     })
 
 
@@ -243,6 +256,7 @@ def subscription_send_payment_email(user, plan, start_date, end_date, price):
     from_email = settings.DEFAULT_FROM_EMAIL
     recipient_list = [user.emailid]
     send_mail(subject, message, from_email, recipient_list)
+
 
 # @login_required
 def view_user_memberships(request):
@@ -358,4 +372,4 @@ def delete_membership_plan(request, plan_id):
         plan.delete()
         return redirect('admin_dashboard')  # Redirect back to the admin dashboard
 
-    return render(request, 'membership_plan/delete_membership.html', {'plan': plan})
+    return render(request, 'membership_plan/delete_membership.html', {'plan': plan})   

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1>Membership Purchase Successful!</h1>
+        <p>Thank you for subscribing to the <strong>{{ plan_name }}</strong> plan.</p>
+        <p>Your membership is now active from <strong>{{ start_date }}</strong> to <strong>{{ end_date }}</strong>.</p>
+        <p>You can manage your membership from your <a href="{% url 'membership_dashboard' %}">dashboard</a>.</p>
+        <a href="{% url 'membership_dashboard' %}">Go to Dashboard</a>
+    </div>
+{% endblock %}
