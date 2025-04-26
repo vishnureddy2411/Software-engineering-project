@@ -1,71 +1,80 @@
 {% extends 'base.html' %}
 {% load static %}
-
+ 
 {% block content %}
-    <div class="container">
-        <h2>Rate & Review - {{ sport.name }}</h2>
-
-        {% if average_rating %}
-            <div class="avg-rating" style="margin-bottom: 20px;">
-                <strong>Average Rating:</strong> {{ average_rating }} / 5
-                <span class="stars">
-                    {% for i in "12345"|make_list %}
-                        {% if forloop.counter <= average_rating|floatformat:0 %}
-                            ★
-                        {% else %}
-                            ☆
-                        {% endif %}
-                    {% endfor %}
-                </span>
-            </div>
-        {% endif %}
-
-        <!-- Review Form -->
-        <form method="POST">
-            {% csrf_token %}
-            
-            <!-- Star Rating Input -->
-            <div class="star-rating">
-                <input type="radio" name="rating" id="star5" value="1" required>
-                <label for="star5">★</label>
-                <input type="radio" name="rating" id="star4" value="2">
-                <label for="star4">★</label>
-                <input type="radio" name="rating" id="star3" value="3">
-                <label for="star3">★</label>
-                <input type="radio" name="rating" id="star2" value="4">
-                <label for="star2">★</label>
-                <input type="radio" name="rating" id="star1" value="5">
-                <label for="star1">★</label>
-            </div>
-
-            <textarea name="review_text" placeholder="Write your review..." required></textarea>
-            <a href="{% url 'user_dashboard' %}" class="submit-btn">Submit Review</a>
-
-            {% if user.is_authenticated %}<p>Thank you for your feedback!</p>{% endif %}
-            
-        </form>
-
-        <!-- Display Reviews -->
-        <div class="reviews">
-            <h3>Reviews</h3>
-            {% for review in reviews %}
-            <div class="review-item">
-                <span class="stars">
-                    {% for i in "12345"|make_list %}
-                        {% if forloop.counter <= review.rating %}
-                            ★
-                        {% else %}
-                            ☆
-                        {% endif %}
-                    {% endfor %}
-                </span>
-                <br>
-                "{{ review.review_text }}" <br>
-                <small>by {{ review.user.username }} on {{ review.created_at|date:"F j, Y" }}</small>
-            </div>
-            {% empty %}
-            <p>No reviews yet.</p>
+<div class="container">
+    <h2>Rate & Review - {{ sport.name }}</h2>
+ 
+    {% if average_rating %}
+    <div class="avg-rating" style="margin-bottom: 20px;">
+        <strong>Average Rating:</strong> {{ average_rating }} / 5
+        <span class="stars">
+            {% for i in "12345"|make_list %}
+                {% if forloop.counter <= average_rating|floatformat:0 %}
+                    ★
+                {% else %}
+                    ☆
+                {% endif %}
             {% endfor %}
-        </div>
+        </span>
     </div>
+    {% endif %}
+ 
+    <!-- Review Form -->
+    <form method="POST">
+        {% csrf_token %}
+ 
+        <!-- Star Rating Input -->
+        <div class="star-rating">
+            <input type="radio" name="rating" id="star5" value="5" required>
+            <label for="star5">★</label>
+ 
+            <input type="radio" name="rating" id="star4" value="4">
+            <label for="star4">★</label>
+ 
+            <input type="radio" name="rating" id="star3" value="3">
+            <label for="star3">★</label>
+ 
+            <input type="radio" name="rating" id="star2" value="2">
+            <label for="star2">★</label>
+ 
+            <input type="radio" name="rating" id="star1" value="1">
+            <label for="star1">★</label>
+        </div>
+ 
+        <textarea name="review_text" placeholder="Write your review..." required></textarea>
+ 
+        <!-- Submit Button -->
+        <button type="submit" class="submit-btn">Submit Review</button>
+ 
+        {% if user.is_authenticated %}
+        <p>Thank you for your feedback!</p>
+        {% endif %}
+    </form>
+ 
+    <!-- Display Reviews -->
+    <div class="reviews">
+        <h3>Reviews</h3>
+ 
+        {% for review in reviews %}
+        <div class="review-item">
+            <span class="stars">
+                {% for i in "12345"|make_list %}
+                    {% if forloop.counter <= review.rating %}
+                        ★
+                    {% else %}
+                        ☆
+                    {% endif %}
+                {% endfor %}
+            </span>
+            <br>
+            "{{ review.review_text }}" <br>
+            <small>by {{ review.user.username }} on {{ review.created_at|date:"F j, Y" }}</small>
+        </div>
+        {% empty %}
+        <p>No reviews yet.</p>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}
+ 
