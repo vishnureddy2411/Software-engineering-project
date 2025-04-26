@@ -30,7 +30,7 @@ def login_view(request):
             if not user.is_active:
                 messages.error(request, "User account is inactive. Contact support.")
                 return redirect("loginpage")
-            
+
             login(request, user)
             set_user_session(request, user)
 
@@ -39,15 +39,28 @@ def login_view(request):
             print(f"User {user.username} logged in successfully. Redirecting to user dashboard.")
             logger.info(f"User {user.username} logged in successfully.")
 
-            # Extra logic: Redirect to review page for incomplete booking reviews
-            booking = Booking.objects.filter(user=user, status__in=['booked', 'Booked']).order_by('-booking_date', '-time_slot').first()
-            if booking is not None and not booking.submitted_review:
-                print("Redirecting to review page for booking:", booking)
-                logger.info(f"Redirecting {user.username} to review page for booking {booking.booking_id}.")
-                return redirect('reviews_by_location_booking', 
-                booking_id=booking.booking_id, location_id=booking.location.location_id, sport_id=booking.sport.sport_id)
-            
+            # Redirect Logic: Check for incomplete booking reviews
+            incomplete_reviews = Booking.objects.filter(
+                user=user,
+                status__in=['booked', 'Booked'],  # Filter for "booked" statuses
+                submitted_review=False  # Ensure review is not submitted
+            ).order_by('-booking_date', '-time_slot').first()  # Get the most recent booking
+
+            if incomplete_reviews:  # Redirect to review page if an incomplete review exists
+                print("Redirecting to review page for booking:", incomplete_reviews)
+                logger.info(
+                    f"Redirecting {user.username} to review page for booking {incomplete_reviews.booking_id}."
+                )
+                return redirect(
+                    'reviews_by_location_booking',
+                    booking_id=incomplete_reviews.booking_id,
+                    location_id=incomplete_reviews.location.location_id,
+                    sport_id=incomplete_reviews.sport.sport_id
+                )
+
+            # Redirect to dashboard if no incomplete reviews
             return redirect("user_dashboard")
+
 
         # Admin authentication
         admin = Admin.objects.filter(emailid=identifier).first()
@@ -124,7 +137,3 @@ def set_admin_session(request, admin):
     request.session.modified = True
     request.session.save()
     print(f"Admin session set: {request.session.items()}")
-
-
-    
-    

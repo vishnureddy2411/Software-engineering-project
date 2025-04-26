@@ -87,7 +87,7 @@ class Booking(models.Model):
     submitted_review = models.BooleanField(default=False)
     def __str__(self):
         full_name = getattr(self.user, "get_full_name", lambda: self.user.username)()
-        return f"Booking {self.id} by {full_name} for {self.sport.name}"
+        return f"Booking {self.booking_id} by {full_name} for {self.sport.name}"
     
     class Meta:
         db_table = 'bookings_booking'

@@ -140,10 +140,11 @@ def choose_date(request, location_id, sport_id):
 
 
 
+
 def list_slots(request, location_id, sport_id, date):
     """
     Display available slots for a given date, location, and sport.
-    Handles slot selection and redirects to the confirm_booking view.
+    Ensures that only slots from the current time onward are displayed for the current day.
     """
     try:
         # Parse and validate the selected date
@@ -155,14 +156,34 @@ def list_slots(request, location_id, sport_id, date):
     location = get_object_or_404(Location, location_id=location_id)
     sport = get_object_or_404(Sport, sport_id=sport_id)
 
-    # Fetch available slots
-    slots = Slot.objects.filter(
-        date=selected_date,
-        location=location,
-        sport=sport,
-        is_booked=False
-    )
+    # Fetch the current time and date
+    current_datetime = datetime.now()
+    current_date = current_datetime.date()
+    current_time = current_datetime.time()
 
+    # Filter slots to exclude past times for today
+    if selected_date > current_date:
+        # For future dates, show all available slots (no time restriction)
+        slots = Slot.objects.filter(
+            date=selected_date,
+            location=location,
+            sport=sport,
+            is_booked=False
+        )
+    elif selected_date == current_date:
+        # For the current date, only show slots with time greater than or equal to the current time (e.g., 6:00 PM)
+        slots = Slot.objects.filter(
+            date=selected_date,
+            location=location,
+            sport=sport,
+            is_booked=False,
+            time__gte=current_time  # Exclude past times for today
+        )
+    else:
+        # For past dates, no slots should be displayed
+        slots = Slot.objects.none()
+
+    # Redirect if no slots are available
     if not slots.exists():
         messages.info(request, f"No slots available on {selected_date}. Please choose another date.")
         return redirect("choose_date", location_id=location_id, sport_id=sport_id)
@@ -179,9 +200,9 @@ def list_slots(request, location_id, sport_id, date):
         "slots": slots,
         "date": selected_date,
         "location": location,
-        "location_id": location_id,  # Pass location ID explicitly
-        "sport_id": sport_id,
         "sport": sport,
+        "location_id": location_id,  # Pass location ID explicitly
+        "sport_id": sport_id,  # Pass sport ID explicitly
     }
     return render(request, "list_slots.html", context)
 
