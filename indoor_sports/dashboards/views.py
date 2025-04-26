@@ -92,7 +92,7 @@ def is_role_valid(request, expected_role):
         print(f"Debug: Role mismatch! Expected: {expected_role}, Found: {role}")
         return False
 
-    # ✅ Admin Validation
+    # Admin Validation
     if role == "admin" and admin_id:
         try:
             admin = Admin.objects.get(adminid=admin_id)
@@ -108,7 +108,7 @@ def is_role_valid(request, expected_role):
             print(f"Debug: Admin not found in DB! Admin ID: {admin_id}")
             return False
 
-    # ✅ User Validation (Newly Added)
+    # User Validation (Newly Added)
     if role == "user" and user_id:
         try:
             user = User.objects.get(userid=user_id)
@@ -185,16 +185,12 @@ def edit_profile(request):
     avatar_base64 = None
     if profile.avatar:
         avatar_base64 = b64encode(profile.avatar).decode('utf-8')
-
-<<<<<<< HEAD
     return render(request, 'edit_profile.html', {
         'user': user,
         'profile': profile,
         'avatar_base64': avatar_base64
     })
 
-=======
->>>>>>> 0748d9696f0f58203751c030591f766ec68ff754
 def edit_profile_admin(request):
     admin_id = request.session.get('admin_id')
 
