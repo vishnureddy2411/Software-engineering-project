@@ -6,12 +6,9 @@ import logging
 from sports.models import Event, Location, Sport
 from django.db.models import Q
 from .forms import EventForm
-<<<<<<< HEAD
+
 from django.http import HttpResponseForbidden
-=======
-from base64 import b64encode
-from MySQLdb import Binary
->>>>>>> 45b93c4d93d79fb93b3894bf12f43143434f684d
+
 
 logger = logging.getLogger(__name__)
 
