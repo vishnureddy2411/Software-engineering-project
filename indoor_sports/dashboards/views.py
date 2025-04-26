@@ -1,3 +1,4 @@
+from base64 import b64encode
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from accounts.models import Profile, User, Admin
@@ -147,11 +148,8 @@ def home(request):
 
 @login_required
 def edit_profile(request):
-    """
-    Edit user and profile information.
-    """
     user = request.user
-    profile, created = Profile.objects.get_or_create(user=user)  # Create Profile if it doesn't exist
+    profile = getattr(user, 'profile', None)  # Get profile if it exists
 
     if request.method == 'POST':
         # Update User fields
@@ -168,28 +166,32 @@ def edit_profile(request):
         user.gender = request.POST.get('gender', user.gender)
         user.save()
 
-        # Update Profile fields
-        profile.bio = request.POST.get('bio', profile.bio)
-        avatar_file = request.FILES.get('avatar')
-        if avatar_file:
-            if hasattr(avatar_file, 'read'):  # Ensure it's file-like
-                profile.avatar = avatar_file.read()
-            else:
-                messages.error(request, "Invalid avatar file uploaded.")
-        profile.save()
+        # Allowed types
+        ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+
+        # Profile image update
+        if profile:
+            profile.bio = request.POST.get('bio', profile.bio)
+            avatar = request.FILES.get('avatar')
+
+            if avatar:
+                if avatar.content_type not in ALLOWED_IMAGE_TYPES:
+                    messages.error(request, "Invalid image format. Please upload JPG, PNG, GIF, or WEBP.")
+                    return redirect('edit_profile')
+
+                profile.avatar = avatar.read()  # Store binary
+            profile.save()
 
         messages.success(request, 'Your profile has been updated successfully.')
         return redirect('edit_profile')
 
-    # Convert binary avatar to base64 string for display
-    avatar_base64 = None
-    if profile.avatar:
-        avatar_base64 = b64encode(profile.avatar).decode('utf-8')
-    return render(request, 'edit_profile.html', {
+    context = {
         'user': user,
-        'profile': profile,
-        'avatar_base64': avatar_base64
-    })
+        'profile': profile
+    }
+    return render(request, 'edit_profile.html', context)
+
+
 
 def edit_profile_admin(request):
     admin_id = request.session.get('admin_id')
