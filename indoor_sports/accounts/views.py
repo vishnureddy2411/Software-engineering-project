@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.urls import reverse
@@ -9,6 +10,9 @@ from django.utils.timezone import now
 import uuid  # For generating unique reset tokens
 import logging
 from .models import User, Profile
+from base64 import b64encode
+from django.utils.encoding import force_str
+
 
 # Temporary storage for reset tokens (production should use a database or cache)
 reset_tokens = {}
@@ -16,7 +20,7 @@ reset_tokens = {}
 logger = logging.getLogger(__name__)
 
 # -------------------- Authentication and Profile Management -------------------- #
-
+@csrf_protect
 def login_view(request):
     """
     Handle user login via POST request.
@@ -69,7 +73,8 @@ def user_profile(request, user_id):
         messages.success(request, "Profile updated successfully.")
         return redirect('user_profile', user_id=user.userid)
 
-    return render(request, 'user_profile.html', {'profile': profile, 'user': user})
+    return render(request, 'user_profile.html', {'profile': profile, 'user': user}) 
+
 
 @login_required
 def user_dashboard_view(request):

@@ -273,7 +273,7 @@ def cancel_booking(request, booking_id):
     booking = get_object_or_404(Booking, booking_id=booking_id, user=request.user)
 
     if request.method == "POST":
-        if booking.status.lower() == "booked":  # Ensure status check works regardless of case
+        if booking.status.lower() in ["booked", "Booked"]:  # Ensure status check works regardless of case
             booking.status = "Cancelled"
             booking.cancellation_time = now()  # Record cancellation timestamp
             booking.save()

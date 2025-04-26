@@ -17,21 +17,55 @@
         </div>
     </div>
 
-    <!-- Profile Information Section -->
+    <!-- Profile Information Table -->
     <div class="card mb-4">
         <div class="card-body">
-            <h4>Profile Information</h4>
-            <p><strong>Email:</strong> {{ user.emailid }}</p>
-            <p><strong>First Name:</strong> {{ user.firstname }}</p>
-            <p><strong>Last Name:</strong> {{ user.lastname }}</p>
-            <p><strong>Contact Number:</strong> {{ user.contactnumber }}</p>
-            <p><strong>Address:</strong> {{ user.address }}</p>
-            <p><strong>City:</strong> {{ user.city }}</p>
-            <p><strong>State:</strong> {{ user.state }}</p>
-            <p><strong>Country:</strong> {{ user.country }}</p>
-            <p><strong>ZIP Code:</strong> {{ user.zip_code }}</p>
-            <p><strong>Gender:</strong> {{ user.gender }}</p>
-            <p><strong>Referral Points:</strong> {{ user.referral_points }}</p>
+            <h4 class="mb-3">Profile Information</h4>
+            <table class="table table-striped table-bordered">
+                <tbody>
+                    <tr>
+                        <th>Email</th>
+                        <td>{{ user.emailid }}</td>
+                    </tr>
+                    <tr>
+                        <th>First Name</th>
+                        <td>{{ user.firstname }}</td>
+                    </tr>
+                    <tr>
+                        <th>Last Name</th>
+                        <td>{{ user.lastname }}</td>
+                    </tr>
+                    <tr>
+                        <th>Contact Number</th>
+                        <td>{{ user.contactnumber }}</td>
+                    </tr>
+                    <tr>
+                        <th>Address</th>
+                        <td>{{ user.address }}</td>
+                    </tr>
+                    <tr>
+                        <th>City</th>
+                        <td>{{ user.city }}</td>
+                    </tr>
+                    <tr>
+                        <th>State</th>
+                        <td>{{ user.state }}</td>
+                    </tr>
+                    <tr>
+                        <th>Country</th>
+                        <td>{{ user.country }}</td>
+                    </tr>
+                    <tr>
+                        <th>ZIP Code</th>
+                        <td>{{ user.zip_code }}</td>
+                    </tr>
+                    <tr>
+                        <th>Gender</th>
+                        <td>{{ user.gender }}</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
         </div>
     </div>
 

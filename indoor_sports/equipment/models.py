@@ -13,7 +13,7 @@ class Equipment(models.Model):
 
 
 
-    def _str_(self):
+    def __str__(self):
         return self.name
 
 class Rental(models.Model):
@@ -30,5 +30,5 @@ class Rental(models.Model):
     rental_status = models.CharField(max_length=20, choices=RENTAL_STATUS_CHOICES, default='Rented')
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def _str_(self):
+    def __str__(self):
         return f"Rental {self.id} - {self.equipment.name}"
