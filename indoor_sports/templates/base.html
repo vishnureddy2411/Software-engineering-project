@@ -82,8 +82,11 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 {% if user.profile.avatar %}
-                                    <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">
+                                    <!-- Resize the avatar to a regular icon size -->
+                                    <img src="data:image/jpeg;base64,{{ avatar_base64 }}" alt="User Avatar" 
+                                        class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;">
                                 {% else %}
+                                    <!-- Use a default Font Awesome icon if no avatar -->
                                     <i class="fas fa-user-circle me-2" style="font-size: 24px;"></i>
                                 {% endif %}
                                 Profile
@@ -106,6 +109,9 @@
             </div>
         </div>
     </nav>
+
+
+   
 
     <!-- Django Messages (global) -->
     {% if messages %}

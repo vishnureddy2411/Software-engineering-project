@@ -21,19 +21,30 @@ logger = logging.getLogger(__name__)
 
 # -------------------- Authentication and Profile Management -------------------- #
 @csrf_protect
+
 def login_view(request):
-    """
-    Handle user login via POST request.
-    """
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user:
+        identifier = request.POST.get('identifier')
+        password = request.POST.get('password')
+        user = User.objects.filter(username=identifier).first() or User.objects.filter(emailid=identifier).first()
+
+        if user and user.check_password(password):
             login(request, user)
-            return redirect('home')
+            
+            # Fetch avatar base64 for the session
+            profile = Profile.objects.filter(user=user).first()
+            avatar_base64 = None
+            if profile and profile.avatar:
+                avatar_base64 = b64encode(profile.avatar).decode('utf-8')
+            request.session['avatar_base64'] = avatar_base64  # Store base64 in session
+            
+            messages.success(request, "Login successful!")
+            return redirect('user_dashboard')
+
         else:
-            messages.error(request, "Invalid username or password.")
+            messages.error(request, "Invalid credentials.")
+            return redirect('loginpage')
+
     return render(request, 'login.html')
 
 # Signal to automatically create a Profile for new users
@@ -53,28 +64,78 @@ def save_user_profile(sender, instance, **kwargs):
         # Handle case where Profile doesn't exist
         logger.warning("User %s does not have a profile.", instance.userid)
 
+
+
 @login_required
 def user_profile(request, user_id):
     """
     View and manage the user's profile based on user_id.
     """
     user = get_object_or_404(User, userid=user_id)
-    profile, created = Profile.objects.get_or_create(user=user)  # Create profile if it doesn't exist
+    profile, created = Profile.objects.get_or_create(user=user)  # Create Profile if it doesn't exist
 
     if request.method == 'POST':
         # Update profile fields
         profile.location = request.POST.get('location', profile.location)
         profile.balance_credits = request.POST.get('balance_credits', profile.balance_credits)
         profile.bio = request.POST.get('bio', profile.bio)
-        avatar = request.FILES.get('avatar')
-        if avatar:
-            profile.avatar = avatar
+
+        # Handle avatar upload and store it as binary
+        avatar_file = request.FILES.get('avatar')
+        if avatar_file:
+            if hasattr(avatar_file, 'read'):  # Ensure it's file-like
+                profile.avatar = avatar_file.read()  # Save binary content
+            else:
+                messages.error(request, "Invalid avatar file uploaded.")
+
         profile.save()
         messages.success(request, "Profile updated successfully.")
         return redirect('user_profile', user_id=user.userid)
 
-    return render(request, 'user_profile.html', {'profile': profile, 'user': user}) 
+    # Convert binary image to base64 string for display
+    avatar_base64 = None
+    if profile.avatar:
+        avatar_base64 = b64encode(profile.avatar).decode('utf-8')
 
+    return render(request, 'user_profile.html', {
+        'profile': profile,
+        'user': user,
+        'avatar_base64': avatar_base64
+    })
+
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from accounts.models import Profile
+
+@login_required
+def delete_avatar(request):
+    """
+    Delete the avatar from the user's profile.
+    """
+    profile = get_object_or_404(Profile, user=request.user)
+    if profile.avatar:
+        profile.avatar = None  # Remove the avatar
+        profile.save()
+        messages.success(request, "Your avatar has been deleted successfully.")
+    else:
+        messages.warning(request, "No avatar to delete.")
+    return redirect('user_profile', user_id=request.user.userid)
+
+
+@login_required
+def delete_avatar(request):
+    """
+    Delete the avatar from the user's profile.
+    """
+    profile = get_object_or_404(Profile, user=request.user)
+    if profile.avatar:
+        profile.avatar = None  # Remove the avatar
+        profile.save()
+        messages.success(request, "Your avatar has been deleted successfully.")
+    else:
+        messages.warning(request, "No avatar to delete.")
+    return redirect('user_profile', user_id=request.user.userid)
 
 @login_required
 def user_dashboard_view(request):
