@@ -80,8 +80,16 @@
                     </li>
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user-circle" style="font-size: 24px;"></i> Profile
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {% if user.profile.avatar %}
+                                    <!-- Resize the avatar to a regular icon size -->
+                                    <img src="data:image/jpeg;base64,{{ avatar_base64 }}" alt="User Avatar" 
+                                        class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;">
+                                {% else %}
+                                    <!-- Use a default Font Awesome icon if no avatar -->
+                                    <i class="fas fa-user-circle me-2" style="font-size: 24px;"></i>
+                                {% endif %}
+                                Profile
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="profileDropdown">
                                 <li><a class="dropdown-item" href="{% url 'user_dashboard' %}">Dashboard</a></li>
@@ -101,6 +109,9 @@
             </div>
         </div>
     </nav>
+
+
+   
 
     <!-- Django Messages (global) -->
     {% if messages %}
@@ -138,14 +149,14 @@
         document.addEventListener("DOMContentLoaded", function() {
             const videoSources = [
                 "{% static 'videos/basketball court.mp4' %}",
-                "{% static 'videos/basketball_game.mp4' %}",
-                "{% static 'videos/basketball_spin.mp4' %}",
-                "{% static 'videos/court_action.mp4' %}",
-                "{% static 'videos/practice_game.mp4' %}",
-                "{% static 'videos/tennis_player_bat_spin.mp4' %}",
-                "{% static 'videos/tennis_player.mp4' %}",
                 "{% static 'videos/two_players_tennis.mp4' %}",
-                "{% static 'videos/pool.mp4' %}",
+                "{% static 'videos/basketball_game.mp4' %}",
+                
+                "{% static 'videos/court_action.mp4' %}",
+                
+                
+                
+                
                 "{% static 'videos/basketball.mp4' %}",
                 "{% static 'videos/volleyball.mp4' %}"
             ];

@@ -81,7 +81,7 @@ class Sport(models.Model):
         db_table = 'sports_sport'
         ordering = ['name']
 
-    def _str_(self):
+    def __str__(self):
         return self.name
 
 

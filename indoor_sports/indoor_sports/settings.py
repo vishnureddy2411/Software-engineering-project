@@ -65,10 +65,12 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'accounts.context_processors.avatar_context',
             ],
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'indoor_sports.wsgi.application'
 
@@ -82,6 +84,9 @@ DATABASES = {
         'HOST': os.getenv('DB_HOST', '127.0.0.1'),
         'PORT': os.getenv('DB_PORT', '3306'),
         'CONN_MAX_AGE': 600,  # Persistent connections
+        'OPTIONS': {
+            'charset': 'utf8mb4',  # Ensure correct encoding
+        },
     }
 }
 
@@ -108,6 +113,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # Media files configuration
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -166,7 +173,7 @@ SESSION_SAVE_EVERY_REQUEST = True
 
 
 # Custom user model
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'accounts.User' 
 
 STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY")
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")

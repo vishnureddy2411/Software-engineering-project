@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from accounts.models import User, Admin
+from accounts.models import Profile, User, Admin
 from django.contrib.auth.decorators import login_required
 import logging
 from sports.models import Event, Location, Sport
 from django.db.models import Q
 from .forms import EventForm
+
+from django.http import HttpResponseForbidden
+
 
 logger = logging.getLogger(__name__)
 
@@ -142,14 +145,16 @@ def home(request):
 
 
 
-
 @login_required
 def edit_profile(request):
+    """
+    Edit user and profile information.
+    """
     user = request.user
-    profile = getattr(user, 'profile', None)  # get profile if it exists
+    profile, created = Profile.objects.get_or_create(user=user)  # Create Profile if it doesn't exist
 
     if request.method == 'POST':
-        # Update User fields only if the value is provided
+        # Update User fields
         user.firstname = request.POST.get('firstname', user.firstname)
         user.lastname = request.POST.get('lastname', user.lastname)
         user.username = request.POST.get('username', user.username)
@@ -161,57 +166,65 @@ def edit_profile(request):
         user.country = request.POST.get('country', user.country)
         user.zip_code = request.POST.get('zip_code', user.zip_code)
         user.gender = request.POST.get('gender', user.gender)
-
         user.save()
 
-        # If user has a profile, update profile fields
-        if profile:
-            profile.bio = request.POST.get('bio', profile.bio)
-            if 'avatar' in request.FILES:
-                profile.avatar = request.FILES['avatar']
-            profile.save()
+        # Update Profile fields
+        profile.bio = request.POST.get('bio', profile.bio)
+        avatar_file = request.FILES.get('avatar')
+        if avatar_file:
+            if hasattr(avatar_file, 'read'):  # Ensure it's file-like
+                profile.avatar = avatar_file.read()
+            else:
+                messages.error(request, "Invalid avatar file uploaded.")
+        profile.save()
 
         messages.success(request, 'Your profile has been updated successfully.')
-        return redirect('edit_profile')  # or wherever you want to redirect
+        return redirect('edit_profile')
 
-    context = {
-        'user': user
-    }
-    return render(request, 'edit_profile.html', context)
+    # Convert binary avatar to base64 string for display
+    avatar_base64 = None
+    if profile.avatar:
+        avatar_base64 = b64encode(profile.avatar).decode('utf-8')
 
+<<<<<<< HEAD
+    return render(request, 'edit_profile.html', {
+        'user': user,
+        'profile': profile,
+        'avatar_base64': avatar_base64
+    })
 
+=======
+>>>>>>> 0748d9696f0f58203751c030591f766ec68ff754
 def edit_profile_admin(request):
-    # Get the logged-in user (assuming the user is an instance of the Admin model)
-    admin = request.user
+    admin_id = request.session.get('admin_id')
 
-    # Handle the POST request to update the profile
+    if not admin_id:
+        messages.error(request, 'Session expired or unauthorized access. Please login again.')
+        return redirect('loginpage')  # Replace 'login' with your login URL name
+
+    try:
+        admin = Admin.objects.get(adminid=admin_id)
+    except Admin.DoesNotExist:
+        messages.error(request, 'Admin profile not found.')
+        return redirect('dashboard')  # Replace with your default admin page
+
     if request.method == 'POST':
-        # Update the admin's details with the data from the form
-        admin.firstname = request.POST.get('firstname', admin.firstname)
-        admin.lastname = request.POST.get('lastname', admin.lastname)
-        admin.emailid = request.POST.get('emailid', admin.emailid)
-        admin.contactnumber = request.POST.get('contactnumber', admin.contactnumber)
-        admin.address = request.POST.get('address', admin.address)
-        admin.city = request.POST.get('city', admin.city)
-        admin.state = request.POST.get('state', admin.state)
-        admin.country = request.POST.get('country', admin.country)
-        admin.zip_code = request.POST.get('zip_code', admin.zip_code)
-        admin.gender = request.POST.get('gender', admin.gender)
+        admin.firstname = request.POST.get('firstname') or admin.firstname
+        admin.lastname = request.POST.get('lastname') or admin.lastname
+        admin.emailid = request.POST.get('emailid') or admin.emailid
+        admin.contactnumber = request.POST.get('contactnumber') or admin.contactnumber
+        admin.address = request.POST.get('address') or admin.address
+        admin.city = request.POST.get('city') or admin.city
+        admin.state = request.POST.get('state') or admin.state
+        admin.country = request.POST.get('country') or admin.country
+        admin.zip_code = request.POST.get('zip_code') or admin.zip_code
+        admin.gender = request.POST.get('gender') or admin.gender
 
-        # Save the updated admin profile
         admin.save()
-
-        # Display a success message and redirect back to the profile page
         messages.success(request, 'Admin profile updated successfully.')
-        return redirect('edit_profile_admin')  # Redirect back to this view after saving
+        return redirect('edit_profile_admin')
 
-    # Pass the admin instance to the template for pre-populating the form
-    context = {
-        'admin': admin
-    }
-    
-    # Render the form with the admin's current details
-    return render(request, 'edit_profile_admin.html', context)
+    return render(request, 'edit_profile_admin.html', {'admin': admin})
 # View Bookings
 def view_bookings(request):
     return render(request, 'view_bookings.html')

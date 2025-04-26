@@ -3,7 +3,7 @@ from .views import (
     password_reset_request,
     password_reset_confirm,
     user_dashboard_view,
-    user_profile,
+    user_profile,delete_avatar,
 )
 from login.views import login_view, logout_view
 
@@ -13,6 +13,7 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
 
     path('profile/<int:user_id>/', user_profile, name='user_profile'),  # Dynamic user profile route
+    path('delete_avatar/', delete_avatar, name='delete_avatar'),  # Delete avatar route
     path('dashboard/', user_dashboard_view, name='user_dashboard'),     # User dashboard
 
     # Password reset routes
