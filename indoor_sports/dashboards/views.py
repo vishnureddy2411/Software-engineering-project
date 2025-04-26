@@ -93,7 +93,7 @@ def is_role_valid(request, expected_role):
         print(f"Debug: Role mismatch! Expected: {expected_role}, Found: {role}")
         return False
 
-    # ✅ Admin Validation
+    # Admin Validation
     if role == "admin" and admin_id:
         try:
             admin = Admin.objects.get(adminid=admin_id)
@@ -109,7 +109,7 @@ def is_role_valid(request, expected_role):
             print(f"Debug: Admin not found in DB! Admin ID: {admin_id}")
             return False
 
-    # ✅ User Validation (Newly Added)
+    # User Validation (Newly Added)
     if role == "user" and user_id:
         try:
             user = User.objects.get(userid=user_id)
