@@ -1,3 +1,4 @@
+from base64 import b64encode
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from accounts.models import Profile, User, Admin
