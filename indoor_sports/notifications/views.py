@@ -59,7 +59,7 @@ def send_email_to_customer_service(request):
             send_mail(
                 subject=subject,
                 message=body,
-                from_email=request.user.email,
+                from_email=request.user.emailid,
                 recipient_list=[customer_service_email],
                 fail_silently=False,
             )
