@@ -241,7 +241,7 @@ def subscription_payment_success(request, plan_duration):
 
         Notification.objects.create(
 
-            notification_type="Payment Received",
+            notification_type="Received",
 
             recipient_email=request.user.emailid,
 

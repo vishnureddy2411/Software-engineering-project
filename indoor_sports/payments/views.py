@@ -218,7 +218,7 @@ def payment_success(request, booking_id):
 
     # Insert Payment Notification
     Notification.objects.create(
-        notification_type="Payment Received",
+        notification_type="Received",
         recipient_email=user.emailid,
         subject="Slot Booking Payment Confirmation",
         message=f"Your payment for booking ID {booking_id} has been received. {discount_amount:.2f} USD discount applied using referral points. Final amount paid: {final_price:.2f} USD.",

@@ -52,8 +52,8 @@ def send_email_to_customer_service(request):
     if request.method == 'POST':
         subject = request.POST.get('subject')
         body = request.POST.get('body')
-        customer_service_email = settings.CUSTOMER_SERVICE_EMAIL
-
+        customer_service_email = settings.CUSTOMER_SERVICE
+ 
         if subject and body:
             # Sending the email
             send_mail(
@@ -63,7 +63,7 @@ def send_email_to_customer_service(request):
                 recipient_list=[customer_service_email],
                 fail_silently=False,
             )
-
+ 
             # Saving the sent email as a notification in the database
             Notification.objects.create(
                 user=request.user,
@@ -73,7 +73,9 @@ def send_email_to_customer_service(request):
                 message=body,
                 status='Read'  # Sent emails are marked as Read by default
             )
-
+ 
             return redirect('email_list')
-
+ 
     return render(request, 'send_email.html')
+ 
+ 
