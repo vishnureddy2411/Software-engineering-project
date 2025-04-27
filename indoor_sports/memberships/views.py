@@ -1,3 +1,4 @@
+from venv import logger
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
@@ -19,7 +20,7 @@ from .models import Membership, MembershipPlan
 from .forms import MembershipForm
 from .forms import MembershipPlanForm
 from django.http import HttpResponse
-
+from payments.models import MembershipPayment
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 @login_required
@@ -140,66 +141,217 @@ DURATION_MAPPING = {
     'Yearly': 365,
 }
 
+# @login_required
+# def subscription_payment_success(request, plan_duration):
+#     """
+#     Handles successful subscription payments and activates the membership.
+#     """
+#     # Get the MembershipPlan by name (e.g., "Gold", "Silver", "Platinum")
+#     membership_plan = get_object_or_404(MembershipPlan, name=plan_duration)
+
+#     # Map duration (e.g., "Monthly") to integer day count
+#     duration_in_days = DURATION_MAPPING.get(membership_plan.duration)
+#     if not duration_in_days:
+#         messages.error(request, f"Invalid duration '{membership_plan.duration}' specified for the plan.")
+#         return redirect('membership_dashboard')
+
+#     # Calculate start and end dates
+#     start_date = now().date()
+#     end_date = start_date + timedelta(days=duration_in_days)
+
+#     # Create the membership
+#     Membership.objects.create(
+#         user=request.user,
+#         plan=membership_plan,
+#         start_date=start_date,
+#         end_date=end_date,
+#         price=membership_plan.price,
+#         status='Active',
+#     )
+
+#     # Send confirmation email
+#     subscription_send_payment_email(
+#         user=request.user,
+#         plan=membership_plan.name,
+#         start_date=start_date,
+#         end_date=end_date,
+#         price=membership_plan.price
+#     )
+
+#     # Create a notification
+#     Notification.objects.create(
+#         notification_type="Payment Received",
+#         recipient_email=request.user.emailid,
+#         subject="Subscription Payment Confirmation",
+#         message=f"We have received your payment for the {membership_plan.name} subscription. "
+#                 f"Your subscription is active from {start_date} to {end_date}.",
+#         status="sent",
+#         created_at=now(),
+#         updated_at=now(),
+#         user_id=request.user.userid
+#     )
+
+#     # Display success message
+#     messages.success(request, f"Your {membership_plan.name} subscription has been successfully activated!")
+#     return render(request, 'mem_payment_success.html', {
+#         'plan': membership_plan.name,
+#         'start_date': start_date,
+#         'end_date': end_date,
+#         'price': membership_plan.price,
+#     })
+
+
+
+
 @login_required
+
 def subscription_payment_success(request, plan_duration):
+
     """
+
     Handles successful subscription payments and activates the membership.
+
     """
-    # Get the MembershipPlan by name (e.g., "Gold", "Silver", "Platinum")
-    membership_plan = get_object_or_404(MembershipPlan, name=plan_duration)
 
-    # Map duration (e.g., "Monthly") to integer day count
-    duration_in_days = DURATION_MAPPING.get(membership_plan.duration)
-    if not duration_in_days:
-        messages.error(request, f"Invalid duration '{membership_plan.duration}' specified for the plan.")
+    try:
+
+        # Get the MembershipPlan by name (e.g., "Gold", "Silver", "Platinum")
+
+        membership_plan = get_object_or_404(MembershipPlan, name=plan_duration)
+ 
+        # Map duration (e.g., "Weekly") to integer day count
+
+        duration_in_days = DURATION_MAPPING.get(membership_plan.duration)
+
+        if not duration_in_days:
+
+            messages.error(request, f"Invalid duration '{membership_plan.duration}' specified for the plan.")
+
+            return redirect('membership_dashboard')
+ 
+        # Calculate start and end dates
+
+        start_date = now().date()
+
+        end_date = start_date + timedelta(days=duration_in_days)
+ 
+        # Create the membership
+
+        membership = Membership.objects.create(
+
+            user=request.user,
+
+            plan=membership_plan,
+
+            start_date=start_date,
+
+            end_date=end_date,
+
+            price=membership_plan.price,
+
+            status='Active',
+
+        )
+ 
+        # **New Logic: Store Membership Payment**
+
+        try:
+
+            payment = MembershipPayment.objects.create(
+
+                user=request.user,
+
+                plan=membership_plan,
+
+                membership=membership,
+
+                amount=membership_plan.price,
+
+                payment_status='Success',
+
+                stripe_payment_id=f"stripe_{membership.id}_{int(now().timestamp())}"  # Example Stripe ID
+
+            )
+
+            # Log the successful payment storage
+
+            logger.info(f"Payment stored successfully: {payment}")
+
+        except Exception as payment_error:
+
+            logger.error(f"Failed to store payment: {payment_error}")
+ 
+        # Send confirmation email
+
+        subscription_send_payment_email(
+
+            user=request.user,
+
+            plan=membership_plan.name,
+
+            start_date=start_date,
+
+            end_date=end_date,
+
+            price=membership_plan.price
+
+        )
+ 
+        # Create a notification
+
+        Notification.objects.create(
+
+            notification_type="Payment Received",
+
+            recipient_email=request.user.emailid,
+
+            subject="Subscription Payment Confirmation",
+
+            message=f"We have received your payment for the {membership_plan.name} subscription. "
+
+                    f"Your subscription is active from {start_date} to {end_date}.",
+
+            status="Sent",
+
+            created_at=now(),
+
+            updated_at=now(),
+
+            user_id=request.user.userid
+
+        )
+ 
+        # Display success message
+
+        messages.success(request, f"Your {membership_plan.name} subscription has been successfully activated!")
+
+        return render(request, 'mem_payment_success.html', {
+
+            'plan': membership_plan.name,
+
+            'start_date': start_date,
+
+            'end_date': end_date,
+
+            'price': membership_plan.price,
+
+        })
+ 
+    except Exception as e:
+
+        # Log any exceptions that occur during the process
+
+        logger.error(f"An error occurred during subscription payment processing: {str(e)}")
+ 
+        # Display an error message to the user
+
+        messages.error(request, "An error occurred while processing your subscription. Please try again.")
+
         return redirect('membership_dashboard')
-
-    # Calculate start and end dates
-    start_date = now().date()
-    end_date = start_date + timedelta(days=duration_in_days)
-
-    # Create the membership
-    Membership.objects.create(
-        user=request.user,
-        plan=membership_plan,
-        start_date=start_date,
-        end_date=end_date,
-        price=membership_plan.price,
-        status='Active',
-    )
-
-    # Send confirmation email
-    subscription_send_payment_email(
-        user=request.user,
-        plan=membership_plan.name,
-        start_date=start_date,
-        end_date=end_date,
-        price=membership_plan.price
-    )
-
-    # Create a notification
-    Notification.objects.create(
-        notification_type="Payment Received",
-        recipient_email=request.user.emailid,
-        subject="Subscription Payment Confirmation",
-        message=f"We have received your payment for the {membership_plan.name} subscription. "
-                f"Your subscription is active from {start_date} to {end_date}.",
-        status="sent",
-        created_at=now(),
-        updated_at=now(),
-        user_id=request.user.userid
-    )
-
-    # Display success message
-    messages.success(request, f"Your {membership_plan.name} subscription has been successfully activated!")
-    return render(request, 'mem_payment_success.html', {
-        'plan': membership_plan.name,
-        'start_date': start_date,
-        'end_date': end_date,
-        'price': membership_plan.price,
-    })
+ 
 
 
+ 
 
 def subscription_payment_cancel(request):
     """Handles failed payments"""
@@ -223,7 +375,7 @@ def subscription_send_payment_email(user, plan, start_date, end_date, price):
     send_mail(subject, message, from_email, recipient_list)
 
 
-@login_required
+# @login_required
 def view_user_memberships(request):
     # Ensure only logged-in users with role 'admin' can access
     if request.session.get('role') != 'admin' or not request.session.get('is_authenticated'):
