@@ -4,6 +4,7 @@
 
 {% block content %}
 <div class="glass-container">
+    <div class="glass-card p-4 mt-4">
     <h2>Complete Your Payment</h2>
     <p><strong>Booking ID:</strong> {{ booking.booking_id }}</p>
     <p><strong>Sport:</strong> {{ booking.sport.name }}</p>
@@ -16,7 +17,7 @@
     {% endif %}
     <p><strong>Referral Discount:</strong> -${{ discount }}</p>
     <button class="glass-btn" id="select-payment-button">Choose Payment Method</button>
-</div>
+    
 
 
 <!-- Payment Method Selection Modal -->
@@ -146,4 +147,6 @@
         cursor: pointer;
     }
 </style>
+    </div>
+</div>
 {% endblock %}

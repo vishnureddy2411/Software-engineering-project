@@ -27,7 +27,7 @@
                     </div>
                     <!-- Changed link to button -->
                     <form action="{% url 'choose_date' location.location_id sport.sport_id %}" method="get" style="display: inline;">
-                        <button type="submit" class="book-button" style="margin-right: 10px;">Book Now</button>
+                        <button type="submit" class="btn btn-primary" style="margin-right: 10px;">Book Now</button>
                     </form>
                 </div>
             </div>
@@ -55,7 +55,7 @@
         <div class="reviews">
             <!-- Changed link to button -->
             <form action="{% url 'give_rating' sport.sport_id location.location_id %}" method="get" style="display: inline;">
-                <button type="submit" class="reviews-button">Go to Reviews</button>
+                <button type="submit" class="btn btn-primary">Go to Reviews</button>
             </form>
         </div>
     </div>
