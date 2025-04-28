@@ -20,6 +20,19 @@ body {
     min-height: 100vh;
 }
 
+/* CONTAINER STYLING */
+    .image-container {
+        text-align: left; /* Move the image to the left */
+    }
+    .image-container img {
+        width: 100%;
+        max-width: 400px;
+        height: 250px;
+        object-fit: cover;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
 /* GLASS EFFECT FOR CARDS */
 .glass-card {
     background: rgba(255, 255, 255, 0.5); /* Semi-transparent white */

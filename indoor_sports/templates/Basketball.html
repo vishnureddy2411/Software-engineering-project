@@ -1,24 +1,14 @@
 {% extends 'base.html' %}
-
-{% load static %}  <!-- Add this line to load the static tag -->
-
+ 
+{% load static %}
+ 
 {% block title %}Sports Venue Booking - Basketball{% endblock %}
-
+ 
 {% block content %}
-<style>
-    .image-container {
-        text-align: left; /* Move the image to the left */
-    }
-    .image-container img {
-        width: 100%;
-        max-width: 400px;
-        height: 250px;
-        object-fit: cover;
-        padding: 10px;
-        border-radius: 10px;
-    }
-</style>
-    <div class="container">
+    <!-- Include Glass CSS -->
+    <link rel="stylesheet" href="{% static 'css/glass.css' %}">
+   
+    <div class="container glass-card"> <!-- Added glass-card class for styling -->
         <div class="header">Basketball Booking</div>
         <div class="content">
             <!-- Left section for image and title -->
@@ -26,24 +16,27 @@
                 <img src="{% static 'images/basket-ball.jpg' %}" alt="Basketball">
                 <h2>Basketball</h2>
             </div>
-
+ 
             <!-- Right section for booking info (aligned to the right) -->
             <div class="info-container">
                 <div class="booking-container">
                     <div class="price-box">
                         ${{ price }}
                         {% if price == sport.peak_price %}
-                            <span style="color: red; font-weight: normal;"></span>
+                            <span style="color: red; font-weight: normal;">Peak Price</span>
                         {% else %}
-                            <span style="color: green; font-weight: normal;"></span>
+                            <span style="color: green; font-weight: normal;">Normal Price</span>
                         {% endif %}
                     </div>
-                    <a href="{% url 'choose_date' location.location_id sport.sport_id %}" class="book-button">Book Now</a>
+                    <!-- Changed link to button -->
+                    <form action="{% url 'choose_date' location.location_id sport.sport_id %}" method="get" style="display: inline;">
+                        <button type="submit" class="book-button" style="margin-right: 10px;">Book Now</button>
+                    </form>
                 </div>
             </div>
         </div>
         <div class="separator"></div>
-
+ 
         <!-- Location Details Section -->
         <div class="location-section">
             <div class="location-title">Location Details</div>
@@ -52,18 +45,22 @@
             </div>
         </div>
         <div class="separator"></div>
-
+ 
         <!-- Description Section -->
-        <div class="section-title">Description of the Basketball</div>
+        <div class="section-title">Description of Basketball</div>
         <div class="description">
             <p>The indoor basketball court features a 28m x 15m professional-grade surface with clear markings, adjustable 10ft hoops, and high-quality lighting. It offers climate control, seating for spectators, and a smooth, shock-absorbing floor for safe and high-intensity gameplay. Ideal for year-round practice, tournaments, and casual play, ensuring a top-tier basketball experience.</p>
         </div>
         <div class="separator"></div>
-
+ 
         <!-- Reviews Section -->
         <div class="section-title">Reviews & Ratings</div>
         <div class="reviews">
-            <a href="{% url 'give_rating' sport.sport_id location.location_id %}" class="reviews-button">Go to Reviews</a>
+            <!-- Changed link to button -->
+            <form action="{% url 'give_rating' sport.sport_id location.location_id %}" method="get" style="display: inline;">
+                <button type="submit" class="reviews-button">Go to Reviews</button>
+            </form>
         </div>
     </div>
 {% endblock %}
+ 

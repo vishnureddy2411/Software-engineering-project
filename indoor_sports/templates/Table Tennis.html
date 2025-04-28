@@ -5,20 +5,10 @@
 {% block title %}TableTennis Booking{% endblock %}
 
 {% block content %}
-<style>
-    .image-container {
-        text-align: left; /* Move the image to the left */
-    }
-    .image-container img {
-        width: 100%;
-        max-width: 400px;
-        height: 250px;
-        object-fit: cover;
-        padding: 10px;
-        border-radius: 10px;
-    }
-</style>
-    <div class="container">
+<!-- Include Glass CSS -->
+<link rel="stylesheet" href="{% static 'css/glass.css' %}">
+
+    <div class="container glass-card">
         <div class="header">TableTennis Booking</div>               
         <div class="content">
             <div class="image-container">
@@ -35,7 +25,10 @@
                             <span style="color: green; font-weight: normal;">Standard Price</span>
                         {% endif %}
                     </div>                   
-                    <a href="{% url 'choose_date' location.location_id sport.sport_id %}" class="book-button">Book Now</a>
+                    <!-- Changed link to button -->
+                    <form action="{% url 'choose_date' location.location_id sport.sport_id %}" method="get" style="display: inline;">
+                        <button type="submit" class="book-button" style="margin-right: 10px;">Book Now</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -60,8 +53,10 @@
         <!-- Reviews Section -->
         <div class="section-title">Reviews & Ratings</div>
         <div class="reviews">
-            
-            <a href="{% url 'give_rating' sport.sport_id location.location_id %}" class="reviews-button">Go to Reviews</a>
+            <!-- Changed link to button -->
+            <form action="{% url 'give_rating' sport.sport_id location.location_id %}" method="get" style="display: inline;">
+                <button type="submit" class="reviews-button">Go to Reviews</button>
+            </form>
         </div>
     </div>
 {% endblock %}
