@@ -15,39 +15,43 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // ------------------- ZIP Code Location Fetching -------------------
     if (zipcodeInput) {
-        zipcodeInput.addEventListener("input", async function () {
-            const zipcode = this.value.trim(); // Trim and sanitize the input
-            console.log("Entered ZIP Code:", zipcode); // Log the entered ZIP code for debugging
+        console.log("ZIP Code input field detected."); // Debugging confirmation
 
-            // Check if ZIP Code is valid (minimum 5 characters and proper format)
+        // Attach an event listener to the ZIP Code input
+        zipcodeInput.addEventListener("input", async function () {
+            const zipcode = this.value.trim();
+            console.log("Entered ZIP Code:", zipcode); // Debugging
+
             if (zipcode.length >= 5 && /^[a-zA-Z0-9\s]*$/.test(zipcode)) {
                 try {
-                    // Call the backend proxy to fetch location details
+                    // Adjust fetch URL to match the backend endpoint
                     const response = await fetch(`/register/user/get-location/?zipcode=${zipcode}`);
+                    console.log("Fetch Request URL:", `/register/user/get-location/?zipcode=${zipcode}`); // Debugging
 
                     if (!response.ok) {
                         throw new Error(`API call failed with status ${response.status}`);
                     }
 
                     const data = await response.json();
-                    console.log("Location Data:", data); // Log the fetched location data for debugging
+                    console.log("API Response Data:", data); // Debugging
 
-                    // Populate the inputs with the fetched data
+                    // Populate the city, state, and country fields
                     if (data.region) stateInput.value = data.region || '';
                     if (data.locality) cityInput.value = data.locality || '';
                     if (data.country) countryInput.value = data.country || 'United States';
                 } catch (error) {
-                    console.error("Error fetching location data:", error);
-                    alert("There was an error fetching the data. Please enter city, state, and country manually.");
+                    console.error("Error fetching location data:", error); // Debugging
+                    alert("There was an error fetching the location details. Please enter city, state, and country manually.");
                 }
             } else {
-                // Reset location fields if ZIP Code is invalid
+                console.log("Invalid ZIP Code format."); // Debugging
                 stateInput.value = '';
                 cityInput.value = '';
                 countryInput.value = 'United States';
-                console.log("Invalid ZIP Code format. Please enter a valid ZIP Code.");
             }
         });
+    } else {
+        console.error("ZIP Code input field not found."); // Debugging
     }
 
     // ------------------- Email Validation Logic -------------------

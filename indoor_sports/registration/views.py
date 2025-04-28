@@ -21,13 +21,13 @@ import requests
 from django.http import JsonResponse
 
 def get_location_from_zipcode(request):
-    """Proxy API request to fetch location data using PositionStack."""
+    """Fetch location data using PositionStack API."""
     zipcode = request.GET.get('zipcode')
     if not zipcode:
         return JsonResponse({'error': 'No ZIP code provided.'}, status=400)
 
     # PositionStack API details
-    api_key = 'a2535033f9f71d56bf960a1f43fab42f'  # Replace with your API key
+    api_key = '5171b95fc73f57b6720ab769fbe67f06'  # Replace with your actual API key
     url = f"https://api.positionstack.com/v1/forward?access_key={api_key}&query={zipcode}, United States"
 
     try:
@@ -40,7 +40,7 @@ def get_location_from_zipcode(request):
         else:
             return JsonResponse({'error': 'No data found for this ZIP code.'}, status=404)
     except requests.exceptions.RequestException as e:
-        print(f"Error in API request: {e}")
+        print(f"Error in API request: {e}")  # Debugging
         return JsonResponse({'error': 'Unable to fetch location data.'}, status=500)
 
         
