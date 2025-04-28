@@ -5,6 +5,7 @@
 
 {% block content %}
 <div class="container mt-4">
+    <div class"glass-card p-4 mt-4>
     <h2 class="mb-4 text-center">Select a Date for {{ sport.sport_name }} at {{ location.name }}</h2>
 
     <!-- Month Navigation -->
@@ -20,6 +21,7 @@
 
     <!-- Hidden input for selected date -->
     <input type="hidden" id="selected_date" name="selected_date">
+    </div>
 </div>
 {% endblock %}
 

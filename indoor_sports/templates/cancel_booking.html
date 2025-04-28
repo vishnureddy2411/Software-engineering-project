@@ -4,6 +4,7 @@
 
 {% block content %}
 <div class="container mt-4">
+    <div class="glass-card p-4 mt-4">
     <h2>Cancel Booking Confirmation</h2>
     <p>Are you sure you want to cancel this booking?</p>
     <ul class="list-group mb-3">
@@ -17,6 +18,7 @@
         <button type="submit" class="btn btn-danger">Yes, Cancel Booking</button>
         <a href="{% url 'booking_detail' booking.booking_id %}" class="btn btn-secondary">No, Go Back</a>
     </form>
+    </div>
 </div>
 {% endblock %}
 

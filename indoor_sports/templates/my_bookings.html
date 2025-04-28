@@ -4,6 +4,7 @@
 
 {% block content %}
 <div class="container mt-4">
+  <div class="glass-card p-4 mt-4">
     <h2>My Bookings</h2>
     {% if bookings %}
     <table class="table table-striped">
@@ -38,5 +39,6 @@
     {% else %}
     <p>You have no bookings.</p>
     {% endif %}
+  </div>
 </div>
 {% endblock %}
