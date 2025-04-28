@@ -120,33 +120,40 @@ document.addEventListener("DOMContentLoaded", function () {
     if (zipcodeInput) {
         zipcodeInput.addEventListener("input", async function () {
             const zipcode = this.value.trim();
-            // Proceed if zipcode length is at least 3 and matches allowed format
+        
             if (zipcode.length >= 5 && /^[a-zA-Z0-9\s]*$/.test(zipcode)) {
                 try {
-                    // For production, consider routing this request through your Django backend to mask the API key.
                     const response = await fetch(`http://api.positionstack.com/v1/forward?access_key=a2535033f9f71d56bf960a1f43fab42f&query=${zipcode}, United States`);
+        
+                    if (!response.ok) {
+                        throw new Error(`API call failed with status ${response.status}`);
+                    }
+        
                     const data = await response.json();
+                    console.log("API Response:", data); // Debug: Log the API response
+        
                     if (data.data && data.data.length > 0) {
-                        const place = data.data[0]; // use the first result
+                        const place = data.data[0]; // Use the first result
                         if (stateInput) stateInput.value = place.region || '';
                         if (cityInput) cityInput.value = place.locality || '';
                         if (countryInput) countryInput.value = place.country || 'United States';
                     } else {
+                        // Handle case where no data is found
                         if (cityInput) { cityInput.value = ''; cityInput.disabled = false; }
                         if (stateInput) { stateInput.value = ''; stateInput.disabled = false; }
                         if (countryInput) { countryInput.value = 'United States'; countryInput.disabled = false; }
-                        alert("No data found for this zip code. Please enter city, state, and country manually.");
+                        alert("No data found for this ZIP code. Please enter city, state, and country manually.");
                     }
                 } catch (error) {
                     console.error("Error fetching location details:", error);
-                    alert("There was an error fetching the data. Please enter city, state, and country manually.");
+                    // alert("There was an error fetching the data. Please enter city, state, and country manually.");
                 }
             } else {
-                // Reset location fields if zip code input is cleared or invalid
+                // Reset location fields if ZIP code input is cleared or invalid
                 if (cityInput) { cityInput.value = ''; cityInput.disabled = false; }
                 if (stateInput) { stateInput.value = ''; stateInput.disabled = false; }
                 if (countryInput) { countryInput.value = 'United States'; countryInput.disabled = false; }
-                console.log("Invalid zip code format. Please enter a valid zip code.");
+                console.log("Invalid ZIP code format. Please enter a valid ZIP code.");
             }
         });
     }
