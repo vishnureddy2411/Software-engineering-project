@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (zipcode.length >= 5 && /^[a-zA-Z0-9\s]*$/.test(zipcode)) {
                 try {
                     // Call the backend proxy to fetch location details
-                    const response = await fetch(`/register/get-location/?zipcode=${zipcode}`);
+                    const response = await fetch(`/register/user/get-location/?zipcode=${zipcode}`);
 
                     if (!response.ok) {
                         throw new Error(`API call failed with status ${response.status}`);

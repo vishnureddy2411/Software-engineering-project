@@ -17,7 +17,6 @@ import os
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 
-
 import requests
 from django.http import JsonResponse
 
@@ -43,7 +42,8 @@ def get_location_from_zipcode(request):
     except requests.exceptions.RequestException as e:
         print(f"Error in API request: {e}")
         return JsonResponse({'error': 'Unable to fetch location data.'}, status=500)
-    
+
+        
 # from referrals.utils import process_referral  # Optional: hook for referral processing
 
 
