@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 } catch (error) {
                     console.error("Error fetching location details:", error);
-                    // alert("There was an error fetching the data. Please enter city, state, and country manually.");
+                    
                 }
             } else {
                 // Reset location fields if ZIP code input is cleared or invalid
