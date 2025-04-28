@@ -9,6 +9,8 @@ urlpatterns = [
     path('register_admin/', views.register_new_admin, name="register_new_admin"),
     path('check_email_exists/', views.check_email_exists, name='check_email_exists'),
     path('check_username/', views.check_username, name="check_username"),
+    path('get-location/', views.get_location_from_zipcode, name='get_location'),
 ]
+
 
 

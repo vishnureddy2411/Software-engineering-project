@@ -18,7 +18,32 @@ from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 
 
+import requests
+from django.http import JsonResponse
 
+def get_location_from_zipcode(request):
+    """Proxy API request to fetch location data using PositionStack."""
+    zipcode = request.GET.get('zipcode')
+    if not zipcode:
+        return JsonResponse({'error': 'No ZIP code provided.'}, status=400)
+
+    # PositionStack API details
+    api_key = 'a2535033f9f71d56bf960a1f43fab42f'  # Replace with your API key
+    url = f"https://api.positionstack.com/v1/forward?access_key={api_key}&query={zipcode}, United States"
+
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+
+        if data.get('data') and len(data['data']) > 0:
+            return JsonResponse(data['data'][0])  # Return the first match
+        else:
+            return JsonResponse({'error': 'No data found for this ZIP code.'}, status=404)
+    except requests.exceptions.RequestException as e:
+        print(f"Error in API request: {e}")
+        return JsonResponse({'error': 'Unable to fetch location data.'}, status=500)
+    
 # from referrals.utils import process_referral  # Optional: hook for referral processing
 
 

@@ -1,20 +1,56 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Retrieve the CSRF token from the page
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    // Retrieve CSRF token (optional use for AJAX calls requiring CSRF protection)
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
 
-    // Get references to relevant DOM elements
-    const emailInput = document.getElementById("emailid");
-    const emailError = document.getElementById("email-error"); // Make sure this element exists in your template, if needed
-    const usernameInput = document.getElementById("username");
-    const usernameError = document.getElementById("username-error"); // Make sure this element exists in your template, if needed
-
-    const registrationForm = document.getElementById("registration-form");
+    // Get references to input fields
     const zipcodeInput = document.getElementById("zip_code");
     const cityInput = document.getElementById("city");
     const stateInput = document.getElementById("state");
     const countryInput = document.getElementById("country");
+    const emailInput = document.getElementById("emailid");
+    const emailError = document.getElementById("email-error");
+    const usernameInput = document.getElementById("username");
+    const usernameError = document.getElementById("username-error");
+    const registrationForm = document.getElementById("registration-form");
 
-    // AJAX Email Validation if emailInput is not readonly
+    // ------------------- ZIP Code Location Fetching -------------------
+    if (zipcodeInput) {
+        zipcodeInput.addEventListener("input", async function () {
+            const zipcode = this.value.trim(); // Trim and sanitize the input
+            console.log("Entered ZIP Code:", zipcode); // Log the entered ZIP code for debugging
+
+            // Check if ZIP Code is valid (minimum 5 characters and proper format)
+            if (zipcode.length >= 5 && /^[a-zA-Z0-9\s]*$/.test(zipcode)) {
+                try {
+                    // Call the backend proxy to fetch location details
+                    const response = await fetch(`/get-location/?zipcode=${zipcode}`);
+
+                    if (!response.ok) {
+                        throw new Error(`API call failed with status ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    console.log("Location Data:", data); // Log the fetched location data for debugging
+
+                    // Populate the inputs with the fetched data
+                    if (data.region) stateInput.value = data.region || '';
+                    if (data.locality) cityInput.value = data.locality || '';
+                    if (data.country) countryInput.value = data.country || 'United States';
+                } catch (error) {
+                    console.error("Error fetching location data:", error);
+                    alert("There was an error fetching the data. Please enter city, state, and country manually.");
+                }
+            } else {
+                // Reset location fields if ZIP Code is invalid
+                stateInput.value = '';
+                cityInput.value = '';
+                countryInput.value = 'United States';
+                console.log("Invalid ZIP Code format. Please enter a valid ZIP Code.");
+            }
+        });
+    }
+
+    // ------------------- Email Validation Logic -------------------
     if (emailInput && !emailInput.readOnly) {
         emailInput.addEventListener("input", async function () {
             const email = this.value.trim();
@@ -23,15 +59,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     const response = await fetch(checkEmailUrl, {
                         method: "POST",
                         headers: {
-                            "Content-Type": "application/x-www-form-urlencoded"
+                            "Content-Type": "application/x-www-form-urlencoded",
                         },
                         body: new URLSearchParams({
-                            "emailid": email,
-                            "csrfmiddlewaretoken": csrfToken
+                            emailid: email,
+                            csrfmiddlewaretoken: csrfToken
                         })
                     });
+
                     const data = await response.json();
-                    // Provide visual feedback based on response
                     if (data.exists) {
                         if (emailError) emailError.style.display = "block";
                         emailInput.style.borderColor = "red";
@@ -49,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // AJAX Username Validation if usernameInput is not readonly
+    // ------------------- Username Validation Logic -------------------
     if (usernameInput && !usernameInput.readOnly) {
         usernameInput.addEventListener("input", async function () {
             const username = this.value.trim();
@@ -62,9 +98,10 @@ document.addEventListener("DOMContentLoaded", function () {
                             "X-CSRFToken": csrfToken
                         },
                         body: new URLSearchParams({
-                            "username": username
+                            username: username
                         })
                     });
+
                     const data = await response.json();
                     if (data.exists) {
                         if (usernameError) usernameError.style.display = "block";
@@ -83,78 +120,39 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Basic form validation function for user registration
-    function validateUserForm() {
-        const email = emailInput ? emailInput.value.trim() : "";
-        const phone = document.getElementById("contactnumber") ? document.getElementById("contactnumber").value.trim() : "";
-        const password = document.getElementById("password") ? document.getElementById("password").value.trim() : "";
+    // ------------------- Form Validation -------------------
+    if (registrationForm) {
+        registrationForm.addEventListener("submit", function (e) {
+            // Perform validation before form submission
+            if (!validateForm()) {
+                e.preventDefault();
+                alert("Please fix the errors in the form before submitting.");
+            }
+        });
+    }
 
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phonePattern = /^[0-9]{10}$/;
+    function validateForm() {
+        const zipcode = zipcodeInput?.value.trim();
+        const city = cityInput?.value.trim();
+        const state = stateInput?.value.trim();
+        const country = countryInput?.value.trim();
 
-        if (!emailPattern.test(email)) {
-            alert("Enter a valid email address.");
+        if (!zipcode || zipcode.length < 5) {
+            alert("Please enter a valid ZIP Code.");
             return false;
         }
-        if (phone && !phonePattern.test(phone)) {
-            alert("Enter a valid 10-digit phone number.");
+        if (!city) {
+            alert("City cannot be empty.");
             return false;
         }
-        if (password.length < 6) {
-            alert("Password must be at least 6 characters long.");
+        if (!state) {
+            alert("State cannot be empty.");
+            return false;
+        }
+        if (!country) {
+            alert("Country cannot be empty.");
             return false;
         }
         return true;
-    }
-
-    // Form submission handler with final validation check
-    if (registrationForm) {
-        registrationForm.addEventListener("submit", function (e) {
-            if (!validateUserForm()) {
-                e.preventDefault();
-            }
-        });
-    }
-
-    // Zip Code to Location Mapping using Positionstack API
-    if (zipcodeInput) {
-        zipcodeInput.addEventListener("input", async function () {
-            const zipcode = this.value.trim();
-        
-            if (zipcode.length >= 5 && /^[a-zA-Z0-9\s]*$/.test(zipcode)) {
-                try {
-                    const response = await fetch(`http://api.positionstack.com/v1/forward?access_key=a2535033f9f71d56bf960a1f43fab42f&query=${zipcode}, United States`);
-        
-                    if (!response.ok) {
-                        throw new Error(`API call failed with status ${response.status}`);
-                    }
-        
-                    const data = await response.json();
-                    console.log("API Response:", data); // Debug: Log the API response
-        
-                    if (data.data && data.data.length > 0) {
-                        const place = data.data[0]; // Use the first result
-                        if (stateInput) stateInput.value = place.region || '';
-                        if (cityInput) cityInput.value = place.locality || '';
-                        if (countryInput) countryInput.value = place.country || 'United States';
-                    } else {
-                        // Handle case where no data is found
-                        if (cityInput) { cityInput.value = ''; cityInput.disabled = false; }
-                        if (stateInput) { stateInput.value = ''; stateInput.disabled = false; }
-                        if (countryInput) { countryInput.value = 'United States'; countryInput.disabled = false; }
-                        alert("No data found for this ZIP code. Please enter city, state, and country manually.");
-                    }
-                } catch (error) {
-                    console.error("Error fetching location details:", error);
-                    
-                }
-            } else {
-                // Reset location fields if ZIP code input is cleared or invalid
-                if (cityInput) { cityInput.value = ''; cityInput.disabled = false; }
-                if (stateInput) { stateInput.value = ''; stateInput.disabled = false; }
-                if (countryInput) { countryInput.value = 'United States'; countryInput.disabled = false; }
-                console.log("Invalid ZIP code format. Please enter a valid ZIP code.");
-            }
-        });
     }
 });
