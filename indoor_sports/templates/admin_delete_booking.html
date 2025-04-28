@@ -1,6 +1,7 @@
 {% extends 'base_admin.html' %}
 {% block content %}
 <div class="glass-card p-4 mt-4">
+    <div class="glass-card p-4 mt-4">
     <h1>Delete Booking</h1>
     <p>Are you sure you want to delete booking {{ booking_id }}?</p>
     <form method="post">
@@ -8,5 +9,6 @@
         <button type="submit">Confirm Delete</button>
         <a href="{% url 'admin_list_bookings' %}">Cancel</a>
     </form>
+    </div>
 </div>
 {% endblock %}
