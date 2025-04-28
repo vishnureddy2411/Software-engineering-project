@@ -18,6 +18,7 @@ from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 
 import requests
+import os
 from django.http import JsonResponse
 
 def get_location_from_zipcode(request):
@@ -26,8 +27,11 @@ def get_location_from_zipcode(request):
     if not zipcode:
         return JsonResponse({'error': 'No ZIP code provided.'}, status=400)
 
-    # PositionStack API details
-    api_key = '5171b95fc73f57b6720ab769fbe67f06'  # Replace with your actual API key
+    # Fetch the API key from environment variables
+    api_key = os.environ.get('POSITIONSTACK_API_KEY')
+    if not api_key:
+        return JsonResponse({'error': 'API key not configured.'}, status=500)
+
     url = f"https://api.positionstack.com/v1/forward?access_key={api_key}&query={zipcode}, United States"
 
     try:
@@ -40,7 +44,7 @@ def get_location_from_zipcode(request):
         else:
             return JsonResponse({'error': 'No data found for this ZIP code.'}, status=404)
     except requests.exceptions.RequestException as e:
-        print(f"Error in API request: {e}")  # Debugging
+        print(f"Error in API request: {e}")
         return JsonResponse({'error': 'Unable to fetch location data.'}, status=500)
 
         
