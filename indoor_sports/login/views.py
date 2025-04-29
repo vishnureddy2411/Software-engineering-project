@@ -61,26 +61,20 @@ def login_view(request):
             # Redirect to dashboard if no incomplete reviews
             return redirect("user_dashboard")
 
-def admin_login(request):
-    if request.method == "POST":
-        identifier = request.POST.get('emailid')
-        password = request.POST.get('password')
 
+        # Admin authentication
         admin = Admin.objects.filter(emailid=identifier).first()
         if admin and (check_password(password, admin.password) or password == admin.password):
             print(f"Admin found: {admin.emailid} | Verified: {admin.is_verified} | Active: {admin.is_active}")
-
             if not admin.is_verified or not admin.is_active:
                 messages.error(request, "Admin access denied. Account not verified or inactive.")
                 return redirect("loginpage")
-
-            # ✅ Manually set session, DO NOT use login(request, admin)
-            request.session['admin_id'] = admin.adminid
-            request.session['admin_email'] = admin.emailid
+            
+            login(request, admin)
+            set_admin_session(request, admin)
 
             admin.lastlogin = now()
             admin.save(update_fields=["lastlogin"])
-
             print(f"Admin {admin.emailid} logged in successfully. Redirecting to admin dashboard.")
             logger.info(f"Admin {admin.emailid} logged in successfully.")
             print("Session after login:", request.session.items())
