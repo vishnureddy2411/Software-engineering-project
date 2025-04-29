@@ -21,32 +21,31 @@ import requests
 import os
 from django.http import JsonResponse
 
+import requests
+import os
+from django.http import JsonResponse
+
 def get_location_from_zipcode(request):
-    """Fetch location data using PositionStack API."""
     zipcode = request.GET.get('zipcode')
-    if not zipcode:
-        return JsonResponse({'error': 'No ZIP code provided.'}, status=400)
+    if not zipcode or len(zipcode) < 5:
+        return JsonResponse({'error': 'Invalid ZIP code provided.'}, status=400)
 
-    # Fetch the API key from environment variables
-    api_key = os.environ.get('POSITIONSTACK_API_KEY')
-    if not api_key:
-        return JsonResponse({'error': 'API key not configured.'}, status=500)
-
+    api_key = os.environ.get('POSITIONSTACK_API_KEY', '5171b95fc73f57b6720ab769fbe67f06')
     url = f"https://api.positionstack.com/v1/forward?access_key={api_key}&query={zipcode}, United States"
 
     try:
         response = requests.get(url)
-        response.raise_for_status()
+        response.raise_for_status()  # Raise exception if status is not 200
         data = response.json()
 
-        if data.get('data') and len(data['data']) > 0:
-            return JsonResponse(data['data'][0])  # Return the first match
+        if data.get('data'):
+            return JsonResponse(data['data'][0])  # Return first match
         else:
-            return JsonResponse({'error': 'No data found for this ZIP code.'}, status=404)
+            return JsonResponse({'error': 'No location data found for this ZIP code.'}, status=404)
+
     except requests.exceptions.RequestException as e:
         print(f"Error in API request: {e}")
-        return JsonResponse({'error': 'Unable to fetch location data.'}, status=500)
-
+        return JsonResponse({'error': 'Failed to fetch location data.'}, status=500)
         
 # from referrals.utils import process_referral  # Optional: hook for referral processing
 

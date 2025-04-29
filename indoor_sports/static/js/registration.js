@@ -21,8 +21,8 @@ document.addEventListener("DOMContentLoaded", function () {
         zipcodeInput.addEventListener("input", async function () {
             const zipcode = this.value.trim();
             console.log("Entered ZIP Code:", zipcode); // Debugging
+            if (zipcode.length >= 5 && /^[0-9]{5,10}$/.test(zipcode)) {
 
-            if (zipcode.length >= 5 && /^[a-zA-Z0-9\s]*$/.test(zipcode)) {
                 try {
                     // Adjust fetch URL to match the backend endpoint
                     const response = await fetch(`/register/user/get-location/?zipcode=${zipcode}`);
