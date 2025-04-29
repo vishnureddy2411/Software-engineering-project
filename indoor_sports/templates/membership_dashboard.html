@@ -62,9 +62,10 @@
                 <p>No active memberships found.</p>
             {% endif %}
 
+            <!-- Upcoming Plans Section -->
             <h2>Upcoming Plans</h2>
-            {% for membership in user_memberships %}
-                {% if membership.status == 'Pending' %}
+            {% if upcoming_memberships %}
+                {% for membership in upcoming_memberships %}
                     <div class="glass-card p-4 mt-4">
                         <div class="card-body">
                             <h4>Plan: {{ membership.plan }}</h4>
@@ -76,8 +77,10 @@
                             </form>
                         </div>
                     </div>
-                {% endif %}
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <p>No upcoming memberships found.</p>
+            {% endif %}
         </div>
 
     </div>
