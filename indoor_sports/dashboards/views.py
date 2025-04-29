@@ -59,44 +59,8 @@ def user_dashboard(request):
     })
 
 
-
 def admin_dashboard(request):
-    """
-    Displays the admin dashboard.
-    Ensures the admin is authenticated and has the correct role.
-    """
-    list(messages.get_messages(request))  # Clear messages
-
-    # Debug session before checking role
-    logger.debug(f"Session Data Before Validation -> {dict(request.session.items())}")
-
-    if not is_role_valid(request, "admin"):
-        messages.warning(request, "You do not have permission to access this page.")
-        return redirect("loginpage")
-
-    # Ensure the admin_id exists before accessing the database
-    admin_id = request.session.get("admin_id")
-    if not admin_id:
-        logger.warning("Admin session missing. Redirecting to login.")
-        messages.error(request, "Session expired. Please log in again.")
-        return redirect("loginpage")
-
-    try:
-        # Fetch the admin object from the database
-        admin = Admin.objects.get(adminid=admin_id)
-        logger.info(f"Accessing admin dashboard: Admin ID {admin.adminid}")
-
-    except Admin.DoesNotExist:
-        logger.error(f"Admin not found: Admin ID {admin_id}")
-        messages.error(request, "Admin not found. Please log in again.")
-        return redirect("loginpage")
-
-    # Debug session before rendering the dashboard
-    logger.debug(f"Session Data Before Rendering Dashboard -> {dict(request.session.items())}")
-
     return render(request, "admin_dashboard.html", {
-        "last_login": admin.lastlogin,
-        "admin": admin
     })
 
 def is_role_valid(request, expected_role):
