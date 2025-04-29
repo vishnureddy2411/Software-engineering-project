@@ -75,21 +75,32 @@ def register_membership_view(request, plan_id):
     start_date = now().date()
     end_date = start_date + timedelta(days=int(membership_plan.duration))
 
-    current_membership = Membership.objects.filter(user=request.user, status='Active').first()
-    if current_membership:
-        current_membership.status = 'Cancelled'
-        current_membership.save()
+    active_membership = Membership.objects.filter(user=request.user, status='Active').first()
 
-    Membership.objects.create(
-        user=request.user,
-        plan_id=membership_plan.id,
-        start_date=start_date,
-        end_date=end_date,
-        status='Active',
-        price=membership_plan.price,
-    )
+    if active_membership:
+        # If user has an active membership, queue the new plan
+        scheduled_start_date = active_membership.end_date
+        Membership.objects.create(
+            user=request.user,
+            plan_id=membership_plan.id,
+            start_date=scheduled_start_date,
+            end_date=scheduled_start_date + timedelta(days=int(membership_plan.duration)),
+            status='Pending',
+            price=membership_plan.price,
+        )
+        messages.info(request, "Your new membership plan is scheduled to start after your current plan ends.")
+    else:
+        # No active membership, activate immediately
+        Membership.objects.create(
+            user=request.user,
+            plan_id=membership_plan.id,
+            start_date=start_date,
+            end_date=end_date,
+            status='Active',
+            price=membership_plan.price,
+        )
+
     return redirect('membership_dashboard')
-
 @login_required
 def cancel_membership_view(request, membership_id):
     membership = get_object_or_404(Membership, id=membership_id, user=request.user)
@@ -315,7 +326,6 @@ def subscription_send_payment_email(user, plan, start_date, end_date, price):
     send_mail(subject, message, from_email, recipient_list)
 
 
-# @login_required
 def view_user_memberships(request):
     # Ensure only logged-in users with role 'admin' can access
     if request.session.get('role') != 'admin' or not request.session.get('is_authenticated'):
@@ -421,3 +431,11 @@ def delete_membership_plan(request, plan_id):
         return redirect('admin_dashboard')
 
     return render(request, 'membership_plan/delete_membership.html', {'plan': plan})
+
+
+def activate_pending_memberships():
+    pending_memberships = Membership.objects.filter(status='Pending', start_date__lte=now().date())
+    
+    for membership in pending_memberships:
+        membership.status = 'Active'
+        membership.save()
