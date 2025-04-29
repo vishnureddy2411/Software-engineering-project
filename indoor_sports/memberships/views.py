@@ -358,11 +358,9 @@ def view_user_memberships(request):
 
 
 def update_membership(request, id):
-    if request.session.get('role') != 'admin' or not request.session.get('is_authenticated'):
-        print("Access denied: Not an admin or not authenticated.")
-        messages.error(request, "Access denied. Admins only.")
-        return redirect('loginpage')
-
+    if not is_role_valid(request, "admin"):
+        messages.warning(request, "You do not have permission to access this page.")
+        return redirect("loginpage")
     try:
         admin_id = request.session.get('admin_id')
         admin = Admin.objects.get(adminid=admin_id)
