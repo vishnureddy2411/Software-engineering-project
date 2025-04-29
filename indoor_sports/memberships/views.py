@@ -328,10 +328,9 @@ def subscription_send_payment_email(user, plan, start_date, end_date, price):
 
 def view_user_memberships(request):
     # Ensure only logged-in users with role 'admin' can access
-    if request.session.get('role') != 'admin' or not request.session.get('is_authenticated'):
-        print("Access denied: Not an admin or not authenticated.")
-        messages.error(request, "Access denied. Admins only.")
-        return redirect('loginpage')
+    if not is_role_valid(request, "admin"):
+        messages.warning(request, "You do not have permission to access this page.")
+        return redirect("loginpage")
 
     try:
         # Get admin_id from session and fetch Admin object
