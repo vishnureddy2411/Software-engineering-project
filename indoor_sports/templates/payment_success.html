@@ -4,11 +4,14 @@
 
 {% block content %}
 <div class="glass-container">
-    <h2>Payment Successful!</h2>
-    <p>Your booking has been successfully completed.</p>
-    <p><strong>Booking ID:</strong> {{ booking.booking_id }}</p>
-    <p><strong>Sport:</strong> {{ booking.sport.name }}</p>
-    <p><strong>Location:</strong> {{ booking.location.name }}</p>
-    <p><strong>Slot Time:</strong> {{ booking.slot.time }}</p>
+    <div class="glass-card p-5">
+        <h2>Payment Successful!</h2>
+        <p>Your booking has been successfully completed.</p>
+        <p><strong>Booking ID:</strong> {{ booking.booking_id }}</p>
+        <p><strong>Sport:</strong> {{ booking.sport.name }}</p>
+        <p><strong>Location:</strong> {{ booking.location.name }}</p>
+        <p><strong>Slot Time:</strong> {{ booking.slot.time }}</p>
+    </div>
+    
 </div>
 {% endblock %}

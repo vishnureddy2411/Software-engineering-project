@@ -3,6 +3,7 @@
 
 {% block content %}
 <div class="container mt-4">
+    <div class="glass-card p-4 mt-4">
     <h2>Equipment at {{ location.name }}</h2>
     <ul>
         {% for equipment in equipment_list %}
@@ -10,5 +11,6 @@
         {% endfor %}
     </ul>
     <a href="{% url 'select_equipment' location.location_id %}" class="btn btn-primary">Select Equipment</a>
+    </div>
 </div>
 {% endblock %}

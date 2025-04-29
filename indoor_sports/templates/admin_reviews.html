@@ -4,6 +4,7 @@
 
 {% block content %}
 <div class="container mt-5">
+    <div class="glass-card p-4 mt-4">
     <h2 class="mb-4">All User Reviews</h2>
 
     <div class="list-group">
@@ -20,6 +21,7 @@
         {% empty %}
             <p>No reviews available.</p>
         {% endfor %}
+    </div>
     </div>
 </div>
 {% endblock %}

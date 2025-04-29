@@ -1,47 +1,21 @@
-<<<<<<< HEAD
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sports List</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    <header>
-        <h1>Sports List</h1>
-    </header>
-    <main>
-        <ul>
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Sports List{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="glass-card p-4 mt-4">
+        <h1 class="text-center mb-4">Sports List</h1>
+        <ul class="list-unstyled">
             {% for sport in sports %}
-                <li>Sport: {{ sport.name }} - Category: {{ sport.category }} - Description: {{ sport.description }}</li>
+                <li class="mb-2">
+                    <strong>Sport:</strong> {{ sport.name }} | 
+                    <strong>Category:</strong> {{ sport.category }} | 
+                    <strong>Description:</strong> {{ sport.description }}
+                </li>
             {% endfor %}
         </ul>
-    </main>
-</body>
-</html>
-=======
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sports List</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    <header>
-        <h1>Sports List</h1>
-    </header>
-    <main>
-        <ul>
-            {% for sport in sports %}
-                <li>Sport: {{ sport.name }} - Category: {{ sport.category }} - Description: {{ sport.description }}</li>
-            {% endfor %}
-        </ul>
-    </main>
-</body>
-</html>
->>>>>>> 587daca803448929c1cfa1e6e31a62917d21a21d
+    </div>
+    </div>
+</div>
+{% endblock %}

@@ -82,6 +82,77 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
+/* GLASS-EFFECT CALENDAR STYLING */
+.table-calendar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.2); /* Glass morphism effect */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 700px;
+    margin: auto;
+    overflow: hidden;
+}
+
+.table-calendar table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 5px;
+}
+
+.table-calendar th {
+    background: #4caf50;
+    color: white;
+    padding: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.table-calendar td {
+    padding: 12px;
+    text-align: center;
+    font-size: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.table-calendar .available {
+    background: #d4edda;
+    color: #155724;
+    border-radius: 8px;
+    transition: 0.3s ease-in-out;
+}
+
+.table-calendar .available:hover {
+    background: #c3e6cb;
+}
+
+.table-calendar .unavailable {
+    background: #f8d7da;
+    color: #721c24;
+    cursor: not-allowed;
+}
+
+.table-calendar .noday {
+    background: transparent;
+    border: none;
+}
+
+.selected-date {
+    background: #4caf50 !important;
+    color: white !important;
+    font-weight: bold;
+    border-radius: 10px;
+    transform: scale(1.1);
+}
+
 /* INPUT FIELDS */
 input[type="text"], input[type="email"], input[type="password"], textarea, select {
     background: rgba(255, 255, 255, 0.5); /* Semi-transparent input */

@@ -530,3 +530,5 @@ def get_slot_data(request):
     for slot in slots
     ]
     return JsonResponse(data, safe=False)
+
+

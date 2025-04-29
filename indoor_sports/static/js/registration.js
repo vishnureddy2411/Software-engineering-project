@@ -22,6 +22,12 @@ document.addEventListener("DOMContentLoaded", function () {
             const zipcode = this.value.trim();
             console.log("Entered ZIP Code:", zipcode); // Debugging
             if (zipcode.length >= 5 && /^[0-9]{5,10}$/.test(zipcode)) {
+                const baseUrl = window.location.origin; // Dynamically detects deployment URL
+                const fetchUrl = `${baseUrl}/register/user/get-location/?zipcode=${zipcode}`;
+
+                console.log("Fetch Request URL:", fetchUrl); // Debugging
+
+
 
                 try {
                     // Adjust fetch URL to match the backend endpoint

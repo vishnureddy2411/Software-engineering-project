@@ -1,23 +1,22 @@
-
 {% extends "base.html" %}
 {% block title %}Choose Sport at {{ location.name }}{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Select Sport at {{ location.name }}</h2>
-    <form method="POST">
-        {% csrf_token %}
-        <div class="mb-3">
-            <select name="sport" class="form-control">
-                <option value="">--Select Sport--</option>
-                {% for s in sports %}
-                    <!-- Use s.sport_id explicitly if necessary -->
-                    <option value="{{ s.sport_id }}">{{ s.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Next</button>
-    </form>
+    <div class="glass-card"> <!-- Glass card effect -->
+        <h2>Select Sport at {{ location.name }}</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <select name="sport" class="form-control">
+                    <option value="">--Select Sport--</option>
+                    {% for s in sports %}
+                        <option value="{{ s.sport_id }}">{{ s.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Next</button>
+        </form>
+    </div>
 </div>
 {% endblock %}
-

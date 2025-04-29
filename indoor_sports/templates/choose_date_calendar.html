@@ -1,81 +1,63 @@
-
 {% extends "base.html" %}
 {% load static %}
+
 {% block title %}Select Date - Indoor Sports{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class"glass-card p-4 mt-4>
-    <h2 class="mb-4 text-center">Select a Date for {{ sport.sport_name }} at {{ location.name }}</h2>
+<div class="container mt-5">
+    <div class="glass-card p-5 rounded-4 shadow">
+        <h2 class="text-center mb-4">Select a Date for {{ sport.sport_name }} at {{ location.name }}</h2>
 
-    <!-- Month Navigation -->
-    <div class="mb-3 text-center">
-        <a href="?year={{ year }}&month={% if month == 1 %}12&year={{ year|add:"-1" }}{% else %}{{ month|add:"-1" }}{% endif %}" class="btn btn-secondary">Previous Month</a>
-        <a href="?year={{ year }}&month={% if month == 12 %}1&year={{ year|add:"1" }}{% else %}{{ month|add:"1" }}{% endif %}" class="btn btn-secondary">Next Month</a>
-    </div>
+        <!-- Month Navigation -->
+        <div class="d-flex justify-content-center mb-4 gap-3">
+            <a href="?year={{ year }}&month={% if month == 1 %}12&year={{ year|add:'-1' }}{% else %}{{ month|add:'-1' }}{% endif %}" 
+               class="btn btn-primary rounded-pill px-4">
+               ← Previous
+            </a>
+            <a href="?year={{ year }}&month={% if month == 12 %}1&year={{ year|add:'1' }}{% else %}{{ month|add:'1' }}{% endif %}" 
+               class="btn btn-primary rounded-pill px-4">
+               Next →
+            </a>
+        </div>
 
-    <!-- Calendar wrapper -->
-    <div class="table-calendar">
-        {{ calendar_html|safe }}
-    </div>
+        <!-- Calendar Wrapper -->
+        <div class="table-calendar">
+            {{ calendar_html|safe }}
+        </div>
 
-    <!-- Hidden input for selected date -->
-    <input type="hidden" id="selected_date" name="selected_date">
+        <!-- Hidden input to store selected date -->
+        <input type="hidden" id="selected_date" name="selected_date">
     </div>
 </div>
 {% endblock %}
 
 {% block extra_css %}
-<style>
-    .table-calendar {
-        background-color: #ffffff;
-        padding: 15px;
-        margin: auto;
-    }
-    .table-calendar table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 10px;
-        background-color: #ffffff;
-    }
-    .table-calendar th, .table-calendar td {
-        border: 1px solid #ccc;
-        padding: 8px;
-        text-align: center;
-        background-color: #fff;
-    }
-    .table-calendar .available a {
-        color: green;
-        font-weight: bold;
-        text-decoration: none;
-    }
-    .table-calendar .unavailable {
-        color: red;
-    }
-    .table-calendar .noday {
-        background-color: #f8f8f8;
-    }
-    .table-calendar .available {
-        background-color: #d4edda;
-        cursor: pointer;
-    }
-    .table-calendar .available:hover {
-        background-color: #c3e6cb;
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="{% static 'css/glass.css' %}">
 {% endblock %}
 
 {% block extra_js %}
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".available a").forEach(cell => {
-        cell.addEventListener("click", function (event) {
+    const calendarCells = document.querySelectorAll(".table-calendar td.available");
+    const selectedDateInput = document.getElementById("selected_date");
+
+    calendarCells.forEach(cell => {
+        cell.addEventListener("click", function () {
+            if (!this.classList.contains("unavailable")) {
+                document.querySelectorAll(".selected-date").forEach(prev => prev.classList.remove("selected-date"));
+                this.classList.add("selected-date");
+                selectedDateInput.value = this.dataset.date;
+                console.log("Selected Date:", selectedDateInput.value);
+            }
+        });
+    });
+
+    document.querySelectorAll(".month-nav").forEach(button => {
+        button.addEventListener("click", function (event) {
             event.preventDefault();
-            document.getElementById("selected_date").value = this.closest("td").dataset.date;
-            window.location.href = this.href;
+            window.location.href = this.getAttribute("href");
         });
     });
 });
 </script>
 {% endblock %}
-

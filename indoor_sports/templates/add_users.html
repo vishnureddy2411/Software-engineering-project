@@ -4,11 +4,14 @@
 
 {% block content %}
 <div class="container py-4">
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <h2 class="card-title mb-4">Add New Users</h2>
-            <a href="{% url 'invite_user' %}" class="btn btn-primary">Go to Invitation Link Page</a>
+    <div class="glass-card p-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Add New Users</h2>
+                <a href="{% url 'invite_user' %}" class="btn btn-primary">Go to Invitation Link Page</a>
+            </div>
         </div>
     </div>
+    
 </div>
 {% endblock %}
