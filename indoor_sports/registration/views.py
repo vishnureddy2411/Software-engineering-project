@@ -21,10 +21,6 @@ import requests
 import os
 from django.http import JsonResponse
 
-import requests
-import os
-from django.http import JsonResponse
-
 def get_location_from_zipcode(request):
     zipcode = request.GET.get('zipcode')
     if not zipcode or len(zipcode) < 5:
@@ -35,6 +31,9 @@ def get_location_from_zipcode(request):
 
     try:
         response = requests.get(url)
+        print(f"API Request URL: {url}")  # Debugging log
+        print(f"API Response Status: {response.status_code}")  # Debugging in Render
+        print(f"API Response Data: {response.text}")  # Debugging in Render
         response.raise_for_status()  # Raise exception if status is not 200
         data = response.json()
 
@@ -44,9 +43,12 @@ def get_location_from_zipcode(request):
             return JsonResponse({'error': 'No location data found for this ZIP code.'}, status=404)
 
     except requests.exceptions.RequestException as e:
-        print(f"Error in API request: {e}")
-        return JsonResponse({'error': 'Failed to fetch location data.'}, status=500)
-        
+        print(f"Error fetching location data: {e}")  # Debugging log in Render logs
+        return JsonResponse({'error': f'Failed to fetch location data: {str(e)}'}, status=500)
+
+def generate_referral_code(user_id):
+    """Generate a unique referral code based on user_id."""
+    return f"USER{user_id}"
 # from referrals.utils import process_referral  # Optional: hook for referral processing
 
 
