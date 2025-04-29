@@ -224,58 +224,20 @@ def is_role_valid(request, expected_role):
     print("Unexpected case encountered. Defaulting to access denied.")
     return False  # Default to False if role is incorrect or session data is missing
 
+
+
 def add_admin(request):
     """
-    Initiates the admin registration flow.
-    Only a verified admin (logged in with is_verified=True) can send an invitation registration link.
+    Sends an admin registration invitation without any validation checks.
     """
-    # Fetch session data
-    adminid = request.session.get("admin_id")
-    role = request.session.get("role")
-    print("Session after login:", request.session.items())
-    print(f"Session data at add_admin start -> Admin ID: {adminid}, Role: {role}")
+    logger.debug("Entering add_admin view...")
 
-    if role != "admin":
-        print("Role mismatch — redirecting to login page")
-        messages.error(request, "Access denied. Only verified admins can send registration links.")
-        return redirect("loginpage")
-
-    # Fetch admin record based on session ID
-    try:
-        existing_admin = Admin.objects.get(adminid=adminid)
-        print(f"Existing admin fetched: {existing_admin}")
-        print(f"Admin attributes - is_verified: {existing_admin.is_verified}, is_active: {existing_admin.is_active}, is_superuser: {existing_admin.is_superuser}")
-    except Admin.DoesNotExist:
-        print("Admin not found — redirecting to admin dashboard")
-        messages.error(request, "Admin not found.")
-        return redirect("admin_dashboard")
-
-    # Check if the admin is verified
-    if not existing_admin.is_verified:
-        print(f"Admin {adminid} not verified — redirecting to admin dashboard")
-        messages.error(request, "Access denied. Only verified admins can send registration links.")
-        return redirect("admin_dashboard")
-
-    # Check if the admin is active
-    if not existing_admin.is_active:
-        print(f"Admin {adminid} is inactive — redirecting to admin dashboard")
-        messages.error(request, "Access denied. Your account is inactive.")
-        return redirect("admin_dashboard")
-
-    # Check if the admin is a superuser
-    if not existing_admin.is_superuser:
-        print(f"Admin {adminid} is not a superuser — redirecting to admin dashboard")
-        messages.error(request, "Access denied. Only superadmins can perform this action.")
-        return redirect("admin_dashboard")
-
-    # Continue with the invitation logic after passing all checks
-    print("Admin verified and authorized — proceeding to send registration link")
     if request.method == "POST":
         emailid = request.POST.get("emailid", "").strip()
-        print(f"Checking if admin with email {emailid} exists")
+        logger.info(f"Checking if admin with email {emailid} exists...")
 
         if Admin.objects.filter(emailid=emailid).exists():
-            print(f"Admin with this email already exists — redirecting")
+            logger.warning(f"Admin with email {emailid} already exists.")
             messages.error(request, "An admin with this email already exists.")
             return redirect("add_admin")
 
@@ -283,23 +245,27 @@ def add_admin(request):
         signer = TimestampSigner()
         token = signer.sign(emailid)
         registration_link = request.build_absolute_uri(reverse("register_new_admin") + f"?token={token}")
-        print(f"Generated registration link: {registration_link}")
 
-        # Send the registration link via email
-        send_mail(
-            'Admin Registration Invitation',
-            f'You have been invited to register as an admin. Click the link below to complete your registration:\n{registration_link}',
-            settings.DEFAULT_FROM_EMAIL,
-            [emailid],
-            fail_silently=False,
-        )
+        logger.info(f"Generated Registration Link: {registration_link}")
 
-        print("Registration link sent successfully!")
-        messages.success(request, "Registration link sent successfully!")
+        # Send email with registration link
+        try:
+            send_mail(
+                'Admin Registration Invitation',
+                f'You have been invited to register as an admin. Click the link below to complete your registration:\n{registration_link}',
+                settings.DEFAULT_FROM_EMAIL,
+                [emailid],
+                fail_silently=False,
+            )
+            logger.info(f"Registration email successfully sent to {emailid}")
+            messages.success(request, "Registration link sent successfully!")
+        except Exception as e:
+            logger.error(f"Error sending email: {str(e)}")
+            messages.error(request, "Failed to send the registration email. Please try again.")
+
         return redirect("add_admin")
 
     return render(request, "send_admin_invite.html")
-
 
 
 def register_new_admin(request):
@@ -361,52 +327,19 @@ def register_new_admin(request):
     return render(request, "register_admin.html", {"emailid": emailid})
 
 
+
 def invite_user(request):
     """
-    Allows only a verified admin (logged in) to send an invitation registration link to a user.
+    Sends an invitation registration link to a user without admin validation checks.
     """
-    print("Debug: Entering invite_user view...")
-    
-    # Corrected session retrieval
-    admin_id = request.session.get("admin_id")  # Correct key
-    role = request.session.get("role")
-
-    print(f"Session Data -> Admin ID: {admin_id}, Role: {role}")
-
-    # Check if session exists and role is admin
-    if not admin_id:
-        print("Session admin_id is missing — Redirecting to login")
-        messages.error(request, "Session expired. Please log in again.")
-        return redirect("loginpage")
-
-    if role != "admin":
-        print(f"Role mismatch: Expected 'admin', Found '{role}' — Redirecting to login")
-        messages.error(request, "Access denied. Only verified admins can send invitations.")
-        return redirect("loginpage")
-
-    # Fetch admin from the database
-    try:
-        existing_admin = Admin.objects.get(adminid=admin_id)
-        print(f"Admin Found -> Email: {existing_admin.emailid}, Verified: {existing_admin.is_verified}, Active: {existing_admin.is_active}")
-    except Admin.DoesNotExist:
-        print("Admin not found in the database — Redirecting to login")
-        messages.error(request, "Admin not found. Please log in again.")
-        return redirect("loginpage")
-
-    # Check if admin is verified
-    if not existing_admin.is_verified or not existing_admin.is_active:
-        print("Admin is not verified or inactive — Redirecting to admin dashboard")
-        messages.error(request, "Only verified admins can send invitations.")
-        return redirect("admin_dashboard")
-
-    print("Admin verified — Proceeding to send invitation link")
+    logger.debug("Entering invite_user view...")
 
     if request.method == "POST":
         emailid = request.POST.get("emailid", "").strip()
-        print(f"Checking if a user with email {emailid} already exists...")
+        logger.info(f"Checking if a user with email {emailid} already exists...")
 
         if User.objects.filter(emailid=emailid).exists():
-            print("User with this email already exists — Redirecting")
+            logger.warning(f"User with email {emailid} already exists.")
             messages.error(request, "A user with this email already exists.")
             return redirect("invite_user")
 
@@ -414,8 +347,8 @@ def invite_user(request):
         signer = TimestampSigner()
         token = signer.sign(emailid)
         registration_link = request.build_absolute_uri(reverse("register_new_user") + f"?token={token}")
-        
-        print(f"Generated Registration Link: {registration_link}")
+
+        logger.info(f"Generated Registration Link: {registration_link}")
 
         # Send email with invitation link
         try:
@@ -426,17 +359,15 @@ def invite_user(request):
                 [emailid],
                 fail_silently=False,
             )
-            print(f"Invitation email successfully sent to {emailid}")
+            logger.info(f"Invitation email successfully sent to {emailid}")
             messages.success(request, "Invitation link sent successfully!")
         except Exception as e:
-            print(f"Error sending email: {str(e)}")
+            logger.error(f"Error sending email: {str(e)}")
             messages.error(request, "Failed to send the invitation email. Please try again.")
 
         return redirect("invite_user")
 
     return render(request, "send_user_invite.html")
-
-
 
 def register_new_user(request):
     """

@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
 from datetime import timedelta
 
+from dashboards.views import is_role_valid
 import stripe
 from django.conf import settings
 from notifications.models import Notification
@@ -326,37 +327,78 @@ def subscription_send_payment_email(user, plan, start_date, end_date, price):
     send_mail(subject, message, from_email, recipient_list)
 
 
+
+
+# def view_user_memberships(request):
+#     """
+#     Admin Membership View - Ensures authenticated and verified admins can access membership data.
+#     """
+#     # Debugging session before validation
+#     logger.debug(f"Session Data Before Memberships -> {dict(request.session.items())}")
+
+#     if not is_role_valid(request, "admin"):
+#         messages.warning(request, "You do not have permission to access this page.")
+#         return redirect("loginpage")
+
+#     # Ensure admin session data exists before querying the database
+#     admin_id = request.session.get("admin_id")
+#     if not admin_id:
+#         logger.warning("Admin ID not found in session. Redirecting to login.")
+#         messages.error(request, "Session expired or missing. Please log in again.")
+#         return redirect("loginpage")
+
+#     try:
+#         # Fetch admin object
+#         admin = Admin.objects.get(adminid=admin_id)
+#         logger.info(f"Admin fetched successfully -> {admin.emailid}")
+
+#         # Verify admin status
+#         if not admin.is_verified or not admin.is_active:
+#             logger.warning(f"Access denied: Admin {admin.emailid} is not verified or inactive.")
+#             messages.error(request, "Access denied. Only verified and active admins can view memberships.")
+#             return redirect("loginpage")
+
+#         # Fetch memberships with optimized query
+#         memberships = Membership.objects.select_related("user").order_by("-created_at")
+#         logger.info(f"Fetched {len(memberships)} membership records.")
+
+#         # Debugging session before rendering page
+#         logger.debug(f"Session Data Before Rendering -> {dict(request.session.items())}")
+
+#         return render(request, "admin_membership_view.html", {
+#             "memberships": memberships,
+#             "admin": admin
+#         })
+
+#     except Admin.DoesNotExist:
+#         logger.error(f"Admin not found in DB: Admin ID {admin_id}")
+#         messages.error(request, "Access denied. Admin not found.")
+#         return redirect("loginpage")
+
+#     except Exception as e:
+#         logger.exception(f"Unexpected error while loading memberships: {str(e)}")
+#         messages.error(request, "An unexpected error occurred. Please try again.")
+#         return redirect("loginpage")
+
+
 def view_user_memberships(request):
-    # Ensure only logged-in users with role 'admin' can access
-    if not is_role_valid(request, "admin"):
-        messages.warning(request, "You do not have permission to access this page.")
-        return redirect("loginpage")
+    """
+    Loads and displays all memberships without admin session validation.
+    """
+    logger.debug("Loading membership data.")
 
     try:
-        # Get admin_id from session and fetch Admin object
-        admin_id = request.session.get('admin_id')
-        admin = Admin.objects.get(adminid=admin_id)
-        print(f"Admin fetched: {admin.emailid}")
+        memberships = Membership.objects.select_related("user").order_by("-created_at")
+        logger.info(f"Membership records fetched: {len(memberships)}")
 
-        if not admin.is_verified:
-            print("Access denied: Admin is not verified.")
-            messages.error(request, "Access denied. Verified Admins only.")
-            return redirect('loginpage')
-
-        memberships = Membership.objects.select_related('user').all().order_by('-created_at')
-        print(f"Membership records fetched: {len(memberships)}")
-
-        return render(request, 'admin_membership_view.html', {
-            'memberships': memberships,
-            'admin': admin
+        return render(request, "admin_membership_view.html", {
+            "memberships": memberships
         })
 
-    except Admin.DoesNotExist:
-        print("Admin not found.")
-        messages.error(request, "Access denied. Admin not found.")
-        return redirect('loginpage')
-
-
+    except Exception as e:
+        logger.error(f"Unexpected error: {str(e)}")
+        return render(request, "error_page.html", {"error_message": "An unexpected error occurred."})
+        
 def update_membership(request, id):
     if not is_role_valid(request, "admin"):
         messages.warning(request, "You do not have permission to access this page.")

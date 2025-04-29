@@ -59,6 +59,7 @@ def user_dashboard(request):
     })
 
 
+
 def admin_dashboard(request):
     """
     Displays the admin dashboard.
@@ -66,67 +67,82 @@ def admin_dashboard(request):
     """
     list(messages.get_messages(request))  # Clear messages
 
+    # Debug session before checking role
+    logger.debug(f"Session Data Before Validation -> {dict(request.session.items())}")
+
     if not is_role_valid(request, "admin"):
         messages.warning(request, "You do not have permission to access this page.")
         return redirect("loginpage")
 
+    # Ensure the admin_id exists before accessing the database
+    admin_id = request.session.get("admin_id")
+    if not admin_id:
+        logger.warning("Admin session missing. Redirecting to login.")
+        messages.error(request, "Session expired. Please log in again.")
+        return redirect("loginpage")
+
     try:
-        admin_id = request.session.get("admin_id")
+        # Fetch the admin object from the database
         admin = Admin.objects.get(adminid=admin_id)
         logger.info(f"Accessing admin dashboard: Admin ID {admin.adminid}")
+
     except Admin.DoesNotExist:
         logger.error(f"Admin not found: Admin ID {admin_id}")
         messages.error(request, "Admin not found. Please log in again.")
         return redirect("loginpage")
 
-    return render(request, "admin_dashboard.html", {"last_login": admin.lastlogin})
+    # Debug session before rendering the dashboard
+    logger.debug(f"Session Data Before Rendering Dashboard -> {dict(request.session.items())}")
 
+    return render(request, "admin_dashboard.html", {
+        "last_login": admin.lastlogin,
+        "admin": admin
+    })
 
 def is_role_valid(request, expected_role):
+    """
+    Validates whether the user/admin has the correct role based on session data.
+    Ensures that only verified and active users/admins can access restricted areas.
+    """
     role = request.session.get("role")
     admin_id = request.session.get("admin_id")
-    user_id = request.session.get("user_id")  # Add user_id for user validation
+    user_id = request.session.get("user_id")
 
-    print(f"Debug: Session Data -> {dict(request.session.items())}")  # Debug print
+    # Debug session data before validation
+    logger.debug(f"Session Data Before Role Check -> {dict(request.session.items())}")
 
     if role != expected_role:
-        print(f"Debug: Role mismatch! Expected: {expected_role}, Found: {role}")
+        logger.warning(f"Role mismatch detected! Expected: {expected_role}, Found: {role}")
         return False
 
-    # Admin Validation
     if role == "admin" and admin_id:
         try:
             admin = Admin.objects.get(adminid=admin_id)
-            print(f"Debug: Admin found -> {admin.emailid} | Verified: {admin.is_verified} | Active: {admin.is_active}")
-            
-            if not admin.is_verified or not admin.is_active:
-                print("Debug: Admin is not verified or not active!")
+            if admin.is_verified and admin.is_active:
+                logger.info(f"Admin verification successful -> Admin ID: {admin_id}")
+                return True
+            else:
+                logger.warning(f"Admin validation failed -> Admin ID {admin_id} is not verified or active.")
                 return False
-
-            return True  # Admin is valid
-
         except Admin.DoesNotExist:
-            print(f"Debug: Admin not found in DB! Admin ID: {admin_id}")
+            logger.warning(f"Admin not found in DB! Admin ID: {admin_id}")
             return False
 
-    # User Validation (Newly Added)
     if role == "user" and user_id:
         try:
             user = User.objects.get(userid=user_id)
-            print(f"Debug: User found -> {user.username}  | Active: {user.is_active}")
-            
-            if not user.is_active:
-                print("Debug: User is not active!")
+            if user.is_active:
+                logger.info(f"User verification successful -> User ID: {user_id}")
+                return True
+            else:
+                logger.warning(f"User validation failed -> User ID {user_id} is not active.")
                 return False
-
-            return True  # User is valid
-
         except User.DoesNotExist:
-            print(f"Debug: User not found in DB! User ID: {user_id}")
+            logger.warning(f"User not found in DB! User ID: {user_id}")
             return False
 
-    return False  # Default return False if no match
-
+    logger.error(f"Role validation failed! No valid role found for session.")
+    return False
 
 
 

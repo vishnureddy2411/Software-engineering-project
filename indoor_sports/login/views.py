@@ -1,14 +1,15 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import login, logout
+from django.contrib.auth.hashers import check_password
 from django.contrib import messages
 from django.utils.timezone import now
+from django.views.decorators.csrf import csrf_protect
+from django.http import HttpResponse
 from accounts.models import User, Admin
 from bookings.models import Booking
-from django.contrib.auth.hashers import check_password
-from django.contrib.auth import login, logout
 import logging
 
 logger = logging.getLogger(__name__)
-from django.views.decorators.csrf import csrf_protect
 
 @csrf_protect
 def login_view(request):
@@ -36,17 +37,21 @@ def login_view(request):
 
             user.lastlogin = now()
             user.save(update_fields=["lastlogin"])
+
             print(f"User {user.username} logged in successfully. Redirecting to user dashboard.")
             logger.info(f"User {user.username} logged in successfully.")
+
+            # Debugging session before redirect
+            print("User session before redirect:", request.session.items())
 
             # Redirect Logic: Check for incomplete booking reviews
             incomplete_reviews = Booking.objects.filter(
                 user=user,
-                status__in=['booked', 'Booked'],  # Filter for "booked" statuses
-                submitted_review=False  # Ensure review is not submitted
-            ).order_by('-booking_date', '-time_slot').first()  # Get the most recent booking
+                status__in=['booked', 'Booked'],
+                submitted_review=False
+            ).order_by('-booking_date', '-time_slot').first()
 
-            if incomplete_reviews:  # Redirect to review page if an incomplete review exists
+            if incomplete_reviews:
                 print("Redirecting to review page for booking:", incomplete_reviews)
                 logger.info(
                     f"Redirecting {user.username} to review page for booking {incomplete_reviews.booking_id}."
@@ -58,9 +63,7 @@ def login_view(request):
                     sport_id=incomplete_reviews.sport.sport_id
                 )
 
-            # Redirect to dashboard if no incomplete reviews
             return redirect("user_dashboard")
-
 
         # Admin authentication
         admin = Admin.objects.filter(emailid=identifier).first()
@@ -69,15 +72,22 @@ def login_view(request):
             if not admin.is_verified or not admin.is_active:
                 messages.error(request, "Admin access denied. Account not verified or inactive.")
                 return redirect("loginpage")
-            
+
             login(request, admin)
             set_admin_session(request, admin)
 
             admin.lastlogin = now()
             admin.save(update_fields=["lastlogin"])
+
             print(f"Admin {admin.emailid} logged in successfully. Redirecting to admin dashboard.")
             logger.info(f"Admin {admin.emailid} logged in successfully.")
-            print("Session after login:", request.session.items())
+
+            # Debugging session before redirect
+            print("Admin session before redirect:", request.session.items())
+
+            # return HttpResponse(f"Session after login: {dict(request.session.items())}")  # Debug step
+            print(f"Debug: Session Data Before Redirect to Dashboard -> {dict(request.session.items())}")
+
             return redirect("admin_dashboard")
 
         # Invalid credentials
@@ -85,6 +95,7 @@ def login_view(request):
         messages.error(request, "Invalid username/email or password.")
         logger.warning(f"Login failed for identifier: {identifier}")
         return redirect("loginpage")
+    
 
     return render(request, "login.html")
 
@@ -92,12 +103,11 @@ def logout_view(request):
     """
     Logs out the user/admin and clears all session data.
     """
-    print("Logout view accessed.")  # Debugging message
-    logout(request)  # Logs out the user/admin
-    request.session.flush()  # Clears all session data
+    print("Logout view accessed.")
+    logout(request)
+    request.session.flush()
     messages.success(request, "You have been logged out successfully.")
-    return redirect("loginpage")  # Redirects to the login page
-
+    return redirect("loginpage")
 
 def set_user_session(request, user):
     """
