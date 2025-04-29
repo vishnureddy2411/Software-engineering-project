@@ -26,8 +26,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "rest_framework",  # Django REST framework
-    "corsheaders",  # CORS handling
+    "rest_framework",
+    "corsheaders",
+    "django.contrib.postgres",
     "accounts",
     "bookings",
     "dashboards",
@@ -81,23 +82,10 @@ TEMPLATES = [
 WSGI_APPLICATION = "indoor_sports.wsgi.application"
 
 # ========================== DATABASE CONFIGURATION ========================== #
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": os.getenv("DB_NAME", "indoor_sports"),
-        "USER": os.getenv("DB_USER", "root"),
-        "PASSWORD": os.getenv("DB_PASSWORD", ""),
-        "HOST": os.getenv("DB_HOST", "127.0.0.1"),
-        "PORT": os.getenv("DB_PORT", "3306"),
-        "CONN_MAX_AGE": 600,
-        "OPTIONS": {"charset": "utf8mb4"},
-    }
-}
-
-# Override with PostgreSQL if deployed on Render
 DATABASE_URL = os.getenv("DATABASE_URL")
-if DATABASE_URL:
-    DATABASES["default"] = dj_database_url.config(default=DATABASE_URL)
+DATABASES = {
+    "default": dj_database_url.config(default=DATABASE_URL, engine="django.db.backends.postgresql")
+}
 
 # ========================== CORS SETTINGS ========================== #
 CORS_ALLOWED_ORIGINS = [
