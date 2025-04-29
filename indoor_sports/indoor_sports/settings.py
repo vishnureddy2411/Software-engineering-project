@@ -41,12 +41,15 @@ INSTALLED_APPS = [
     'ratings',
     'registration',
     'reports',
+    'corsheaders',
+
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Static file handling in production
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -71,6 +74,12 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:8000",  # Localhost development
+
+    "https://software-engineering-project-tr0x.onrender.com",  # Replace with your frontend URL
 ]
 
 WSGI_APPLICATION = 'indoor_sports.wsgi.application'
