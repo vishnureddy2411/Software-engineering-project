@@ -4,8 +4,11 @@
 
 {% block content %}
     <div class="error-container">
-        <h1>Error: Something Went Wrong!</h1>
-        <p>Unfortunately, there was an issue processing your request. Please try again later.</p>
-        <a href="{% url 'home' %}">Go Back to Home</a>
+        <div class="glass-card p-4 mt-4">
+            <h1 class="text-center mb-4">Something Went Wrong!</h1>
+            <p class="text-center">Unfortunately, there was an issue processing your request. Please try again later.</p>
+            <p class="text-center">If the problem persists, contact support.</p>
+            <a href="{% url 'home' %}" class="btn btn-primary">Go Back to Home</a>
+        </div>
     </div>
 {% endblock %}

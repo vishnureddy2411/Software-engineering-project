@@ -26,15 +26,25 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 @login_required
 def membership_dashboard_view(request):
-    active_membership = Membership.objects.filter(user=request.user, status='Active').first()
-    user_memberships = Membership.objects.filter(user=request.user).exclude(status='Cancelled')
-    available_plans = MembershipPlan.objects.all()
+    try:
+        active_membership = Membership.objects.filter(user=request.user, status='Active').first()
+        user_memberships = Membership.objects.filter(user=request.user).exclude(status='Cancelled')
+        upcoming_memberships = user_memberships.filter(user=request.user,status='Pending')
+        available_plans = MembershipPlan.objects.all()
+        print(f"User Memberships: {upcoming_memberships}")
 
-    return render(request, 'membership_dashboard.html', {
-        'active_membership': active_membership,
-        'user_memberships': user_memberships,
-        'available_plans': available_plans,
-    })
+        return render(request, 'membership_dashboard.html', {
+            'active_membership': active_membership,
+            'user_memberships': user_memberships,
+            'upcoming_memberships': upcoming_memberships,
+            'available_plans': available_plans,
+        })
+    except Exception as e:
+        logger.error(f"Error in membership dashboard view: {str(e)}")
+        messages.error(request, "An error occurred loading your dashboard.")
+        return redirect('error_page')   
+    
+
 
 @login_required
 def confirm_new_plan_view(request, plan_id):
