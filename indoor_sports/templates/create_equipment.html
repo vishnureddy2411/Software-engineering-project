@@ -4,6 +4,7 @@
 {% block content %}
 <div class="container mt-4">
     <h2>Add New Equipment</h2>
+    
     <form method="POST">
         {% csrf_token %}
         
@@ -47,5 +48,6 @@
 
         <button type="submit" class="btn btn-success">Add Equipment</button>
     </form>
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary mb-2">Dashboard</a>
 </div>
 {% endblock %}

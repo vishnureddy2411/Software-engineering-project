@@ -5,7 +5,7 @@
 {% block content %}
 <div class="glass-card report-container mx-auto p-4">
     <h1 class="text-center mb-4">{{ report_heading }}</h1>
-
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary mb-2"> Back To Dashboard</a>
     <!-- Graph Section -->
     <div class="graph-section row justify-content-center">
         {% for graph, description in graphs %}

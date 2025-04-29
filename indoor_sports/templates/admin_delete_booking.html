@@ -3,6 +3,7 @@
 <div class="glass-card p-4 mt-4">
     
     <h1>Delete Booking</h1>
+    <a href="{% url 'admin_manage_bookings' %}" class="btn btn-secondary mb-2">Back to Manage Bookings</a>
     <p>Are you sure you want to delete booking {{ booking_id }}?</p>
     <form method="post">
         {% csrf_token %}

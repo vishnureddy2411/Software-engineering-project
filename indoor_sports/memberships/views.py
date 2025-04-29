@@ -47,19 +47,45 @@ def membership_dashboard_view(request):
 
 
 @login_required
-def confirm_new_plan_view(request, plan_id):
-    membership_plan = get_object_or_404(MembershipPlan, id=plan_id)
+def confirm_new_plan_view(request, plan):
+    """Handles confirmation for purchasing a new plan.
+    - Ensures new plans start after existing active memberships.
+    - Sets new plan's status to 'Pending' if there's an active membership.
+    """
+    plan_obj = get_object_or_404(MembershipPlan, duration=plan)
+
     active_membership = Membership.objects.filter(user=request.user, status='Active').first()
 
     if request.method == 'POST' and 'confirm-new-plan' in request.POST:
-        # Redirect to Stripe payment
-        return redirect(reverse('create_checkout_session', kwargs={'plan': membership_plan.name}))
+        duration_mapping = {
+            'Weekly': timedelta(days=7),
+            'Monthly': timedelta(days=30),
+            'Yearly': timedelta(days=365),
+        }
+
+        # Determine correct start & end date
+        start_date = (active_membership.end_date + timedelta(days=1)) if active_membership else now().date()
+        end_date = start_date + duration_mapping[plan_obj.duration]
+
+        # Define status: 'Pending' for future plans, 'Active' for immediate ones
+        status = 'Pending' if active_membership else 'Active'
+
+        # Create new membership entry
+        Membership.objects.create(
+            user=request.user,
+            plan=plan_obj,
+            start_date=start_date,
+            end_date=end_date,
+            status=status,
+            price=plan_obj.price,
+        )
+
+        return redirect('membership_dashboard')
 
     return render(request, 'membership_confirmation.html', {
-        'plan_name': membership_plan.name,
+        'plan': plan_obj,
         'active_membership': active_membership,
     })
-
 
 @login_required
 def renew_membership_view(request, membership_id):
@@ -335,60 +361,6 @@ def subscription_send_payment_email(user, plan, start_date, end_date, price):
     from_email = settings.DEFAULT_FROM_EMAIL
     recipient_list = [user.emailid]
     send_mail(subject, message, from_email, recipient_list)
-
-
-
-
-# def view_user_memberships(request):
-#     """
-#     Admin Membership View - Ensures authenticated and verified admins can access membership data.
-#     """
-#     # Debugging session before validation
-#     logger.debug(f"Session Data Before Memberships -> {dict(request.session.items())}")
-
-#     if not is_role_valid(request, "admin"):
-#         messages.warning(request, "You do not have permission to access this page.")
-#         return redirect("loginpage")
-
-#     # Ensure admin session data exists before querying the database
-#     admin_id = request.session.get("admin_id")
-#     if not admin_id:
-#         logger.warning("Admin ID not found in session. Redirecting to login.")
-#         messages.error(request, "Session expired or missing. Please log in again.")
-#         return redirect("loginpage")
-
-#     try:
-#         # Fetch admin object
-#         admin = Admin.objects.get(adminid=admin_id)
-#         logger.info(f"Admin fetched successfully -> {admin.emailid}")
-
-#         # Verify admin status
-#         if not admin.is_verified or not admin.is_active:
-#             logger.warning(f"Access denied: Admin {admin.emailid} is not verified or inactive.")
-#             messages.error(request, "Access denied. Only verified and active admins can view memberships.")
-#             return redirect("loginpage")
-
-#         # Fetch memberships with optimized query
-#         memberships = Membership.objects.select_related("user").order_by("-created_at")
-#         logger.info(f"Fetched {len(memberships)} membership records.")
-
-#         # Debugging session before rendering page
-#         logger.debug(f"Session Data Before Rendering -> {dict(request.session.items())}")
-
-#         return render(request, "admin_membership_view.html", {
-#             "memberships": memberships,
-#             "admin": admin
-#         })
-
-#     except Admin.DoesNotExist:
-#         logger.error(f"Admin not found in DB: Admin ID {admin_id}")
-#         messages.error(request, "Access denied. Admin not found.")
-#         return redirect("loginpage")
-
-#     except Exception as e:
-#         logger.exception(f"Unexpected error while loading memberships: {str(e)}")
-#         messages.error(request, "An unexpected error occurred. Please try again.")
-#         return redirect("loginpage")
 
 
 def view_user_memberships(request):

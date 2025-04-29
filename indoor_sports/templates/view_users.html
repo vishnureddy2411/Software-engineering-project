@@ -8,7 +8,7 @@
     <div class="card shadow-lg">
         <div class="card-body">
             <h2 class="text-center mb-4">View Registered Users</h2>
-
+            <a href="{% url 'admin_card_03' %}" class="btn btn-secondary mb-2">Back to Manage Users</a>
             <!-- Search Bar -->
             <form method="get" class="d-flex justify-content-center mb-4">
                 <input type="text" name="q" value="{{ query|default:'' }}" class="form-control w-50 me-2" placeholder="Search by name, email, username...">

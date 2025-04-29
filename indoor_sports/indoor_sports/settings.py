@@ -141,3 +141,8 @@ STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 STRIPE_WEEKLY_PRICE = os.getenv("STRIPE_WEEKLY_PRICE", "price_weekly")
 STRIPE_MONTHLY_PRICE = os.getenv("STRIPE_MONTHLY_PRICE", "price_monthly")
 STRIPE_YEARLY_PRICE = os.getenv("STRIPE_YEARLY_PRICE", "price_yearly")
+
+AUTHENTICATION_BACKENDS = [
+    'accounts.authentication.MultiModelBackend',  # Your custom backend
+    'django.contrib.auth.backends.ModelBackend',  # Default backend (optional)
+]
