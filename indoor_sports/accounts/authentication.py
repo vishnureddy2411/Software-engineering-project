@@ -9,17 +9,6 @@ class MultiModelBackend(BaseBackend):
     def authenticate(self, request, username=None, password=None):
         logger.info(f"Authenticating identifier: {username}")
 
-        # Try Admin
-        try:
-            admin = Admin.objects.get(emailid=username)
-            if is_password_valid(password, admin.password):
-                logger.info(f"Authenticated as admin: {admin.emailid}")
-                return admin
-            else:
-                logger.warning("Admin password mismatch.")
-        except Admin.DoesNotExist:
-            logger.info("Admin not found.")
-
         # Try User
         try:
             user = User.objects.get(username=username)
@@ -32,6 +21,17 @@ class MultiModelBackend(BaseBackend):
             logger.info("User not found.")
 
         logger.warning("Authentication failed for both admin and user.")
+        # Try Admin
+        try:
+            admin = Admin.objects.get(emailid=username)
+            if is_password_valid(password, admin.password):
+                logger.info(f"Authenticated as admin: {admin.emailid}")
+                return admin
+            else:
+                logger.warning("Admin password mismatch.")
+        except Admin.DoesNotExist:
+            logger.info("Admin not found.")
+
         return None
 
 
